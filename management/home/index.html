@@ -5,6 +5,8 @@
 		<meta charset="utf-8" />
 		<title>首页</title>
 		<meta name="description" content="home">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
 		<!--begin::Web font -->
@@ -26,7 +28,6 @@
 		<link href="../../assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="../../assets/snippets/default/base/style.bundle.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="../../assets/vendors/layui/css/layui.css"  media="all">
-
 
 		<!--end::Base Styles -->
 		<link rel="shortcut icon" href="../../assets/snippets/custom/media/img/logo/favicon.ico" />
@@ -786,17 +787,17 @@
 					<div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark m-aside-menu--dropdown m-scroller" data-menu-vertical="true" m-menu-dropdown="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500" >
 						<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
 							<li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
-								<a href="javascript:void(0);" class="m-menu__link " data-type="tabAdd" data-index="1" data-title="首页" data-url="../accredit/system_accredit.html">
+								<a href="javascript:void(0);" class="m-menu__link " data-type="tabAdd" data-index="1" data-title="首页" data-url="">
 									<span class="m-menu__item-here"></span>
-									<i class="m-menu__link-icon flaticon-line-graph"></i>
-									<span class="m-menu__link-text">Dashboard</span>
+									<i class="m-menu__link-icon flaticon-home"></i>
+									<span class="m-menu__link-text">首页</span>
 								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
 									<span class="m-menu__item-here"></span>
-									<i class="m-menu__link-icon flaticon-open-box"></i>
-									<span class="m-menu__link-text">Layouts</span>
+									<i class="m-menu__link-icon flaticon-settings-1"></i>
+									<span class="m-menu__link-text">系统设置</span>
 									<i class="m-menu__ver-arrow la la-angle-right"></i>
 								</a>
 								<div class="m-menu__submenu ">
@@ -805,39 +806,15 @@
 										<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
 											<span class="m-menu__link">
 												<span class="m-menu__item-here"></span>
-												<span class="m-menu__link-text">Layouts</span>
+												<span class="m-menu__link-text">系统设置</span>
 											</span>
 										</li>
-										<li class="m-menu__item " aria-haspopup="true" >
-											<a href="builder.html" class="m-menu__link ">
+										<li class="m-menu__item " aria-haspopup="true"  >
+											<a href="#" class="m-menu__link "  data-type="tabAdd" data-index="3" data-title="数据字典" data-url="../dict/dict.html">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 													<span></span>
 												</i>
-												<span class="m-menu__link-text">Layout Builder</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="builder.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Boxed Layout</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="builder.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Right Sidebar</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="builder.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Fixed Footer</span>
+												<span class="m-menu__link-text">数据字典</span>
 											</a>
 										</li>
 									</ul>
@@ -849,10 +826,7 @@
 									<i class="m-menu__link-icon flaticon-layers"></i>
 									<span class="m-menu__link-title">
 										<span class="m-menu__link-wrap">
-											<span class="m-menu__link-text">Reports</span>
-											<span class="m-menu__link-badge">
-												<span class="m-badge m-badge--danger">2</span>
-											</span>
+											<span class="m-menu__link-text">相册管理</span>
 										</span>
 									</span>
 									<i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -865,7 +839,7 @@
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-title">
 													<span class="m-menu__link-wrap">
-														<span class="m-menu__link-text">Reports</span>
+														<span class="m-menu__link-text">相册管理</span>
 														<span class="m-menu__link-badge">
 															<span class="m-badge m-badge--danger">2</span>
 														</span>
@@ -874,27 +848,19 @@
 											</span>
 										</li>
 										<li class="m-menu__item " aria-haspopup="true">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-icon flaticon-pie-chart"></i>
-												<span class="m-menu__link-text">Finance Reports</span>
+											<a href="#" class="m-menu__link "  data-type="tabAdd" data-index="5" data-title="相册" data-url="../photo/album/album.html" >
+												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+													<span></span>
+												</i>
+												<span class="m-menu__link-text">相册</span>
 											</a>
 										</li>
 										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
 											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-icon flaticon-line-graph"></i>
-												<span class="m-menu__link-text">Accouning Audit</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-icon flaticon-statistics"></i>
-												<span class="m-menu__link-text">Investments</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-icon flaticon-coins"></i>
-												<span class="m-menu__link-text">Sales</span>
+												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+													<span></span>
+												</i>
+												<span class="m-menu__link-text">轮播图片</span>
 											</a>
 										</li>
 									</ul>
@@ -903,8 +869,8 @@
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
 								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
 									<span class="m-menu__item-here"></span>
-									<i class="m-menu__link-icon flaticon-lifebuoy"></i>
-									<span class="m-menu__link-text">Support</span>
+									<i class="m-menu__link-icon flaticon-users"></i>
+									<span class="m-menu__link-text">用户管理</span>
 									<i class="m-menu__ver-arrow la la-angle-right"></i>
 								</a>
 								<div class="m-menu__submenu ">
@@ -913,371 +879,15 @@
 										<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" m-menu-link-redirect="1">
 											<span class="m-menu__link">
 												<span class="m-menu__item-here"></span>
-												<span class="m-menu__link-text">Support</span>
+												<span class="m-menu__link-text">用户管理</span>
 											</span>
 										</li>
 										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
+											<a href="#" class="m-menu__link ">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 													<span></span>
 												</i>
-												<span class="m-menu__link-text">Reports</span>
-											</a>
-										</li>
-										<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
-											<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Cases</span>
-												<i class="m-menu__ver-arrow la la-angle-right"></i>
-											</a>
-											<div class="m-menu__submenu ">
-												<span class="m-menu__arrow"></span>
-												<ul class="m-menu__subnav">
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-computer"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Pending</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--warning m-badge--wide">10</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-signs-2"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Urgent</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--danger m-badge--wide">6</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-clipboard"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Done</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--success m-badge--wide">2</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-multimedia-2"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Archive</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--info m-badge--wide">245</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-												</ul>
-											</div>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Clients</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Audit</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
-								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
-									<span class="m-menu__item-here"></span>
-									<i class="m-menu__link-icon flaticon-share"></i>
-									<span class="m-menu__link-text">Feedbacks</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu ">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-title">
-													<span class="m-menu__link-wrap">
-														<span class="m-menu__link-text">Product Feedbacks</span>
-														<span class="m-menu__link-badge">
-															<span class="m-badge m-badge--accent">3</span>
-														</span>
-													</span>
-												</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Customer Reviews</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Product Ratings</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Customer Support</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
-								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
-									<span class="m-menu__item-here"></span>
-									<i class="m-menu__link-icon flaticon-network"></i>
-									<span class="m-menu__link-text">Conversions</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu ">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" m-menu-link-redirect="1">
-											<span class="m-menu__link">
-												<span class="m-menu__item-here"></span>
-												<span class="m-menu__link-text">Conversions</span>
-											</span>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Goals</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-title">
-													<span class="m-menu__link-wrap">
-														<span class="m-menu__link-text">Ecommerce</span>
-														<span class="m-menu__link-badge">
-															<span class="m-badge m-badge--warning m-badge--wide m-badge--rounded">new</span>
-														</span>
-													</span>
-												</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Transactions</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Funnels</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-2" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-settings"></i>
-									<span class="m-menu__link-text">Settings</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu m-menu__submenu--up">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item  m-menu__item--parent m-menu__item--bottom-2" aria-haspopup="true">
-											<span class="m-menu__link">
-												<span class="m-menu__link-text">Settings</span>
-											</span>
-										</li>
-										<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link m-menu__toggle">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Profile</span>
-												<i class="m-menu__ver-arrow la la-angle-right"></i>
-											</a>
-											<div class="m-menu__submenu ">
-												<span class="m-menu__arrow"></span>
-												<ul class="m-menu__subnav">
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-computer"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Pending</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--warning">10</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-signs-2"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Urgent</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--danger">6</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-clipboard"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Done</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--success">2</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-													<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-														<a href="inner.html" class="m-menu__link ">
-															<i class="m-menu__link-icon flaticon-multimedia-2"></i>
-															<span class="m-menu__link-title">
-																<span class="m-menu__link-wrap">
-																	<span class="m-menu__link-text">Archive</span>
-																	<span class="m-menu__link-badge">
-																		<span class="m-badge m-badge--info m-badge--wide">245</span>
-																	</span>
-																</span>
-															</span>
-														</a>
-													</li>
-												</ul>
-											</div>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Accounts</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Help</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--line">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Notifications</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-1" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="javascript:void (0);" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-info"></i>
-									<span class="m-menu__link-text">Help</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu m-menu__submenu--up">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item  m-menu__item--parent m-menu__item--bottom-1" aria-haspopup="true">
-											<span class="m-menu__link">
-												<span class="m-menu__link-text">Help</span>
-											</span>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Support</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Blog</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Documentation</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Pricing</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-											<a href="inner.html" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Terms</span>
+												<span class="m-menu__link-text">用户管理</span>
 											</a>
 										</li>
 									</ul>
@@ -1296,24 +906,27 @@
 						<!-- begin::content -->
 						<div class="layui-tab layui-tab-card" lay-filter="menu_tab" lay-allowclose="true" style="border-top: none">
 							<ul class="layui-tab-title">
-								<li class="layui-this">网站设置</li>
-								<li lay-id="22">用户基本管理</li>
-								<li lay-id="33">权限分配</li>
-								<li lay-id="44">商品管理</li>
-								<li  lay-id="55">订单管理</li>
+								<li lay-id="0" class="layui-this">首页</li>
 							</ul>
 							<div class="layui-tab-content" style="height: 100%;">
 								<div class="layui-tab-item layui-show">
 									1. 我个人比较喜欢卡片风格的，所以你发现又是以卡片的风格举例
 									2. 删除功能适用于所有风格
-								</div>
-								<div class="layui-tab-item" id="addPage_div" >
-									<object type="text/html" data="../dict/dict.html" width="100%" height="100%"></object>
+									<script type="text/javascript" src="../../assets/vendors/jquery/jquery-3.3.1.min.js"></script>
 
+									<!--	<object type="text/html" data="../dict/dict.html" width="100%" height="100%"></object>-->
+									<!--<include src="../dict/dict.html"></include>-->
+									<script type="text/javascript">
+                                        //在js中引入
+                                        /*   $(document).ready(function () {
+                                               $.get("../dict/dict.html",function(data) { //初始將a.html include div#iframe
+                                                   $("#addPage_div").html(data);
+
+                                               });
+                                           });*/
+									</script>
 								</div>
-								<div class="layui-tab-item">3</div>
-								<div class="layui-tab-item">4</div>
-								<div class="layui-tab-item">5</div>
+
 							</div>
 						</div>
 						<!-- end:: content -->
@@ -1383,13 +996,24 @@
 
 
 		<!--begin::Base Scripts -->
+		<script type="text/javascript" src="../../assets/vendors/jquery/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="../../assets/vendors/bootstrap/bootstrap.min.js"></script>
 		<script src="../../assets/vendors/base/vendors.bundle.js" type="text/javascript"></script>
 		<script src="../../assets/snippets/default/base/scripts.bundle.js" type="text/javascript"></script>
-		<script src="../../assets/vendors/layui/layui.js" charset="utf-8"></script>
 
+
+		<script src="../../assets/vendors/jquery/validation/jquery.validate.min.js" type="text/javascript"></script>
+		<script src="../../assets/vendors/jquery/validation/additional-methods.min.js" type="text/javascript"></script>
+		<script src="../../assets/vendors/jquery/validation/messages_zh.min.js" type="text/javascript"></script>
+		<script src="../../assets/vendors/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../assets/vendors/jquery/jquery.serializejson.min.js"></script>
+		<script type="text/javascript" src="../../assets/vendors/jquery/jquery.form.format.js"></script>
+		<script type="text/javascript" src="../../assets/vendors/bootstrap/bootstrap-touchspin.js"></script>
 		<!--end::Base Scripts -->
 
 		<!--begin::Page Snippets -->
+
+		<script src="../../assets/vendors/base/utils.js" type="text/javascript"></script>
 		<script src="index.js" type="text/javascript"></script>
 
 		<!--end::Page Snippets -->

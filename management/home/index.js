@@ -6,7 +6,7 @@ var SnippetIndex = function() {
      */
     var initMenuEvent = function () {
 
-    }
+    };
 
     /**
      * 初始化 Tab
@@ -19,7 +19,7 @@ var SnippetIndex = function() {
             //触发事件
             var active = {
                 tabAdd: function(othis){
-                    var index = othis.data('index'), title = othis.data('title'), content = othis.data('url');
+                    var index = othis.data('index'), title = othis.data('title'), target = othis.data('url'),tabId=othis.data('id');
                     var flag = true;
                     $(".layui-tab-title li").each(function () {
                         var layId = $(this).attr("lay-id");
@@ -28,25 +28,22 @@ var SnippetIndex = function() {
                             element.tabChange('menu_tab', layId);
                             flag = false;
                         }
-                    })
+                    });
                     //新增一个Tab项
                     if (flag) {
-                        element.tabAdd('menu_tab', {
-                            title:  title
-                            ,content:  '<object type="text/html" data="'+content+'" width="100%" height="100%"></object>'
-                            ,id:  index
+                        var tabHtmlContent  = "";
+                        $.get(""+target+"",function(data) {
+                            tabHtmlContent = data;
+                            element.tabAdd('menu_tab', {
+                                title:  title,
+                                content:  tabHtmlContent,
+                                id:  index
+                            });
+                            element.tabChange('menu_tab', index);
                         });
-                        element.tabChange('menu_tab', index);
+
                     }
 
-                }
-                ,tabDelete: function(othis){
-                    //删除指定Tab项
-                    element.tabDelete('menu_tab', '44');
-                }
-                ,tabChange: function(){
-                    //切换到指定Tab项
-                    element.tabChange('menu_tab', '22');
                 }
             };
 
@@ -55,11 +52,6 @@ var SnippetIndex = function() {
                 active[type] ? active[type].call(this, othis) : '';
             });
 
-           /* $(".layui-icon,layui-unselect,layui-tab-close").on('click', function () {
-                var layId = $(this).parent("li").attr("lay-id");
-                console.log(layId);
-                return false;
-            });*/
         });
     }
 

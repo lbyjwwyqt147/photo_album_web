@@ -1,19 +1,19 @@
 //== Class Definition
-var SnippetSystemAccredit = function() {
+var SnippetAlbum = function() {
     var serverUrl = Utils.serverAddress;
-    var systemAccreditTable;
-    var systemAccreditFormModal = $('#system_accredit_form_modal');
-    var form = $("#system_accredit_form");
+    var albumTable;
+    var albumFormModal = $('#album_form_modal');
+    var form = $("#album_form");
     var mark = 1;
     /**
      *  初始化 dataGrid 组件
      */
     var initDataGrid = function () {
         layui.use('table', function(){
-            systemAccreditTable = layui.table;
+            albumTable = layui.table;
             var layuiForm = layui.form;
-            systemAccreditTable.render({
-                elem: '#system_accredit_grid',
+            albumTable.render({
+                elem: '#album_grid',
                 url: serverUrl + 'system/authorization/grid',
                 title: '系统授权列表',
                 text: "无数据", //空数据时的异常提示
@@ -27,17 +27,17 @@ var SnippetSystemAccredit = function() {
                 cols: [[
                     {checkbox: true},
                     {field:'id', title:'ID', hide:true },
-                    {field:'sysCode', title:'系统代码'},
-                    {field:'sysName', title:'系统名称'},
-                    {field:'appId', title:'appId', width:150},
-                    {field:'appKey', title:'appKey', width:250},
-                    {field:'signature', title:'签名', width:250},
-                    {field:'expireTime', title:'到期时间', align: 'center',
+                    {field:'albumName', title:'相册名称'},
+                    {field:'albumTitle', title:'相册主题'},
+                    {field:'albumStyle', title:'相册风格'},
+                    {field:'albumClassify', title:'相册分类'},
+                    {field:'albumDescription', title:'相册描述', width:200},
+                    {field:'createTime', title:'创建时间', align: 'center',
                         templet : function (row) {
-                            return Utils.datatHHmmFormat(row.expireTime);
+                            return Utils.datatHHmmFormat(row.createTime);
                         }
                     },
-                    {field:'status', title:'状态', align: 'center',
+                    {field:'albumStatus', title:'状态', align: 'center',
                         templet : function (row) {
                              var value = row.status;
                              var spanCss = "m-badge--success";
@@ -72,7 +72,7 @@ var SnippetSystemAccredit = function() {
             });
 
             //监听行工具事件
-            systemAccreditTable.on('tool(system_accredit_grid)', function(obj){
+            albumTable.on('tool(album_grid)', function(obj){
                 if(obj.event === 'del'){
                     deleteData(obj);
                 } else if(obj.event === 'edit'){
@@ -80,7 +80,7 @@ var SnippetSystemAccredit = function() {
                     form.setForm(data);
                     mark = 2;
                     // 显示 dialog
-                    systemAccreditFormModal.modal('show');
+                    albumFormModal.modal('show');
                 }
             });
 
@@ -99,14 +99,14 @@ var SnippetSystemAccredit = function() {
      * 刷新grid
      */
     var refreshGrid = function () {
-        systemAccreditTable.reload("system_accredit_grid");
+        albumTable.reload("album_grid");
     };
 
     /**
      * 初始化表单提交
      */
-    var handlesystemAccreditFormSubmit = function() {
-        $('#system_accredit_form_submit').click(function(e) {
+    var handleAlbumFormSubmit = function() {
+        $('#album_form_submit').click(function(e) {
             e.preventDefault();
             Utils.inputTrim();
             var btn = $(this);
@@ -151,9 +151,9 @@ var SnippetSystemAccredit = function() {
             if (!form.valid()) {
                 return;
             }
-            Utils.modalBlock("#system_accredit_form_modal");
-            $("#system_accredit_form input[name='systemCode']").val(Utils.systemCode);
-            $("#system_accredit_form input[name='credential']").val(Utils.credential);
+            Utils.modalBlock("#album_form_modal");
+            $("#album_form input[name='systemCode']").val(Utils.systemCode);
+            $("#album_form input[name='credential']").val(Utils.credential);
             $.ajax({
                 type: "POST",
                 url: serverUrl + "system/authorization/save",
@@ -161,12 +161,12 @@ var SnippetSystemAccredit = function() {
                 dataType: "json",
                 headers: Utils.headers,
                 success:function (response) {
-                    Utils.modalUnblock("#system_accredit_form_modal");
+                    Utils.modalUnblock("#album_form_modal");
                     if (response.success) {
                         // toastr.success(Utils.saveSuccessMsg);
                         refreshGrid();
                         // 关闭 dialog
-                        $('#system_accredit_form_modal').modal('hide');
+                        $('#album_form_modal').modal('hide');
                     } else if (response.status == 202) {
                         toastr.error(Utils.saveFailMsg);
                     } else {
@@ -174,7 +174,7 @@ var SnippetSystemAccredit = function() {
                     }
                 },
                 error:function (response) {
-                    Utils.modalUnblock("#system_accredit_form_modal");
+                    Utils.modalUnblock("#album_form_modal");
                     toastr.error(Utils.errorMsg);
                 }
             });
@@ -186,7 +186,7 @@ var SnippetSystemAccredit = function() {
      *  清空表单数据和样式
      */
     var cleanForm = function () {
-        var form = $("#system_accredit_form");
+        var form = $("#album_form");
         form.resetForm();
         var input = form.find("input");
         $.each(input,function(i,v){
@@ -206,7 +206,7 @@ var SnippetSystemAccredit = function() {
             idsArray.push(obj.data.sysCode);
         } else {
             // 获取选中的数据对象
-            var checkRows = systemAccreditTable.checkStatus('system_accredit_grid');
+            var checkRows = albumTable.checkStatus('album_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -269,7 +269,7 @@ var SnippetSystemAccredit = function() {
             idsArray.push(obj.value);
         } else {
             // 获取选中的数据对象
-            var checkRows = systemAccreditTable.checkStatus('system_accredit_grid');
+            var checkRows = albumTable.checkStatus('album_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -341,24 +341,13 @@ var SnippetSystemAccredit = function() {
     };
 
     var initModalDialog = function() {
-        layui.use('laydate', function(){
-            var laydate = layui.laydate;
-            //执行一个laydate实例
-            laydate.render({
-                elem: '#expireTime',
-                type: 'datetime',
-                min: 1,
-                btns: ['clear', 'confirm']
-            });
-        });
-
         // 在调用 show 方法后触发。
-        systemAccreditFormModal.on('show.bs.modal', function (event) {
+        albumFormModal.on('show.bs.modal', function (event) {
          //   var button = $(event.relatedTarget);// 触发事件的按钮
            // var recipient = button.data('whatever'); // 解析出data-whatever内容
-            var recipient = "新增系统信息";
+            var recipient = "发布作品";
             if (mark == 2) {
-                recipient = "修改系统信息";
+                recipient = "修改作品";
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
@@ -367,7 +356,7 @@ var SnippetSystemAccredit = function() {
         });
 
         // 当调用 hide 实例方法时触发。
-        systemAccreditFormModal.on('hide.bs.modal', function (event) {
+        albumFormModal.on('hide.bs.modal', function (event) {
             // 清空form 表单数据
             cleanForm();
             $(".modal-backdrop").remove();
@@ -380,28 +369,39 @@ var SnippetSystemAccredit = function() {
         init: function() {
             initDataGrid();
             initModalDialog();
-            handlesystemAccreditFormSubmit();
-            $('#accredit_delete').click(function(e) {
+            handleAlbumFormSubmit();
+            $('#album_delete').click(function(e) {
                 e.preventDefault();
                 deleteData(null);
                 return false;
             });
-            $('#accredit_add').click(function(e) {
+            $('#album_add').click(function(e) {
                 e.preventDefault();
                 mark = 1;
                 // 显示 dialog
-                systemAccreditFormModal.modal('show');
+               albumFormModal.modal('show').css({
+                    width: 'auto'
+                });
+                //弹出即全屏
+
+            /*    var index = layer.open({
+                    type: 2,
+                    content: 'http://layim.layui.com',
+                    area: ['320px', '195px'],
+                    maxmin: true
+                });
+                layer.full(index);*/
                 return false;
             });
 
-            $('#accredit_sync').click(function(e) {
+            $('#album_sync').click(function(e) {
                 e.preventDefault();
                 sync();
                 return false;
             });
 
             window.onresize = function(){
-                systemAccreditTable.resize("system_accredit_grid");
+                albumTable.resize("album_grid");
             }
         }
     };
@@ -409,5 +409,5 @@ var SnippetSystemAccredit = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetSystemAccredit.init();
+    SnippetAlbum.init();
 });
