@@ -5,6 +5,8 @@ var SnippetAlbum = function() {
     var albumFormModal = $('#album_form_modal');
     var form = $("#album_form");
     var mark = 1;
+    var imageUploader;
+
     /**
      *  初始化 dataGrid 组件
      */
@@ -153,7 +155,9 @@ var SnippetAlbum = function() {
             }
             Utils.modalBlock("#album_form_modal");
             $("#album_form input[name='systemCode']").val(Utils.systemCode);
-            $("#album_form input[name='credential']").val(Utils.credential);
+            var text = $("textarea").text();
+            var des = text.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' '); //转换格式
+            console.log(des);
             $.ajax({
                 type: "POST",
                 url: serverUrl + "system/authorization/save",
@@ -340,6 +344,31 @@ var SnippetAlbum = function() {
         });
     };
 
+    /**
+     * 初始化上传插件
+     */
+    var initUploader = function () {
+        //证书控件
+        imageUploader = WebuploaderUtil({
+            uploader : '#uploader',
+            filePicker : '#filePicker',
+            queueList : '.queueList',
+            butnText : "请选择图片",
+            extensions : 'jpg,jpeg,png',
+            mimeTypes : 'image/*',
+            formData : {
+                systemCode : Utils.systemCode,
+                businessCode: 10,
+                uploaderId: 1,
+                uploaderName: '张三'
+            },
+            filePicker2 : "#filePicker2",
+            uploadBtn : '.uploadBtn',
+            flag : false,
+            name: $("#albumName").val()
+        });
+    }
+
     var initModalDialog = function() {
         // 在调用 show 方法后触发。
         albumFormModal.on('show.bs.modal', function (event) {
@@ -351,8 +380,39 @@ var SnippetAlbum = function() {
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
-
+            $(".modal-content").css("width", $(window).width());
             //  modal.find('.modal-body input').val(recipient)
+            initUploader();
+
+
+      /*      imageUploader.on( 'uploadSuccess', function( file,response) {
+                console.log(response);
+                console.log(file);
+            });*/
+
+
+            // 文件上传成功
+            imageUploader.on( 'uploadSuccess', function( file ,response) {
+                console.log(response);
+
+                if (response.status == 200) {
+
+                    $( '#'+file.id ).find('.file-status').text('已上传');
+                    $( '#'+file.id ).find('.file-status').text('上传出错');
+
+                } else {
+                    $( '#'+file.id ).find('.file-status').text('上传出错');
+
+                }
+            });
+
+            // 文件上传失败，显示上传出错
+            imageUploader.on( 'uploadError', function( file ) {
+                console.log(response);
+
+                $( '#'+file.id ).find('.file-status').text('上传出错');
+            });
+
         });
 
         // 当调用 hide 实例方法时触发。
@@ -379,9 +439,7 @@ var SnippetAlbum = function() {
                 e.preventDefault();
                 mark = 1;
                 // 显示 dialog
-               albumFormModal.modal('show').css({
-                    width: 'auto'
-                });
+               albumFormModal.modal('show');
                 //弹出即全屏
 
             /*    var index = layer.open({
