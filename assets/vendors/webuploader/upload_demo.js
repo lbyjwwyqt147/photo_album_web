@@ -356,7 +356,6 @@ var WebuploaderUtil = function(params) {
 
 
         });
-        destroy
         $li.appendTo( $queue );
     }
 
@@ -467,7 +466,7 @@ var WebuploaderUtil = function(params) {
             case 'finish':
                 stats = uploader.getStats();
                 if ( stats.successNum ) {
-                    alert( '上传成功' );
+                    console.log( '文件上传成功！' );
                 } else {
                     // 没有成功的图片，重设
                     state = 'done';

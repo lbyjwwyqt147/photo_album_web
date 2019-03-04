@@ -5,7 +5,8 @@ var SnippetAlbum = function() {
     var albumFormModal = $('#album_form_modal');
     var form = $("#album_form");
     var mark = 1;
-    var imageUploader;
+    var albumImageUploader;
+    var albumImageArray = [];
 
     /**
      *  初始化 dataGrid 组件
@@ -16,7 +17,7 @@ var SnippetAlbum = function() {
             var layuiForm = layui.form;
             albumTable.render({
                 elem: '#album_grid',
-                url: serverUrl + 'system/authorization/grid',
+                url: serverUrl + 'album/grid',
                 title: '系统授权列表',
                 text: "无数据", //空数据时的异常提示
                 cellMinWidth: 50, //全局定义常规单元格的最小宽度
@@ -29,10 +30,10 @@ var SnippetAlbum = function() {
                 cols: [[
                     {checkbox: true},
                     {field:'id', title:'ID', hide:true },
-                    {field:'albumName', title:'相册名称'},
+                   /* {field:'albumName', title:'相册名称'},*/
                     {field:'albumTitle', title:'相册主题'},
-                    {field:'albumStyle', title:'相册风格'},
                     {field:'albumClassify', title:'相册分类'},
+                    {field:'albumStyle', title:'相册风格'},
                     {field:'albumDescription', title:'相册描述', width:200},
                     {field:'createTime', title:'创建时间', align: 'center',
                         templet : function (row) {
@@ -50,7 +51,7 @@ var SnippetAlbum = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', toolbar: '#system_table_toolbar', align: 'center', width:180}
+                    {fixed: 'right', title:'操作', toolbar: '#album_table_toolbar', align: 'center', width:180}
                 ]],
                 page: true ,
                 limit: 30,
@@ -108,59 +109,100 @@ var SnippetAlbum = function() {
      * 初始化表单提交
      */
     var handleAlbumFormSubmit = function() {
+
+        //保存草稿
+        $('#album_la_eye_submit').click(function(e) {
+            e.preventDefault();
+            $("#albumStatus").val('2');
+            albumDataFormSubmit();
+            return false;
+        });
+
+        // 发布
         $('#album_form_submit').click(function(e) {
             e.preventDefault();
+            $("#albumStatus").val('0');
             Utils.inputTrim();
-            var btn = $(this);
-            form.validate({
-                rules: {
-                    sysCode: {
-                        required: true,
-                        maxlength: 10
-                    },
-                    sysName: {
-                        required: true,
-                        maxlength: 32
-                    },
-                    expireTime: {
-                        maxlength: 45
-                    }
-                },
-                errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
-                errorPlacement: function (error, element) {   // 验证失败调用的函数
-                    error.addClass( "form-control-feedback" );   // 提示信息增加样式
-                    element.parent("div").parent("div").addClass( "has-danger" );
-                    if ( element.prop( "type" ) === "checkbox" ) {
-                        error.insertAfter(element.parent("label"));  // 待验证的元素如果是checkbox，错误提示放到label中
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass("has-danger");     // 验证失败时给元素增加样式
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).parent("div").parent("div").removeClass( "has-danger" );
-                    $(element).removeClass("has-danger");  // 验证成功时去掉元素的样式
+            albumDataFormSubmit();
+            return false;
+        });
 
-                },
 
-                //display error alert on form submit
-                invalidHandler: function(event, validator) {
+    };
 
+    /**
+     * 表单提交
+     */
+    var albumDataFormSubmit = function () {
+        form.validate({
+            rules: {
+                albumTitle: {
+                    required: true,
+                    maxlength: 32
                 },
-            });
-            if (!form.valid()) {
-                return;
-            }
-            Utils.modalBlock("#album_form_modal");
-            $("#album_form input[name='systemCode']").val(Utils.systemCode);
-            var text = $("textarea").text();
-            var des = text.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' '); //转换格式
-            console.log(des);
+                albumStyle: {
+                    required: true
+                },
+                albumClassify: {
+                    required: true
+                },
+                albumLabel: {
+                    maxlength: 32
+                },
+                albumDescription: {
+                    maxlength: 255
+                },
+                albumMusicAddress: {
+                    maxlength: 255
+                }
+            },
+            errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
+            errorPlacement: function (error, element) {   // 验证失败调用的函数
+                error.addClass( "form-control-feedback" );   // 提示信息增加样式
+                element.parent("div").parent("div").addClass( "has-danger" );
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter(element.parent("label"));  // 待验证的元素如果是checkbox，错误提示放到label中
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parent("div").parent("div").addClass( "has-danger" );
+                $(element).addClass("has-danger");     // 验证失败时给元素增加样式
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parent("div").parent("div").removeClass( "has-danger" );
+                $(element).removeClass("has-danger");  // 验证成功时去掉元素的样式
+
+            },
+
+            //display error alert on form submit
+            invalidHandler: function(event, validator) {
+
+            },
+        });
+        if (!form.valid()) {
+            return;
+        }
+        var desText = $("#albumDes").val();
+        $("#albumDescription").val(Utils.textareaTo(desText));
+        if (albumImageUploader.getFiles().length == 0) {
+            $("#image-alert-danger").show();
+            return;
+        }
+        //开始上传文件
+        albumImageUploader.upload();
+        Utils.modalBlock("#album_form_modal");
+
+
+        // 所有文件上传结束
+        albumImageUploader.on( 'uploadFinished', function() {
+            $("#albumName").val($("#albumTitle").val());
+            $("#album_pictures").val(JSON.stringify(albumImageArray));
+            console.log("所有图片上传结束............")
             $.ajax({
                 type: "POST",
-                url: serverUrl + "system/authorization/save",
+                url: serverUrl + "album/save",
                 data: form.serializeJSON(),
                 dataType: "json",
                 headers: Utils.headers,
@@ -182,7 +224,7 @@ var SnippetAlbum = function() {
                     toastr.error(Utils.errorMsg);
                 }
             });
-            return false;
+
         });
     };
 
@@ -196,6 +238,7 @@ var SnippetAlbum = function() {
         $.each(input,function(i,v){
             $(v).removeAttr("value");
         });
+        $("#image-alert-danger").hide();
         var formControlFeedback = $(".form-control-feedback");
         formControlFeedback.parent("div").parent("div").removeClass( "has-danger" );
         formControlFeedback.remove();
@@ -348,8 +391,57 @@ var SnippetAlbum = function() {
      * 初始化上传插件
      */
     var initUploader = function () {
-        //证书控件
-        imageUploader = WebuploaderUtil({
+        // 分类下拉框
+        $.ajax({
+            type: "get",
+            url:Utils.coreServerAddress + 'dict/combox',
+            data:{
+                systemCode : Utils.systemCode,
+                dictCode : 'album_classify'
+            },
+            async:false,
+            dataType: "json",
+            headers: Utils.headers,
+            success: function(res){
+                if (null != res) {
+                    var html = '';
+                    Object.keys(res).forEach(function(key){
+                        html += '<option value="' + res[key].id + '" data-tokens="'+ res[key].text+'">' + res[key].text+ '</option>';
+                    });
+                    $("#albumClassify").html(html);
+                    //必须加，刷新select
+                    $("#albumClassify").selectpicker('refresh');
+                }
+            }
+        });
+
+        // 风格下拉框
+        $.ajax({
+            type: "get",
+            url:Utils.coreServerAddress + 'dict/combox',
+            data:{
+                systemCode : Utils.systemCode,
+                dictCode : 'image_style'
+            },
+            async:false,
+            dataType: "json",
+            headers: Utils.headers,
+            success: function(res){
+                if (null != res) {
+                    var html = '';
+                    Object.keys(res).forEach(function(key){
+                        html += '<option value="' + res[key].id + '" data-tokens="'+ res[key].text+'">' + res[key].text+ '</option>';
+                    });
+                    $("#albumStyle").html(html);
+                    //必须加，刷新select
+                    $("#albumStyle").selectpicker('refresh');
+                }
+            }
+        });
+
+
+        // 上传控件
+        albumImageUploader = WebuploaderUtil({
             uploader : '#uploader',
             filePicker : '#filePicker',
             queueList : '.queueList',
@@ -372,6 +464,8 @@ var SnippetAlbum = function() {
     var initModalDialog = function() {
         // 在调用 show 方法后触发。
         albumFormModal.on('show.bs.modal', function (event) {
+            $("#image-alert-danger").hide();
+            albumImageArray = [];
          //   var button = $(event.relatedTarget);// 触发事件的按钮
            // var recipient = button.data('whatever'); // 解析出data-whatever内容
             var recipient = "发布作品";
@@ -385,29 +479,25 @@ var SnippetAlbum = function() {
             initUploader();
 
 
-      /*      imageUploader.on( 'uploadSuccess', function( file,response) {
-                console.log(response);
-                console.log(file);
-            });*/
-
+            albumImageUploader.on( 'beforeFileQueued', function( file ,response) {
+                $("#image-alert-danger").hide();
+                if (!form.valid()) {
+                    return false;
+                }
+            });
 
             // 文件上传成功
-            imageUploader.on( 'uploadSuccess', function( file ,response) {
-                console.log(response);
-
+            albumImageUploader.on( 'uploadSuccess', function( file ,response) {
                 if (response.status == 200) {
-
+                    albumImageArray.push(response.data[0]);
                     $( '#'+file.id ).find('.file-status').text('已上传');
-                    $( '#'+file.id ).find('.file-status').text('上传出错');
-
                 } else {
                     $( '#'+file.id ).find('.file-status').text('上传出错');
-
                 }
             });
 
             // 文件上传失败，显示上传出错
-            imageUploader.on( 'uploadError', function( file ) {
+            albumImageUploader.on( 'uploadError', function( file ) {
                 console.log(response);
 
                 $( '#'+file.id ).find('.file-status').text('上传出错');
@@ -420,6 +510,14 @@ var SnippetAlbum = function() {
             // 清空form 表单数据
             cleanForm();
             $(".modal-backdrop").remove();
+
+            // 移除文件
+            var imageFiles = albumImageUploader.getFiles();
+            $.each(imageFiles, function (i, v) {
+                albumImageUploader.removeFile(v ,true);
+            });
+            albumImageUploader.reset();
+            albumImageUploader.destroy();
         });
     };
 

@@ -1,10 +1,11 @@
-var systemCode = "1000";
-var appId = "1550817758252";
-var appKey = "c80e645007264e2684b393533ef7e832";
-var credential = "1f2db1ad91963708d36c751c282be8ae";
+var systemCode = "1001";
+var appId = "1550817774159";
+var appKey = "0020a9ebfc7b4667b0617488d96c788b";
+var credential = "42e853886ec8d3cbdaa062a732551b10";
 
 var Utils = {
-    "serverAddress" : "http://127.0.0.1:18080/api/v1/",
+    "serverAddress" : "http://127.0.0.1:18081/api/v1/",
+    "coreServerAddress" : "http://127.0.0.1:18080/api/v1/",
     "systemCode" : systemCode,
     "appId" : appId,
     "appKey" : appKey,
@@ -23,6 +24,36 @@ var Utils = {
         "appKey":appKey,
         "credential":credential,
         "systemCode":systemCode
+    },
+
+    /**
+     * 转换textarea存入数据库的回车换行和空格
+     * @param str
+     * @returns {*}
+     */
+    textareaTo:function(str) {
+        var reg=new RegExp("\n","g");
+        var regSpace=new RegExp(" ","g");
+
+        str = str.replace(reg,"<br>");
+        str = str.replace(regSpace,"&nbsp;");
+
+        return str;
+    },
+
+    /**
+     *  将文本转换为了HTML的格式，'\n'   转换为   <br/>，' ' 转换为 &nbsp;
+     * @param str
+     * @returns {*}
+     */
+    toTextarea:function(str) {
+        var reg=new RegExp("<br>","g");
+        var regSpace=new RegExp("&nbsp;","g");
+
+        str = str.replace(reg,"\n");
+        str = str.replace(regSpace," ");
+
+        return str;
     },
 
     /**

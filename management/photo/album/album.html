@@ -194,11 +194,23 @@
                                                     <span class="percentage"></span>
                                                 </div><div class="info"></div>
                                                 <div class="btns">
-                                                    <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+                                                    <div id="filePicker2"></div>
+<!--
+                                                    <div class="uploadBtn">开始上传</div>
+-->
                                                 </div>
                                             </div>
                                         </div>
 
+                                    </div>
+
+                                    <div class="m-alert m-alert--icon alert alert-danger" id="image-alert-danger" style="display: none;margin-left: 20px;margin-right: 20px;">
+                                        <div class="m-alert__icon">
+                                            <i class="flaticon-danger"></i>
+                                        </div>
+                                        <div class="m-alert__text">
+                                            <strong>请上传图片!</strong>
+                                        </div>
                                     </div>
 
                                     <!--end:: Widgets/Stats2-1 -->
@@ -212,27 +224,33 @@
                                         <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="album_form">
                                              <div class="m-portlet__body">
                                                  <div class="form-group m-form__group row ">
-                                                     <label class="col-form-label col-lg-3 col-sm-12">名称 <span class="has-danger-error">*</span></label>
+                                                     <label class="col-form-label col-lg-3 col-sm-12">主题 <span class="has-danger-error">*</span></label>
                                                      <div class="col-lg-9 col-md-9 col-sm-12">
-                                                         <input type="text" class="form-control m-input" name="albumName" id="albumName" placeholder="相册名称必须填写" autocomplete="off">
+                                                         <input type="text" class="form-control m-input" name="albumTitle" id="albumTitle" placeholder="主题名称必须填写" autocomplete="off">
                                                      </div>
                                                  </div>
+
+                                                 <div class="form-group m-form__group row">
+                                                     <label class="col-form-label col-lg-3 col-sm-12">分类  <span class="has-danger-error">*</span></label>
+                                                     <div class="col-lg-9 col-md-9 col-sm-12">
+                                                         <select class="form-control m-bootstrap-select m_selectpicker" name="albumClassify" id="albumClassify">
+
+                                                         </select>
+                                                     </div>
+                                                 </div>
+
                                                  <div class="form-group m-form__group row">
                                                      <label class="col-form-label col-lg-3 col-sm-12">风格  <span class="has-danger-error">*</span></label>
                                                      <div class="col-lg-9 col-md-9 col-sm-12">
-                                                         <select class="form-control m-bootstrap-select m_selectpicker" name="albumStyle">
-                                                             <option>Mustard</option>
-                                                             <option>Ketchup</option>
-                                                             <option>Relish</option>
-                                                         </select>
+                                                         <select class="form-control m-bootstrap-select m_selectpicker" name="albumStyle" id="albumStyle">
 
-                                                         <!--<input type="text" class="form-control m-input" name="albumStyle" placeholder="风格" autocomplete="off">-->
+                                                         </select>
                                                      </div>
                                                  </div>
                                                  <div class="form-group m-form__group row">
                                                      <label class="col-form-label col-lg-3 col-sm-12">描述</label>
                                                      <div class="col-lg-9 col-md-9 col-sm-12">
-                                                         <textarea class="form-control m-input" name="albumDescription" rows="3"></textarea>
+                                                         <textarea class="form-control m-input" name="albumDes" id="albumDes" rows="3"  wrap="hard"></textarea>
 
                                                      </div>
                                                  </div>
@@ -252,10 +270,11 @@
 
 
                                                  <div style="display: none">
-                                                     <input type="hidden" class="form-control" name="systemCode" placeholder="systemCode" autocomplete="off">
                                                      <input type="hidden" class="form-control" name="id" placeholder="id" autocomplete="off">
-                                                     <input type="hidden" class="form-control" name="credential" placeholder="credential" autocomplete="off">
-                                                     <input type="hidden" class="form-control" name="status" placeholder="status" autocomplete="off">
+                                                     <input type="hidden" class="form-control" name="albumStatus" id="albumStatus" placeholder="status" autocomplete="off">
+                                                     <input type="hidden" class="form-control" name="pictures"  id="album_pictures" placeholder="pictures" autocomplete="off">
+                                                     <input type="hidden" class="form-control" name="albumName" id="albumName" placeholder="albumName" autocomplete="off">
+                                                     <input type="hidden" class="form-control" name="albumDescription" id="albumDescription" placeholder="albumDescription" autocomplete="off">
                                                  </div>
                                              </div>
                                          </form>
@@ -276,10 +295,17 @@
                         </span>
                     </a>
 
+                    <a href="#" class="btn btn-info btn-sm m-btn m-btn m-btn--icon" id="album_la_eye_submit">
+                        <span>
+                            <i class="la la-eye"></i>
+                            <span>预览</span>
+                        </span>
+                    </a>
+
                     <a href="#" class="btn btn-success btn-sm m-btn m-btn m-btn--icon" id="album_form_submit">
                         <span>
                             <i class="la la-check"></i>
-                            <span>保存</span>
+                            <span>发布</span>
                         </span>
                     </a>
 
@@ -291,10 +317,10 @@
 
 </div>
 
-<script type="text/html" id="system_table_toolbar">
+<script type="text/html" id="album_table_toolbar">
 
 
-    <input type="checkbox" name="lock" title="禁用" value="{{d.sysCode}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
 
     <a href="#" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-toggle="m-tooltip" data-placement="top" title="修改数据" lay-event="edit">
         <i class="la la-edit"></i>

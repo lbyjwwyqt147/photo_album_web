@@ -1,6 +1,6 @@
 //== Class Definition
 var SnippetDict = function() {
-    var serverUrl = Utils.serverAddress;
+    var serverUrl = Utils.coreServerAddress;
     var dictTable;
     var dictFormModal = $('#dict_form_modal');
     var form = $("#dict_form");
@@ -245,6 +245,7 @@ var SnippetDict = function() {
                     }
                 },
                 highlight: function (element, errorClass, validClass) {
+                    $(element).parent("div").parent("div").addClass( "has-danger" );
                     $(element).addClass("has-danger");     // 验证失败时给元素增加样式
                 },
                 unhighlight: function (element, errorClass, validClass) {
