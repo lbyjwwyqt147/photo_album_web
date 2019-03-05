@@ -71,7 +71,7 @@ var ImagesView = {
                 col_div += '<div class="m-portlet__body">\n';
                 col_div += '<div class="m-widget19">\n';
                 col_div += '<div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height-: 300px">\n';
-                col_div += '<img src="'+v.pictureLocation+'" alt="">\n';
+                col_div += '<img src="'+v.cover+'" alt="">\n';
                 col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">\n';
                 col_div += v.title;
                 col_div += '</h3>\n';
@@ -88,7 +88,7 @@ var ImagesView = {
                 col_div += '</div>\n';
                 col_div += '</div>\n';
 
-                $row.ap
+                $row.append(col_div);
             });
         }
 

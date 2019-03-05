@@ -12,97 +12,30 @@ var SnippetAlbum = function() {
      *  初始化 dataGrid 组件
      */
     var initDataGrid = function () {
-        layui.use('table', function(){
-            albumTable = layui.table;
-            var layuiForm = layui.form;
-            albumTable.render({
-                elem: '#album_grid',
-                url: serverUrl + 'album/grid',
-                title: '系统授权列表',
-                text: "无数据", //空数据时的异常提示
-                cellMinWidth: 50, //全局定义常规单元格的最小宽度
-                height: 'full-100', //高度最大化减去差值
-                even: true,
-                initSort: {
-                    field: 'sysCode', //排序字段，对应 cols 设定的各字段名
-                    type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-                },
-                cols: [[
-                    {checkbox: true},
-                    {field:'id', title:'ID', hide:true },
-                   /* {field:'albumName', title:'相册名称'},*/
-                    {field:'albumTitle', title:'相册主题'},
-                    {field:'albumClassify', title:'相册分类'},
-                    {field:'albumStyle', title:'相册风格'},
-                    {field:'albumDescription', title:'相册描述', width:200},
-                    {field:'createTime', title:'创建时间', align: 'center',
-                        templet : function (row) {
-                            return Utils.datatHHmmFormat(row.createTime);
-                        }
-                    },
-                    {field:'albumStatus', title:'状态', align: 'center',
-                        templet : function (row) {
-                             var value = row.status;
-                             var spanCss = "m-badge--success";
-                             if (value == 1)  {
-                                 spanCss = "m-badge--warning";
-                             }
-                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + Utils.statusText(value) + '</span>';
-                            return spanHtml;
-                        }
-                    },
-                    {fixed: 'right', title:'操作', toolbar: '#album_table_toolbar', align: 'center', width:180}
-                ]],
-                page: true ,
-                limit: 30,
-                limits: [30,60,90],
-                request: {
-                    pageName: 'pageNumber', //页码的参数名称，默认：page
-                    limitName: 'pageSize' //每页数据量的参数名，默认：limit
-                },
-               response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-                },
-                headers: Utils.headers,
-                parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                    return {
-                        "code": res.status, //解析接口状态
-                        "msg": res.message, //解析提示文本
-                        "count": res.total, //解析数据长度
-                        "data": res.data //解析数据列表
-                    };
-                }
-            });
+        $.ajax({
+            type: "get",
+            url:serverUrl + 'album/grid',
+            data:{
 
-            //监听行工具事件
-            albumTable.on('tool(album_grid)', function(obj){
-                if(obj.event === 'del'){
-                    deleteData(obj);
-                } else if(obj.event === 'edit'){
-                    var data = obj.data;
-                    form.setForm(data);
-                    mark = 2;
-                    // 显示 dialog
-                    albumFormModal.modal('show');
+            },
+            async:false,
+            dataType: "json",
+            headers: Utils.headers,
+            success: function(response){
+                console.log(response);
+                if (response.success) {
+                    ImagesView.initImageManagerViewList($("#album_manager_grid"), response.data);
                 }
-            });
-
-            //监听锁定操作
-            layuiForm.on('checkbox(lock)', function(obj){
-                var statusValue = 0;
-                if (obj.elem.checked) {
-                    statusValue = 1;
-                }
-                updateDataStatus(obj, statusValue);
-            });
+            }
         });
+
     };
 
     /**
      * 刷新grid
      */
     var refreshGrid = function () {
-        albumTable.reload("album_grid");
+
     };
 
     /**
