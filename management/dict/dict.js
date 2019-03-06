@@ -123,7 +123,7 @@ var SnippetDict = function() {
                 title: '数据字典列表',
                 text: "无数据", //空数据时的异常提示
                 cellMinWidth: 50, //全局定义常规单元格的最小宽度
-                height: 'full-220', //高度最大化减去差值
+                height: 'full-211', //高度最大化减去差值
                 even: true,
                 initSort: {
                     field: 'priority', //排序字段，对应 cols 设定的各字段名
@@ -149,9 +149,16 @@ var SnippetDict = function() {
                     },
                     {fixed: 'right', title:'操作', toolbar: '#dict_table_toolbar', align: 'center', width:200}
                 ]],
-                page: true ,
+                page: {
+                    layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
+                    curr: 1 ,//设定初始在第 1 页
+                    groups: 10, //只显示 10 个连续页码
+                    first: true, //显示首页
+                    last: true //显示尾页
+                },
                 limit: 20,
                 limits: [20,30,40,50],
+
                 request: {
                     pageName: 'pageNumber', //页码的参数名称，默认：page
                     limitName: 'pageSize' //每页数据量的参数名，默认：limit

@@ -7,27 +7,46 @@ var SnippetAlbum = function() {
     var mark = 1;
     var albumImageUploader;
     var albumImageArray = [];
+    var album_style_array = [];
 
     /**
      *  初始化 dataGrid 组件
      */
     var initDataGrid = function () {
+        // 风格下拉框
         $.ajax({
             type: "get",
-            url:serverUrl + 'album/grid',
+            url:Utils.coreServerAddress + 'dict/combox',
             data:{
-
+                systemCode : Utils.systemCode,
+                dictCode : 'image_style'
             },
             async:false,
             dataType: "json",
             headers: Utils.headers,
-            success: function(response){
-                console.log(response);
-                if (response.success) {
-                    ImagesView.initImageManagerViewList($("#album_manager_grid"), response.data);
+            success: function(res){
+                if (null != res) {
+                    var styleHtml = '';
+                    var checkboxHtml = ''
+                    Object.keys(res).forEach(function(key){
+                        styleHtml += '<option value="' + res[key].id + '" data-tokens="'+ res[key].text+'">' + res[key].text+ '</option>\n';
+                        checkboxHtml += '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">\n';
+                        checkboxHtml += '<input type="checkbox" name="query_album_style" value="'+ res[key].id +'" onchange="SnippetAlbum.queryAlbumGrid()">\n';
+                        checkboxHtml += res[key].text
+                        checkboxHtml += '\n<span></span>\n';
+                        checkboxHtml += '</label>\n';
+                    });
+                    $("#album_query_checkbox_div").html(checkboxHtml);
+                    $("#albumStyle").html(styleHtml);
+                    //必须加，刷新select
+                    $("#albumStyle").selectpicker('refresh');
                 }
             }
         });
+        $("#album_manager_grid").css("height",$(document.body).height()-300);
+
+        // 相册list
+        refreshGrid();
 
     };
 
@@ -35,8 +54,78 @@ var SnippetAlbum = function() {
      * 刷新grid
      */
     var refreshGrid = function () {
+        var query_album_status = $("input[name='query_album_status']:checked").val();
+        // 相册list
+        $.ajax({
+            type: "get",
+            url:serverUrl + 'album/grid',
+            data:{
+                'albumStyle': JSON.stringify(album_style_array),
+                'albumStatus': query_album_status
+            },
+            async:false,
+            dataType: "json",
+            headers: Utils.headers,
+            success: function(response){
+                console.log(response);
+                if (response.success) {
+                    // ImagesView.initImageManagerViewList($("#album_manager_grid"), response.data);
+                    var datas =  response.data;
+                    layui.use(['laypage', 'layer'], function(){
+                        var laypage = layui.laypage,layer = layui.layer;
+                        //调用分页
+                        laypage.render({
+                            elem: 'album_manager_grid_laypage',
+                            count: datas.length,
+                            layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
+                            limit:20,
+                            limits:[20, 30, 40, 50],
+                            jump: function(obj){
+                               ImagesView.rendererImagesList("album_manager_grid", datas, false);
+                            }
+                        });
+                    });
 
+                }
+            }
+        });
+
+
+       /* layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage,layer = layui.layer;
+            //调用分页
+            laypage.render({
+                elem: 'album_manager_grid_laypage',
+                count: data.length,
+                layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
+                limit:20,
+                limits:[20, 30, 40, 50],
+                jump: function(obj){
+                    //模拟渲染
+                    document.getElementById('biuuu_city_list').innerHTML = function(){
+                        var arr = []
+                            ,thisData = data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                        layui.each(thisData, function(index, item){
+                            arr.push('<li>'+ item +'</li>');
+                        });
+                        return arr.join('');
+                    }();
+                }
+            });
+        });*/
     };
+
+    /**
+     * 查询相册
+     */
+    var queryAlbumList = function () {
+        album_style_array = [];
+        var album_style_checkbox = $("input[name='query_album_style']:checked");
+        $.each(album_style_checkbox, function (i, v) {
+          album_style_array.push($(this).val());
+        });
+        refreshGrid();
+    }
 
     /**
      * 初始化表单提交
@@ -348,30 +437,6 @@ var SnippetAlbum = function() {
             }
         });
 
-        // 风格下拉框
-        $.ajax({
-            type: "get",
-            url:Utils.coreServerAddress + 'dict/combox',
-            data:{
-                systemCode : Utils.systemCode,
-                dictCode : 'image_style'
-            },
-            async:false,
-            dataType: "json",
-            headers: Utils.headers,
-            success: function(res){
-                if (null != res) {
-                    var html = '';
-                    Object.keys(res).forEach(function(key){
-                        html += '<option value="' + res[key].id + '" data-tokens="'+ res[key].text+'">' + res[key].text+ '</option>';
-                    });
-                    $("#albumStyle").html(html);
-                    //必须加，刷新select
-                    $("#albumStyle").selectpicker('refresh');
-                }
-            }
-        });
-
 
         // 上传控件
         albumImageUploader = WebuploaderUtil({
@@ -490,8 +555,11 @@ var SnippetAlbum = function() {
             });
 
             window.onresize = function(){
-                albumTable.resize("album_grid");
+                $("#album_manager_grid").css("height",$(document.body).height()-300);
             }
+        },
+        queryAlbumGrid: function() {
+            queryAlbumList();
         }
     };
 }();

@@ -5402,7 +5402,7 @@ var mDropdown = function(elementId, options) {
          * Get zindex
          */
         setZindex: function() {
-            var zIndex = 101; //mUtil.css(the.layout.wrapper, 'z-index');
+            var zIndex = 133; //mUtil.css(the.layout.wrapper, 'z-index');
             var newZindex = mUtil.getHighestZindex(element);
             if (newZindex >= zIndex) {
                 zIndex = newZindex + 1;

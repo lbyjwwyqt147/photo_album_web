@@ -67,12 +67,6 @@
             text-align: left!important;
         }
 
-        .layui-table-fixed {
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 90;
-        }
 
         .modal .modal-content .modal-body {
              padding: 0px;
@@ -106,6 +100,23 @@
             pointer-events: none;
         }
 
+        .m-portlet .m-portlet__head {
+            border-bottom: 0px solid #ebedf2;
+            padding:0px;
+        }
+
+        .m-radio, .m-checkbox {
+            padding-left: 20px;
+        }
+
+        .layui-laypage .layui-laypage-count, .layui-laypage .layui-laypage-limits, .layui-laypage .layui-laypage-refresh, .layui-laypage .layui-laypage-skip {
+            margin-left: 0px;
+        }
+
+        .layui-tab-content {
+            padding: 1px;
+        }
+
      /*   .layui-form-checked span, .layui-form-checked:hover span {
             background-color: #5FB878;
         }*/
@@ -118,9 +129,28 @@
             <div class="col-xl-12">
                 <!--begin:: grid -->
                 <div class="m-widget1">
-                    <div class="m-portlet__head" style="height: 41px;">
-                        <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head" >
+                        <div class="m-portlet__head-caption" >
+                            <div class="m-checkbox-inline" id="album_query_checkbox_div" style="padding-left: 10px;">
 
+                            </div>
+                            <div class="m-radio-inline" style="padding-left: 50px">
+                                <label class="m-radio m-radio--bold m-radio--state-brand">
+                                    <input type="radio" name="query_album_status" value="0" checked onchange="SnippetAlbum.queryAlbumGrid()">
+                                    已发布
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--bold m-radio--state-brand">
+                                    <input type="radio" name="query_album_status" value="1" onchange="SnippetAlbum.queryAlbumGrid()">
+                                    隐藏
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--bold m-radio--state-brand">
+                                    <input type="radio" name="query_album_status" value="2" onchange="SnippetAlbum.queryAlbumGrid()">
+                                    草稿
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
                         <div class="m-portlet__head-tools">
                             <ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
@@ -132,14 +162,7 @@
 															</span>
                                     </a>
                                 </li>
-                                <li class="nav-item m-tabs__item">
-                                    <a href="#" class="btn btn-outline-danger m-btn btn-sm  m-btn--icon" id="album_delete">
-															<span>
-																<i class="la la-trash-o"></i>
-																<span>删除</span>
-															</span>
-                                    </a>
-                                </li>
+
                                 <li class="nav-item m-tabs__item">
                                     <a href="#" class="btn btn-outline-info m-btn btn-sm  m-btn--icon" id="album_sync">
 															<span>
@@ -156,8 +179,8 @@
 -->
 
 
-                    <div class="row" style="margin-right: 0px;  margin-left: 0px; " id="album_manager_grid">
-                        <div class="col-xl-4">
+                    <div class="row" style="margin-right: 0px;  margin-left: 0px; border: 1px solid #ebedf2; padding: 10px 10px;" id="album_manager_grid" >
+                        <div class="col-xl-3">
                             <!--begin:: Widgets/Blog-->
                             <div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
                                 <div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">
@@ -180,7 +203,7 @@
                                                 </a>
 
                                                 <div class="m-dropdown__wrapper" style="z-index: 101;">
-                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 21.5px;"></span>
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 35.5px;"></span>
                                                     <div class="m-dropdown__inner">
                                                         <div class="m-dropdown__body">
                                                             <div class="m-dropdown__content">
@@ -228,7 +251,7 @@
                                             <h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">
                                                 Introducing New Feature
                                             </h3>
-                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 21.5rem;padding-bottom: 1.3rem;">
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 35.5rem;padding-bottom: 1.3rem;">
                                                 18
                                             </h3>
                                             <div class="m-widget19__shadow"></div>
@@ -247,7 +270,7 @@
 
 
 
-                        <div class="col-xl-4">
+                        <div class="col-xl-3">
                             <!--begin:: Widgets/Blog-->
                             <div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
                                 <div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">
@@ -270,7 +293,7 @@
                                                 </a>
 
                                                 <div class="m-dropdown__wrapper" style="z-index: 101;">
-                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 21.5px;"></span>
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 35.5px;"></span>
                                                     <div class="m-dropdown__inner">
                                                         <div class="m-dropdown__body">
                                                             <div class="m-dropdown__content">
@@ -318,7 +341,7 @@
                                             <h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">
                                                 Introducing New Feature
                                             </h3>
-                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 21.5rem;padding-bottom: 1.3rem;">
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 35.5rem;padding-bottom: 1.3rem;">
                                                 18
                                             </h3>
                                             <div class="m-widget19__shadow"></div>
@@ -336,7 +359,7 @@
 
 
 
-                        <div class="col-xl-4">
+                        <div class="col-xl-3">
                             <!--begin:: Widgets/Blog-->
                             <div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
                                 <div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">
@@ -359,7 +382,7 @@
                                                 </a>
 
                                                 <div class="m-dropdown__wrapper" style="z-index: 101;">
-                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 21.5px;"></span>
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 35.5px;"></span>
                                                     <div class="m-dropdown__inner">
                                                         <div class="m-dropdown__body">
                                                             <div class="m-dropdown__content">
@@ -403,11 +426,11 @@
                                 <div class="m-portlet__body">
                                     <div class="m-widget19">
                                         <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 300px">
-                                            <img src="http://localhost:18080/images/1001/1/10/2019/3/5/03754e29a86f4285aa341006f45213bc.jpg" alt="">
+                                            <img src="../../assets/app/media/img//blog/blog5.jpg" alt="">
                                             <h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">
                                                 Introducing New Feature
                                             </h3>
-                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 21.5rem;padding-bottom: 1.3rem;">
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 35.5rem;padding-bottom: 1.3rem;">
                                                 18
                                             </h3>
                                             <div class="m-widget19__shadow"></div>
@@ -425,10 +448,185 @@
 
 
 
+                        <div class="col-xl-3">
+                            <!--begin:: Widgets/Blog-->
+                            <div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
+                                <div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">
+                                    <div class="m-portlet__head-caption">
+                                        <div class="m-portlet__head-action">
+                                            <span class="m-badge m-badge--success m-badge--wide">hot</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="m-portlet__head-tools">
+                                        <ul class="m-portlet__nav">
+                                            <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
+
+                                                <!-- <a href="" class="m-portlet__nav-link m-portlet__nav-link&#45;&#45;icon">
+                                                     <i class="la la-cog"></i>
+                                                 </a>-->
+
+                                                <a href="#" class="m-portlet__nav-link m-portlet__nav-link--icon m-portlet__nav-link--icon-xl">
+                                                    <i class="la la-ellipsis-h m--font-light"></i>
+                                                </a>
+
+                                                <div class="m-dropdown__wrapper" style="z-index: 101;">
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 35.5px;"></span>
+                                                    <div class="m-dropdown__inner">
+                                                        <div class="m-dropdown__body">
+                                                            <div class="m-dropdown__content">
+                                                                <ul class="m-nav">
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-edit"></i>
+                                                                            <span class="m-nav__link-text">编辑</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-interface-7"></i>
+                                                                            <span class="m-nav__link-text">发布</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-close"></i>
+                                                                            <span class="m-nav__link-text">隐藏</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-delete-2"></i>
+                                                                            <span class="m-nav__link-text">删除</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <div class="m-portlet__body">
+                                    <div class="m-widget19">
+                                        <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 300px">
+                                            <img src="../../assets/app/media/img//blog/blog4.jpg" alt="">
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">
+                                                Introducing New Feature
+                                            </h3>
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 35.5rem;padding-bottom: 1.3rem;">
+                                                18
+                                            </h3>
+                                            <div class="m-widget19__shadow"></div>
+                                        </div>
+                                        <div class="m-widget19__content">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--end:: Widgets/Blog-->
+                        </div>
+
+
+                        <div class="col-xl-3">
+                            <!--begin:: Widgets/Blog-->
+                            <div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
+                                <div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">
+                                    <div class="m-portlet__head-caption">
+                                        <div class="m-portlet__head-action">
+                                            <span class="m-badge m-badge--success m-badge--wide">hot</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="m-portlet__head-tools">
+                                        <ul class="m-portlet__nav">
+                                            <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
+
+                                                <!-- <a href="" class="m-portlet__nav-link m-portlet__nav-link&#45;&#45;icon">
+                                                     <i class="la la-cog"></i>
+                                                 </a>-->
+
+                                                <a href="#" class="m-portlet__nav-link m-portlet__nav-link--icon m-portlet__nav-link--icon-xl">
+                                                    <i class="la la-ellipsis-h m--font-light"></i>
+                                                </a>
+
+                                                <div class="m-dropdown__wrapper" style="z-index: 101;">
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 35.5px;"></span>
+                                                    <div class="m-dropdown__inner">
+                                                        <div class="m-dropdown__body">
+                                                            <div class="m-dropdown__content">
+                                                                <ul class="m-nav">
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-edit"></i>
+                                                                            <span class="m-nav__link-text">编辑</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-interface-7"></i>
+                                                                            <span class="m-nav__link-text">发布</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-close"></i>
+                                                                            <span class="m-nav__link-text">隐藏</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a href="" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-delete-2"></i>
+                                                                            <span class="m-nav__link-text">删除</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <div class="m-portlet__body">
+                                    <div class="m-widget19">
+                                        <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 300px">
+                                            <img src="../../assets/app/media/img//blog/blog3.jpg" alt="">
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 2.5rem;padding-bottom: 1.3rem;">
+                                                Introducing New Feature
+                                            </h3>
+                                            <h3 class="m-widget19__title m--font-light" style="padding-left: 35.5rem;padding-bottom: 1.3rem;">
+                                                18
+                                            </h3>
+                                            <div class="m-widget19__shadow"></div>
+                                        </div>
+                                        <div class="m-widget19__content">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--end:: Widgets/Blog-->
+                        </div>
 
 
                     </div>
 
+                    <div id="album_manager_grid_laypage"></div>
 
 
                 </div>
