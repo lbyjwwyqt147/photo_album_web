@@ -16,7 +16,7 @@ var SnippetAlbum = function() {
         // 风格下拉框
         $.ajax({
             type: "get",
-            url:Utils.coreServerAddress + 'dict/combox',
+            url:Utils.cloudServerAddress + 'dict/combox',
             data:{
                 systemCode : Utils.systemCode,
                 dictCode : 'image_style'
@@ -416,7 +416,7 @@ var SnippetAlbum = function() {
         // 分类下拉框
         $.ajax({
             type: "get",
-            url:Utils.coreServerAddress + 'dict/combox',
+            url:Utils.cloudServerAddress + 'dict/combox',
             data:{
                 systemCode : Utils.systemCode,
                 dictCode : 'album_classify'

@@ -147,7 +147,7 @@ var WebuploaderUtil = function(params) {
         swf: './Uploader.swf',
         chunked: false,  //是否要分片处理大文件上传
         chunkSize: 2*1024*1024, //分片上传，每片2M，默认是5M
-        server: 'http://127.0.0.1:18080/api/v1/file/upload/batch',
+        server: 'http://101.132.136.225:18080/api/v1/file/upload/batch',
         // runtimeOrder: 'flash',
         accept: {
             title: '图片',

@@ -5,7 +5,7 @@ var credential = "42e853886ec8d3cbdaa062a732551b10";
 
 var Utils = {
     "serverAddress" : "http://127.0.0.1:18081/api/v1/",
-    "coreServerAddress" : "http://127.0.0.1:18080/api/v1/",
+    "cloudServerAddress" : "http://101.132.136.225:18080/api/v1/",
     "systemCode" : systemCode,
     "appId" : appId,
     "appKey" : appKey,

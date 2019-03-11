@@ -1,11 +1,12 @@
 //== Class Definition
-var SnippetDict = function() {
-    var serverUrl = Utils.cloudServerAddress;
-    var dictTable;
-    var dictFormModal = $('#dict_form_modal');
-    var form = $("#dict_form");
+var Snippetorganization = function() {
+    var serverUrl = Utils.serverAddress;
+    var organizationTable;
+    var organizationFormModal = $('#organization_form_modal');
+    var form = $("#organization_form");
     var mark = 1;
-    var dictPid = 0;
+    var organizationPid = 0;
+    var organizationParentName = "";
     var nodeList = [];
     var setting = {
         view: {
@@ -25,12 +26,12 @@ var SnippetDict = function() {
         },
         async: {
             enable: true,
-            url: serverUrl + "dict/ztree?systemCode=" + Utils.systemCode + "&credential=" +  Utils.credential + "&pid=" + dictPid,
+            url: serverUrl + "organization/ztree?pid=" + organizationPid,
             autoParam: ["id", "name"]
         },
         callback: {
             onClick: function (event, treeId, treeNode) {
-                dictPid = treeNode.id;
+                organizationPid = treeNode.id;
                 refreshGrid();
             }
         }
@@ -41,7 +42,7 @@ var SnippetDict = function() {
      * 初始化ztree 组件
      */
     var initTree = function() {
-        $.fn.zTree.init($("#dict_tree"), setting);
+        $.fn.zTree.init($("#organization_tree"), setting);
     };
 
     /**
@@ -49,7 +50,7 @@ var SnippetDict = function() {
      * @param id
      */
     function rereshParentNode(id){
-        var treeObj = $.fn.zTree.getZTreeObj("dict_tree");
+        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
         var nowNode = treeObj.getNodesByParam("id", id, null);
         var parent = nowNode[0].getParentNode();
         treeObj.reAsyncChildNodes(parent, "refresh");
@@ -60,7 +61,7 @@ var SnippetDict = function() {
      * @param id
      */
     function rereshNode(id){
-        var treeObj = $.fn.zTree.getZTreeObj("dict_tree");
+        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
         var nowNode = treeObj.getNodesByParam("id", id, null);
         treeObj.reAsyncChildNodes(nowNode[0], "refresh");
     };
@@ -70,7 +71,7 @@ var SnippetDict = function() {
      * @param id
      */
     function rereshTree(){
-        var treeObj = $.fn.zTree.getZTreeObj("dict_tree");
+        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
         treeObj.refresh();
     };
 
@@ -85,7 +86,7 @@ var SnippetDict = function() {
         if (value === "") {
             return;
         }
-        var zTree = $.fn.zTree.getZTreeObj("dict_tree");
+        var zTree = $.fn.zTree.getZTreeObj("organization_tree");
         var keyType = "name";
         nodeList = zTree.getNodesByParamFuzzy(keyType, value);
         updateNodes(nodeList, true);
@@ -93,7 +94,7 @@ var SnippetDict = function() {
     };
 
     function updateNodes(nodeList, highlight) {
-        var zTree = $.fn.zTree.getZTreeObj("dict_tree");
+        var zTree = $.fn.zTree.getZTreeObj("organization_tree");
         for( var i=0, l=nodeList.length; i<l; i++) {
             nodeList[i].highlight = highlight;
             zTree.updateNode(nodeList[i]);
@@ -110,15 +111,13 @@ var SnippetDict = function() {
      */
     var initDataGrid = function () {
         layui.use('table', function(){
-             dictTable = layui.table;
+             organizationTable = layui.table;
             var layuiForm = layui.form;
-            dictTable.render({
-                elem: '#dict_grid',
-                url: serverUrl + 'dict/grid',
+            organizationTable.render({
+                elem: '#organization_grid',
+                url: serverUrl + 'organization/grid',
                 where: {   //传递额外参数
-                    'pid' : dictPid,
-                    'credential': Utils.credential,
-                    'systemCode': Utils.systemCode
+                    'pid' : organizationPid
                 },
                 title: '数据字典列表',
                 text: "无数据", //空数据时的异常提示
@@ -132,13 +131,14 @@ var SnippetDict = function() {
                 cols: [[
                     {checkbox: true},
                     {field:'id', title:'ID', hide:true },
-                    {field:'dictCode', title:'字典代码'},
-                    {field:'dictName', title:'字典名称'},
-                    {field:'priority', title:'优先级'},
+                    {field:'orgNumber', title:'机构代码'},
+                    {field:'orgName', title:'机构名称'},
+                    {field:'fullName', title:'机构全名称'},
+                    {field:'seq', title:'优先级'},
                     {field:'description', title:'描述'},
-                    {field:'status', title:'状态', align: 'center',
+                    {field:'orgStatus', title:'状态', align: 'center',
                         templet : function (row) {
-                            var value = row.status;
+                            var value = row.orgStatus;
                             var spanCss = "m-badge--success";
                             if (value == 1)  {
                                 spanCss = "m-badge--warning";
@@ -147,7 +147,7 @@ var SnippetDict = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', toolbar: '#dict_table_toolbar', align: 'center', width:200}
+                    {fixed: 'right', title:'操作', toolbar: '#organization_table_toolbar', align: 'center', width:200}
                 ]],
                 page: {
                     layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
@@ -178,7 +178,7 @@ var SnippetDict = function() {
             });
 
             //监听行工具事件
-            dictTable.on('tool(dict_grid)', function(obj){
+            organizationTable.on('tool(organization_grid)', function(obj){
                 if(obj.event === 'del'){
                     deleteData(obj);
                 } else if(obj.event === 'edit'){
@@ -186,7 +186,7 @@ var SnippetDict = function() {
                     form.setForm(data);
                     mark = 2;
                     // 显示 dialog
-                    dictFormModal.modal('show');
+                    organizationFormModal.modal('show');
                 }
             });
 
@@ -205,9 +205,9 @@ var SnippetDict = function() {
      * 刷新grid
      */
     var refreshGrid = function () {
-        dictTable.reload('dict_grid',{
+        organizationTable.reload('organization_grid',{
             where: {   //传递额外参数
-                'pid' : dictPid
+                'pid' : organizationPid
             },
             page: {
                  curr: 1 //重新从第 1 页开始
@@ -219,26 +219,26 @@ var SnippetDict = function() {
     /**
      * 初始化表单提交
      */
-    var handleDictFormSubmit = function() {
-        $('#dict_form_submit').click(function(e) {
+    var handleorganizationFormSubmit = function() {
+        $('#organization_form_submit').click(function(e) {
             e.preventDefault();
             Utils.inputTrim();
             var btn = $(this);
             form.validate({
                 rules: {
-                    dictCode: {
+                    orgNumber: {
+                        required: true,
+                        maxlength: 15
+                    },
+                    orgName: {
                         required: true,
                         maxlength: 32
                     },
-                    dictName: {
-                        required: true,
-                        maxlength: 32
-                    },
-                    priority: {
+                    seq: {
                         range: [1,999]
                     },
                     description: {
-                        maxlength: 45
+                        maxlength: 200
                     }
                 },
                 errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
@@ -269,26 +269,24 @@ var SnippetDict = function() {
             if (!form.valid()) {
                 return;
             }
-            Utils.modalBlock("#dict_form_modal");
-            $("#dict_form input[name='systemCode']").val(Utils.systemCode);
-            $("#dict_form input[name='credential']").val(Utils.credential);
-            $("#dict_form input[name='pid']").val(dictPid);
+            Utils.modalBlock("#organization_form_modal");
+            $("#organization_form input[name='parentId']").val(organizationPid);
             $.ajax({
                 type: "POST",
-                url: serverUrl + "dict/save",
+                url: serverUrl + "organization/save",
                 data: form.serializeJSON(),
                 dataType: "json",
                 headers: Utils.headers,
                 success:function (response) {
-                    Utils.modalUnblock("#dict_form_modal");
+                    Utils.modalUnblock("#organization_form_modal");
                     if (response.success) {
                         // toastr.success(Utils.saveSuccessMsg);
                         // 刷新表格
                         refreshGrid();
                         // 刷新tree节点
-                        rereshNode(dictPid);
+                        rereshNode(organizationPid);
                         // 关闭 dialog
-                        dictFormModal.modal('hide');
+                        organizationFormModal.modal('hide');
                     }  else if (response.status == 202) {
                         toastr.error(Utils.saveFailMsg);
                     } else {
@@ -297,7 +295,7 @@ var SnippetDict = function() {
 
                 },
                 error:function (response) {
-                    Utils.modalUnblock("#dict_form_modal");
+                    Utils.modalUnblock("#organization_form_modal");
                     toastr.error(Utils.errorMsg);
                 }
             });
@@ -321,7 +319,7 @@ var SnippetDict = function() {
             idsArray.push(obj.data.id);
         } else {
             // 获取选中的数据对象
-            var checkRows = dictTable.checkStatus('dict_grid');
+            var checkRows = organizationTable.checkStatus('organization_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -340,12 +338,10 @@ var SnippetDict = function() {
                 Utils.pageMsgBlock();
                 $.ajax({
                     type: "POST",
-                    url: serverUrl + "dict/batchDelete",
+                    url: serverUrl + "organization/batchDelete",
                     traditional:true,
                     data: {
                         'ids' : JSON.stringify(idsArray),
-                        'systemCode' : Utils.systemCode,
-                        'credential' : Utils.credential,
                         _method: 'DELETE'
                     },
                     dataType: "json",
@@ -358,7 +354,7 @@ var SnippetDict = function() {
                             } else {
                                 refreshGrid();
                             }
-                            rereshNode(dictPid);
+                            rereshNode(organizationPid);
                         } else if (response.status == 202) {
                             toastr.error(Utils.delFailMsg);
                         } else {
@@ -385,7 +381,7 @@ var SnippetDict = function() {
             idsArray.push(obj.value);
         } else {
             // 获取选中的数据对象
-            var checkRows = dictTable.checkStatus('dict_grid');
+            var checkRows = organizationTable.checkStatus('organization_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -398,12 +394,10 @@ var SnippetDict = function() {
             Utils.pageMsgBlock();
             $.ajax({
                 type: "POST",
-                url: serverUrl + "dict/status",
+                url: serverUrl + "organization/status",
                 traditional:true,
                 data: {
                     'ids' : JSON.stringify(idsArray),
-                    'systemCode' : Utils.systemCode,
-                    'credential' : Utils.credential,
                     'status' : status,
                     _method: 'PUT'
                 },
@@ -413,7 +407,7 @@ var SnippetDict = function() {
                     Utils.htmPageUnblock();
                     if (response.success) {
                         refreshGrid();
-                        rereshNode(dictPid);
+                        rereshNode(organizationPid);
                     }  else if (response.status == 202) {
                         obj.othis.removeClass("layui-form-checked");
                         layer.tips(Utils.updateMsg, obj.othis,  {
@@ -441,7 +435,7 @@ var SnippetDict = function() {
             Utils.pageMsgBlock();
             $.ajax({
                 type: "POST",
-                url: serverUrl + "dict/sync",
+                url: serverUrl + "organization/sync",
                 dataType: "json",
                 headers: Utils.headers,
                 success:function (response) {
@@ -462,12 +456,13 @@ var SnippetDict = function() {
 
     var initModalDialog = function() {
         // 在调用 show 方法后触发。
-        $('#dict_form_modal').on('show.bs.modal', function (event) {
-            var recipient = "新增数据字典";
-            $("#dict_form_dict_code").removeAttr("readonly");
+        $('#organization_form_modal').on('show.bs.modal', function (event) {
+            var recipient = "新增组织机构";
+            $("#organization_form_org_number").removeAttr("readonly");
+            $("#organization_form_parent_name").val(organizationParentName);
             if (mark == 2) {
-                recipient = "修改数据字典";
-                $("#dict_form_dict_code").attr("readonly", "readonly");
+                recipient = "修改组织机构";
+                $("#organization_form_org_number").attr("readonly", "readonly");
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
@@ -475,7 +470,7 @@ var SnippetDict = function() {
         });
 
         // 当调用 hide 实例方法时触发。
-        $('#dict_form_modal').on('hide.bs.modal', function (event) {
+        $('#organization_form_modal').on('hide.bs.modal', function (event) {
             // 清空form 表单数据
             cleanForm();
             $(".modal-backdrop").remove();
@@ -489,17 +484,17 @@ var SnippetDict = function() {
             initTree();
             initDataGrid();
             initModalDialog();
-            handleDictFormSubmit();
-            $('#dict_delete').click(function(e) {
+            handleorganizationFormSubmit();
+            $('#organization_delete').click(function(e) {
                 e.preventDefault();
                 deleteData(null);
                 return false;
             });
-            $('#dict_add').click(function(e) {
+            $('#organization_add').click(function(e) {
                 e.preventDefault();
                 mark = 1;
                 // 显示 dialog
-                dictFormModal.modal('show');
+                organizationFormModal.modal('show');
                 return false;
             });
             $('#searchNode').click(function(e) {
@@ -508,7 +503,7 @@ var SnippetDict = function() {
                 return false;
             });
 
-            $('#dict_sync').click(function(e) {
+            $('#organization_sync').click(function(e) {
                 e.preventDefault();
                 sync();
                 return false;
@@ -516,7 +511,7 @@ var SnippetDict = function() {
 
 
             window.onresize = function(){
-                dictTable.resize("dict_grid");
+                organizationTable.resize("organization_grid");
             }
         }
     };
@@ -524,5 +519,5 @@ var SnippetDict = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetDict.init();
+    Snippetorganization.init();
 });
