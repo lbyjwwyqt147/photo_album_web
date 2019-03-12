@@ -194,7 +194,7 @@
                             <div class="form-group m-form__group row ">
                                 <label class="col-form-label col-lg-3 col-sm-12">上级机构 <span class="has-danger-error">*</span></label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input type="hidden" class="form-control" id="organization_form_parent_name" name="organizationParentName" placeholder="上级机构" autocomplete="off">
+                                    <input  class="form-control m-input " id="organization_form_parent_name" name="organizationParentName" placeholder="上级机构" disabled autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group m-form__group row ">
@@ -222,10 +222,11 @@
                                 </div>
                             </div>
                             <div style="display: none">
-                                <input type="hidden" class="form-control" name="id" placeholder="id" autocomplete="off">
-                                <input type="hidden" class="form-control" name="orgStatus" placeholder="status" value="0" autocomplete="off">
-                                <input type="hidden" class="form-control" name="parentId" placeholder="pid" value="0" autocomplete="off">
-                                <input type="hidden" class="form-control" name="createTime" placeholder="createTime"  autocomplete="off">
+                                <input type="hidden" class="form-control  m-input" name="id" placeholder="id" autocomplete="off">
+                                <input type="hidden" class="form-control  m-input" name="orgStatus" placeholder="status" value="0" autocomplete="off">
+                                <input type="hidden" class="form-control  m-input" name="parentId" placeholder="pid" value="0" autocomplete="off">
+                                <input type="hidden" class="form-control  m-input" name="createTime" placeholder="createTime"  autocomplete="off">
+                                <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
                             </div>
                         </div>
                     </form>
@@ -255,7 +256,7 @@
 </div>
 
 <script type="text/html" id="organization_table_toolbar">
-    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" lay-filter="lock" {{ d.orgStatus == 1 ? 'checked' : '' }}>
 
     <a href="#" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-toggle="m-tooltip" data-placement="top" title="修改数据" lay-event="edit">
         <i class="la la-edit"></i>

@@ -166,7 +166,7 @@ var SnippetDict = function() {
                 response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 },
-                headers: Utils.headers,
+                headers: Utils.cloudHeaders,
                 parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                     return {
                         "code": res.status, //解析接口状态
@@ -278,7 +278,7 @@ var SnippetDict = function() {
                 url: serverUrl + "dict/save",
                 data: form.serializeJSON(),
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.cloudHeaders,
                 success:function (response) {
                     Utils.modalUnblock("#dict_form_modal");
                     if (response.success) {
@@ -349,7 +349,7 @@ var SnippetDict = function() {
                         _method: 'DELETE'
                     },
                     dataType: "json",
-                    headers: Utils.headers,
+                    headers: Utils.cloudHeaders,
                     success:function (response) {
                         Utils.htmPageUnblock();
                         if (response.success) {
@@ -408,7 +408,7 @@ var SnippetDict = function() {
                     _method: 'PUT'
                 },
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.cloudHeaders,
                 success:function (response) {
                     Utils.htmPageUnblock();
                     if (response.success) {
@@ -443,7 +443,7 @@ var SnippetDict = function() {
                 type: "POST",
                 url: serverUrl + "dict/sync",
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.cloudHeaders,
                 success:function (response) {
                     Utils.htmPageUnblock();
                     if (response.success) {

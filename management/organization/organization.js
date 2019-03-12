@@ -1,9 +1,9 @@
 //== Class Definition
-var Snippetorganization = function() {
+var SnippetOrganization = function() {
     var serverUrl = Utils.serverAddress;
     var organizationTable;
     var organizationFormModal = $('#organization_form_modal');
-    var form = $("#organization_form");
+    var submitForm = $("#organization_form");
     var mark = 1;
     var organizationPid = 0;
     var organizationParentName = "";
@@ -166,7 +166,7 @@ var Snippetorganization = function() {
                 response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 },
-                headers: Utils.headers,
+                headers: Utils.serverHeaders(),
                 parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                     return {
                         "code": res.status, //解析接口状态
@@ -182,8 +182,7 @@ var Snippetorganization = function() {
                 if(obj.event === 'del'){
                     deleteData(obj);
                 } else if(obj.event === 'edit'){
-                    var data = obj.data;
-                    form.setForm(data);
+                    dataDetails(obj.data.id);
                     mark = 2;
                     // 显示 dialog
                     organizationFormModal.modal('show');
@@ -224,7 +223,7 @@ var Snippetorganization = function() {
             e.preventDefault();
             Utils.inputTrim();
             var btn = $(this);
-            form.validate({
+            submitForm.validate({
                 rules: {
                     orgNumber: {
                         required: true,
@@ -266,7 +265,7 @@ var Snippetorganization = function() {
 
                 },
             });
-            if (!form.valid()) {
+            if (!submitForm.valid()) {
                 return;
             }
             Utils.modalBlock("#organization_form_modal");
@@ -274,9 +273,9 @@ var Snippetorganization = function() {
             $.ajax({
                 type: "POST",
                 url: serverUrl + "organization/save",
-                data: form.serializeJSON(),
+                data: submitForm.serializeJSON(),
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.serverHeaders(),
                 success:function (response) {
                     Utils.modalUnblock("#organization_form_modal");
                     if (response.success) {
@@ -307,7 +306,7 @@ var Snippetorganization = function() {
      *  清空表单数据和样式
      */
     var cleanForm = function () {
-        Utils.cleanFormData(form);
+        Utils.cleanFormData(submitForm);
     };
 
     /**
@@ -402,7 +401,7 @@ var Snippetorganization = function() {
                     _method: 'PUT'
                 },
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.serverHeaders(),
                 success:function (response) {
                     Utils.htmPageUnblock();
                     if (response.success) {
@@ -437,7 +436,7 @@ var Snippetorganization = function() {
                 type: "POST",
                 url: serverUrl + "organization/sync",
                 dataType: "json",
-                headers: Utils.headers,
+                headers: Utils.serverHeaders(),
                 success:function (response) {
                     Utils.htmPageUnblock();
                     if (response.success) {
@@ -453,6 +452,27 @@ var Snippetorganization = function() {
             });
     };
 
+    /**
+     *  数据详情
+     */
+    var dataDetails = function(id) {
+        $.ajax({
+            type: "GET",
+            url: serverUrl + "organization/details/" + id,
+            dataType: "json",
+            headers: Utils.serverHeaders(),
+            success:function (response) {
+                Utils.modalUnblock("#organization_form_modal");
+                if (response.success) {
+                    submitForm.setForm(response.data);
+                }
+            },
+            error:function (response) {
+                Utils.modalUnblock("#organization_form_modal");
+                toastr.error(Utils.errorMsg);
+            }
+        });
+    };
 
     var initModalDialog = function() {
         // 在调用 show 方法后触发。
@@ -460,9 +480,12 @@ var Snippetorganization = function() {
             var recipient = "新增组织机构";
             $("#organization_form_org_number").removeAttr("readonly");
             $("#organization_form_parent_name").val(organizationParentName);
+            $("#organization_form_org_number").removeClass("m-input--solid");
             if (mark == 2) {
                 recipient = "修改组织机构";
+                $("#organization_form_org_number").addClass("m-input--solid");
                 $("#organization_form_org_number").attr("readonly", "readonly");
+                Utils.modalBlock("#organization_form_modal");
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
@@ -519,5 +542,5 @@ var Snippetorganization = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    Snippetorganization.init();
+    SnippetOrganization.init();
 });

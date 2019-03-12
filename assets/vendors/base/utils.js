@@ -19,12 +19,23 @@ var Utils = {
     'updateMsg' : "数据更新失败!",
     'syncMsg' : "数据同步失败!",
 
-    headers: {
+    cloudHeaders: {
         "appId":appId,
         "appKey":appKey,
         "credential":credential,
         "systemCode":systemCode
     },
+
+    serverHeaders: function() {
+        var headers = {
+            "appId":appId,
+            "appKey":appKey,
+            "credential":credential,
+            "systemCode":systemCode
+        };
+        return headers;
+    },
+
 
     /**
      * 转换textarea存入数据库的回车换行和空格
