@@ -32,6 +32,7 @@ var SnippetOrganization = function() {
         callback: {
             onClick: function (event, treeId, treeNode) {
                 organizationPid = treeNode.id;
+                organizationParentName = treeNode.name;
                 refreshGrid();
             }
         }
@@ -67,7 +68,7 @@ var SnippetOrganization = function() {
     };
 
     /**
-     *  刷新当前节点
+     *  刷新树
      * @param id
      */
     function rereshTree(){
@@ -117,7 +118,7 @@ var SnippetOrganization = function() {
                 elem: '#organization_grid',
                 url: serverUrl + 'organization/grid',
                 where: {   //传递额外参数
-                    'pid' : organizationPid
+                    'parentId' : organizationPid
                 },
                 title: '数据字典列表',
                 text: "无数据", //空数据时的异常提示
@@ -125,7 +126,7 @@ var SnippetOrganization = function() {
                 height: 'full-211', //高度最大化减去差值
                 even: true,
                 initSort: {
-                    field: 'priority', //排序字段，对应 cols 设定的各字段名
+                    field: 'seq', //排序字段，对应 cols 设定的各字段名
                     type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
                 },
                 cols: [[
@@ -156,8 +157,8 @@ var SnippetOrganization = function() {
                     first: true, //显示首页
                     last: true //显示尾页
                 },
-                limit: 20,
-                limits: [20,30,40,50],
+                limit: 10,
+                limits: [10,20,30,50],
 
                 request: {
                     pageName: 'pageNumber', //页码的参数名称，默认：page
@@ -182,7 +183,7 @@ var SnippetOrganization = function() {
                 if(obj.event === 'del'){
                     deleteData(obj);
                 } else if(obj.event === 'edit'){
-                    dataDetails(obj.data.id);
+                    submitForm.setForm(obj.data);
                     mark = 2;
                     // 显示 dialog
                     organizationFormModal.modal('show');
@@ -206,7 +207,7 @@ var SnippetOrganization = function() {
     var refreshGrid = function () {
         organizationTable.reload('organization_grid',{
             where: {   //传递额外参数
-                'pid' : organizationPid
+                'parentId' : organizationPid
             },
             page: {
                  curr: 1 //重新从第 1 页开始
@@ -452,27 +453,7 @@ var SnippetOrganization = function() {
             });
     };
 
-    /**
-     *  数据详情
-     */
-    var dataDetails = function(id) {
-        $.ajax({
-            type: "GET",
-            url: serverUrl + "organization/details/" + id,
-            dataType: "json",
-            headers: Utils.serverHeaders(),
-            success:function (response) {
-                Utils.modalUnblock("#organization_form_modal");
-                if (response.success) {
-                    submitForm.setForm(response.data);
-                }
-            },
-            error:function (response) {
-                Utils.modalUnblock("#organization_form_modal");
-                toastr.error(Utils.errorMsg);
-            }
-        });
-    };
+
 
     var initModalDialog = function() {
         // 在调用 show 方法后触发。
@@ -485,7 +466,6 @@ var SnippetOrganization = function() {
                 recipient = "修改组织机构";
                 $("#organization_form_org_number").addClass("m-input--solid");
                 $("#organization_form_org_number").attr("readonly", "readonly");
-                Utils.modalBlock("#organization_form_modal");
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
