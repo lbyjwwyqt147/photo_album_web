@@ -27,7 +27,7 @@ var SnippetOrganization = function() {
         async: {
             enable: true,
             url: serverUrl + "organization/ztree?pid=" + organizationPid,
-            autoParam: ["id", "name"]
+            autoParam: ["pid", "name"]
         },
         callback: {
             onClick: function (event, treeId, treeNode) {
@@ -64,8 +64,24 @@ var SnippetOrganization = function() {
     function rereshNode(id){
         var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
         var nowNode = treeObj.getNodesByParam("id", id, null);
+        console.log(nowNode[0]);
         treeObj.reAsyncChildNodes(nowNode[0], "refresh");
     };
+
+    /**
+     * 刷新 指定 节点
+     * 在指定的节点下面增加子节点之后调用的方法。
+     * @param id
+     */
+    function rereshExpandNode(id) {
+        var zTreeObj = $.fn.zTree.getZTreeObj("organization_tree");
+        /*获取 zTree 当前被选中的节点数据集合*/
+        var nodes = zTreeObj.getNodesByParam("id", id, null);
+        var curNode = nodes[0];
+        /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
+        zTreeObj.reAsyncChildNodes(curNode, "refresh", false);
+    }
+
 
     /**
      *  刷新树
@@ -284,7 +300,8 @@ var SnippetOrganization = function() {
                         // 刷新表格
                         refreshGrid();
                         // 刷新tree节点
-                        rereshNode(organizationPid);
+                        console.log(organizationPid);
+                        rereshExpandNode(organizationPid);
                         // 关闭 dialog
                         organizationFormModal.modal('hide');
                     }  else if (response.status == 202) {
