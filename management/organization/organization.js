@@ -11,7 +11,8 @@ var SnippetOrganization = function() {
     var setting = {
         view: {
             selectedMulti: false,
-            fontCss: getFontCss
+            fontCss: getFontCss,
+            expandSpeed: "slow", //节点展开动画速度
         },
         check: {
             enable: false
@@ -25,15 +26,18 @@ var SnippetOrganization = function() {
             enable: false
         },
         async: {
-            enable: true,
-            url: serverUrl + "organization/ztree?pid=" + organizationPid,
-            autoParam: ["pid", "name"]
+            enable: true, //是否异步加载
+            url: serverUrl + "organization/ztree",
+            autoParam: ["id"]   // 点击节点进行异步加载时默认发送参数
         },
         callback: {
-            onClick: function (event, treeId, treeNode) {
+            onClick: function (event, treeId, treeNode) {   //点击节点执行事件
                 organizationPid = treeNode.id;
                 organizationParentName = treeNode.name;
                 refreshGrid();
+            },
+            onAsyncSuccess:function(){ //异步加载完成后执行
+
             }
         }
     };
@@ -78,6 +82,9 @@ var SnippetOrganization = function() {
         /*获取 zTree 当前被选中的节点数据集合*/
         var nodes = zTreeObj.getNodesByParam("id", id, null);
         var curNode = nodes[0];
+        console.log(curNode);
+        console.log("====== ");
+        console.log(zTreeObj.getSelectedNodes());
         /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
         zTreeObj.reAsyncChildNodes(curNode, "refresh", false);
     }
