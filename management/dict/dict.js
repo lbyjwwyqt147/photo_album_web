@@ -101,6 +101,8 @@ var SnippetDict = function() {
     };
 
     function getFontCss(treeId, treeNode) {
+        console.log(treeNode);
+
         return (!!treeNode.highlight) ? {color:"#C50000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"};
     };
 

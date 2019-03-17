@@ -1,44 +1,42 @@
-//== Class Definition
-var SnippetOrganization = function() {
-    var serverUrl = Utils.serverAddress;
-    var organizationTable;
-    var organizationFormModal = $('#organization_form_modal');
-    var submitForm = $("#organization_form");
-    var mark = 1;
-    var organizationPid = 0;
-    var organizationParentName = "";
-    var nodeList = [];
-    var setting = {
-        view: {
-            selectedMulti: false,
-            fontCss: getFontCss,
-            expandSpeed: "slow", //节点展开动画速度
-        },
-        check: {
-            enable: false
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        },
-        edit: {
-            enable: false
-        },
-        async: {
-            enable: true, //是否异步加载
-            url: serverUrl + "organization/ztree",
-            autoParam: ["id"]   // 点击节点进行异步加载时默认发送参数
-        },
-        callback: {
-            onClick: function (event, treeId, treeNode) {   //点击节点执行事件
-                organizationPid = treeNode.id;
-                organizationParentName = treeNode.name;
-                refreshGrid();
-            },
-            onAsyncSuccess:function(){ //异步加载完成后执行
+/***
+ * 组织机构
+ * @type {{init}}
+ */
+var SnippetMainPageOrganization = function() {
+    var serverUrl = BaseUtils.serverAddress;
+    var organizationMainPageTable;
+    var organizationMainPageFormModal = $('#organization_mainPage_dataSubmit_form_modal');
+    var organizationMainPageSubmitForm = $("#organization_mainPage_dataSubmit_form");
+    var organizationMainPageMark = 1;
+    var organizationMainPagePid = 0;
+    var organizationMainPageParentName = "";
+    var organizationMainPageZtreeNodeList = [];
+    var organizationMainPageModuleCode = '1011';
 
-            }
+    /**
+     * ztree 基础属性
+     * @type {{onClick: callback.onClick, onAorganizationMainPageSyncDataSuccess: callback.onAorganizationMainPageSyncDataSuccess}}
+     */
+    var organizationMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
+        "selectedMulti":false,
+        "enable":false,
+        "url":serverUrl + "tree/organization/ztree",
+        "headers":BaseUtils.serverHeaders()
+    });
+    organizationMainPageZtreeSetting.callback = {
+        onClick: function (event, treeId, treeNode) {   //点击节点执行事件
+            organizationMainPagePid = treeNode.id;
+            organizationMainPageParentName = treeNode.name;
+            organizationMainPageRefreshGrid();
+        },
+        onAsyncSuccess:function(){ //异步加载完成后执行
+
+        },
+        onAsyncError:function(){ //异步加载出现异常执行
+
+        },
+        beforeAsync:function () { //异步加载之前执行
+          //  BaseUtils.checkLoginTimeoutStatus();
         }
     };
 
@@ -46,30 +44,9 @@ var SnippetOrganization = function() {
     /**
      * 初始化ztree 组件
      */
-    var initTree = function() {
-        $.fn.zTree.init($("#organization_tree"), setting);
-    };
-
-    /**
-     * 刷新父节点
-     * @param id
-     */
-    function rereshParentNode(id){
-        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
-        var nowNode = treeObj.getNodesByParam("id", id, null);
-        var parent = nowNode[0].getParentNode();
-        treeObj.reAsyncChildNodes(parent, "refresh");
-    };
-
-    /**
-     *  刷新当前节点
-     * @param id
-     */
-    function rereshNode(id){
-        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
-        var nowNode = treeObj.getNodesByParam("id", id, null);
-        console.log(nowNode[0]);
-        treeObj.reAsyncChildNodes(nowNode[0], "refresh");
+    var organizationMainPageInitTree = function() {
+        console.log(organizationMainPageZtreeSetting);
+        $.fn.zTree.init($("#organization_mainPage_tree"), organizationMainPageZtreeSetting);
     };
 
     /**
@@ -77,16 +54,9 @@ var SnippetOrganization = function() {
      * 在指定的节点下面增加子节点之后调用的方法。
      * @param id
      */
-    function rereshExpandNode(id) {
-        var zTreeObj = $.fn.zTree.getZTreeObj("organization_tree");
-        /*获取 zTree 当前被选中的节点数据集合*/
-        var nodes = zTreeObj.getNodesByParam("id", id, null);
-        var curNode = nodes[0];
-        console.log(curNode);
-        console.log("====== ");
-        console.log(zTreeObj.getSelectedNodes());
-        /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
-        zTreeObj.reAsyncChildNodes(curNode, "refresh", false);
+    function organizationMainPageRereshExpandNode(id) {
+        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
     }
 
 
@@ -94,12 +64,27 @@ var SnippetOrganization = function() {
      *  刷新树
      * @param id
      */
-    function rereshTree(){
-        var treeObj = $.fn.zTree.getZTreeObj("organization_tree");
-        treeObj.refresh();
+    function organizationMainPageRereshTree(){
+        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        BaseUtils.ztree.rereshzTree(zTreeObj);
     };
 
+    /**
+     *  搜索节点
+     */
+    function organizationMainPageSearchZtreeNode() {
+        var searchZtreeValue = $.trim($("#organization-mainPage-nodeName-search").val());
+        organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList,false);
+        if (searchZtreeValue === "") {
+            return;
+        }
+        var zTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        var keyType = "name";
+        organizationMainPageZtreeNodeList = zTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
+        organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList, true);
+       // BaseUtils.ztree.searchZteeNode(zTree, organizationMainPageZtreeNodeList, searchvValue);
 
+    };
 
     /**
      *  搜索节点
@@ -110,38 +95,91 @@ var SnippetOrganization = function() {
         if (value === "") {
             return;
         }
-        var zTree = $.fn.zTree.getZTreeObj("organization_tree");
+        var zTree = $.fn.zTree.getZTreeObj("dict_tree");
         var keyType = "name";
         nodeList = zTree.getNodesByParamFuzzy(keyType, value);
         updateNodes(nodeList, true);
 
     };
 
-    function updateNodes(nodeList, highlight) {
-        var zTree = $.fn.zTree.getZTreeObj("organization_tree");
-        for( var i=0, l=nodeList.length; i<l; i++) {
-            nodeList[i].highlight = highlight;
-            zTree.updateNode(nodeList[i]);
+    function organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList, highlight) {
+        var zTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        var nodeLength = organizationMainPageZtreeNodeList.length;
+        for (var i = 0; i < nodeLength; i++) {
+            organizationMainPageZtreeNodeList[i].highlight = highlight;
+            zTree.updateNode(organizationMainPageZtreeNodeList[i]);
+        }
+
+    };
+
+    /**
+     * 初始化 功能按钮
+     */
+    var organizationMainPageInitFunctionButtonGroup = function () {
+        var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
+        if (functionButtonGroup != null) {
+            var gridHeadToolsHtml = $("#organization-mainPage-grid-head-tools");
+            var tableToolbarHtml = $("#organization_mainPage_table_toolbar");
+
+            var buttonGroup = functionButtonGroup.split(';');
+            //如果arry数组里面存在"指定字符" 这个字符串则返回该字符串的数组下标，否则返回(不包含在数组中) -1
+            var save_index = $.inArray("1", buttonGroup);
+            if (save_index != -1) {
+                var save_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="新增组织机构">\n';
+                save_btn_html += '<a href="javascript:;" class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" id="organization_mainPage_add_btn">\n';
+                save_btn_html += '<i class="la la-plus"></i>\n';
+                save_btn_html += '</a>\n';
+                save_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(save_btn_html);
+
+
+                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改组织机构" lay-event="edit">\n'
+                edit_btn_html += '<i class="la la-edit"></i>\n';
+                edit_btn_html += '</a>\n';
+                tableToolbarHtml.append(edit_btn_html);
+
+            }
+            var delete_index = $.inArray("2", buttonGroup);
+            if (delete_index != -1) {
+                var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除组织机构">\n';
+                delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="organization_mainPage_delete_btn">\n';
+                delete_btn_html += '<i class="la la-trash-o"></i>\n';
+                delete_btn_html += '</a>\n';
+                delete_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(delete_btn_html);
+
+
+
+                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 删除组织机构" lay-event="del">\n'
+                table_del_btn_html += '<i class="la la-trash-o"></i>\n';
+                table_del_btn_html += '</a>\n';
+                tableToolbarHtml.append(table_del_btn_html);
+            }
+            var sync_index = $.inArray("10", buttonGroup);
+            if (sync_index != -1) {
+                var sync_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="同步数据">\n';
+                sync_btn_html += '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon btn-sm m-btn--icon-only" id="organization_mainPage_sync_btn">\n';
+                sync_btn_html += '<i class="la la-rotate-right"></i>\n';
+                sync_btn_html += '</a>\n';
+                sync_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(sync_btn_html);
+            }
         }
     };
-
-    function getFontCss(treeId, treeNode) {
-        return (!!treeNode.highlight) ? {color:"#C50000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"};
-    };
-
 
     /**
      *  初始化 dataGrid 组件
      */
-    var initDataGrid = function () {
+    var organizationMainPageInitDataGrid = function () {
+        BaseUtils.checkLoginTimeoutStatus();
         layui.use('table', function(){
-             organizationTable = layui.table;
+             organizationMainPageTable = layui.table;
             var layuiForm = layui.form;
-            organizationTable.render({
-                elem: '#organization_grid',
-                url: serverUrl + 'organization/grid',
+            organizationMainPageTable.render({
+                elem: '#organization_mainPage_grid',
+                url: serverUrl + 'table/organization/grid',
                 where: {   //传递额外参数
-                    'parentId' : organizationPid
+                    'parentId' : organizationMainPagePid
                 },
                 title: '数据字典列表',
                 text: "无数据", //空数据时的异常提示
@@ -159,7 +197,7 @@ var SnippetOrganization = function() {
                     {field:'orgName', title:'机构名称'},
                     {field:'fullName', title:'机构全名称'},
                     {field:'seq', title:'优先级'},
-                    {field:'description', title:'描述'},
+                    {field:'description', title:'描述', hide:true},
                     {field:'orgStatus', title:'状态', align: 'center',
                         templet : function (row) {
                             var value = row.orgStatus;
@@ -167,11 +205,11 @@ var SnippetOrganization = function() {
                             if (value == 1)  {
                                 spanCss = "m-badge--warning";
                             }
-                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + Utils.statusText(value) + '</span>';
+                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + BaseUtils.statusText(value) + '</span>';
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', toolbar: '#organization_table_toolbar', align: 'center', width:200}
+                    {fixed: 'right', title:'操作', toolbar: '#organization_mainPage_table_toolbar', align: 'center', width:200}
                 ]],
                 page: {
                     layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
@@ -190,7 +228,7 @@ var SnippetOrganization = function() {
                 response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 },
-                headers: Utils.serverHeaders(),
+                headers: BaseUtils.serverHeaders(),
                 parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                     return {
                         "code": res.status, //解析接口状态
@@ -198,18 +236,27 @@ var SnippetOrganization = function() {
                         "count": res.total, //解析数据长度
                         "data": res.data //解析数据列表
                     };
+                },
+                done: function (res, curr, count) {
+                    var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
+                    var status_table_index = $.inArray("3", curFunctionButtonGroup);
+                    if (status_table_index != -1) {
+                        $(".layui-unselect.layui-form-checkbox").show();
+                    } else {
+                        $(".layui-unselect.layui-form-checkbox").hide();
+                    }
                 }
             });
 
             //监听行工具事件
-            organizationTable.on('tool(organization_grid)', function(obj){
+            organizationMainPageTable.on('tool(organization_mainPage_grid)', function(obj){
                 if(obj.event === 'del'){
-                    deleteData(obj);
+                    organizationMainPageDeleteData(obj);
                 } else if(obj.event === 'edit'){
-                    submitForm.setForm(obj.data);
-                    mark = 2;
+                    organizationMainPageSubmitForm.setForm(obj.data);
+                    organizationMainPageMark = 2;
                     // 显示 dialog
-                    organizationFormModal.modal('show');
+                    organizationMainPageFormModal.modal('show');
                 }
             });
 
@@ -219,7 +266,12 @@ var SnippetOrganization = function() {
                 if (obj.elem.checked) {
                     statusValue = 1;
                 }
-                updateDataStatus(obj, statusValue);
+                organizationMainPageUpdateDataStatus(obj, statusValue);
+            });
+
+            //监听行双击事件
+            organizationMainPageTable.on('rowDouble(organization_mainPage_grid)', function(obj){
+
             });
         });
     };
@@ -227,27 +279,26 @@ var SnippetOrganization = function() {
     /**
      * 刷新grid
      */
-    var refreshGrid = function () {
-        organizationTable.reload('organization_grid',{
+    var organizationMainPageRefreshGrid = function () {
+        BaseUtils.checkLoginTimeoutStatus();
+        organizationMainPageTable.reload('organization_mainPage_grid',{
             where: {   //传递额外参数
-                'parentId' : organizationPid
+                'parentId' : organizationMainPagePid
             },
             page: {
                  curr: 1 //重新从第 1 页开始
              }
-
         });
     };
 
     /**
      * 初始化表单提交
      */
-    var handleorganizationFormSubmit = function() {
-        $('#organization_form_submit').click(function(e) {
+    var organizationMainPageFormSubmitHandle = function() {
+        $('#organization_mainPage_dataSubmit_form_submit').click(function(e) {
             e.preventDefault();
-            Utils.inputTrim();
-            var btn = $(this);
-            submitForm.validate({
+            BaseUtils.formInputTrim("#organization_mainPage_dataSubmit_form");
+            organizationMainPageSubmitForm.validate({
                 rules: {
                     orgNumber: {
                         required: true,
@@ -261,7 +312,7 @@ var SnippetOrganization = function() {
                         range: [1,999]
                     },
                     description: {
-                        maxlength: 200
+                        maxlength: 100
                     }
                 },
                 errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
@@ -289,38 +340,42 @@ var SnippetOrganization = function() {
 
                 },
             });
-            if (!submitForm.valid()) {
+            if (!organizationMainPageSubmitForm.valid()) {
                 return;
             }
-            Utils.modalBlock("#organization_form_modal");
-            $("#organization_form input[name='parentId']").val(organizationPid);
+            BaseUtils.checkLoginTimeoutStatus();
+            BaseUtils.modalBlock("#organization_mainPage_dataSubmit_form_modal");
+            $("#organization_mainPage_dataSubmit_form input[name='parentId']").val(organizationMainPagePid);
             $.ajax({
                 type: "POST",
                 url: serverUrl + "organization/save",
-                data: submitForm.serializeJSON(),
+                data: organizationMainPageSubmitForm.serializeJSON(),
                 dataType: "json",
-                headers: Utils.serverHeaders(),
+                headers: BaseUtils.serverHeaders(),
+                crossDomain: true,
                 success:function (response) {
-                    Utils.modalUnblock("#organization_form_modal");
+                    BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
                     if (response.success) {
-                        // toastr.success(Utils.saveSuccessMsg);
+                        // toastr.success(BaseUtils.saveSuccessMsg);
                         // 刷新表格
-                        refreshGrid();
+                        organizationMainPageRefreshGrid();
                         // 刷新tree节点
-                        console.log(organizationPid);
-                        rereshExpandNode(organizationPid);
+                        organizationMainPageRereshExpandNode(organizationMainPagePid);
                         // 关闭 dialog
-                        organizationFormModal.modal('hide');
+                        organizationMainPageFormModal.modal('hide');
                     }  else if (response.status == 202) {
-                        toastr.error(Utils.saveFailMsg);
+                        toastr.error(BaseUtils.saveFailMsg);
                     } else {
-                        toastr.error(Utils.tipsFormat(response.message));
+                        toastr.error(BaseUtils.tipsFormat(response.message));
                     }
 
                 },
                 error:function (response) {
-                    Utils.modalUnblock("#organization_form_modal");
-                    toastr.error(Utils.errorMsg);
+                    BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
+                    toastr.error(BaseUtils.networkErrorMsg);
+                },
+                beforeSend:function () {
+
                 }
             });
             return false;
@@ -330,20 +385,20 @@ var SnippetOrganization = function() {
     /**
      *  清空表单数据和样式
      */
-    var cleanForm = function () {
-        Utils.cleanFormData(submitForm);
+    var organizationMainPageCleanForm = function () {
+        BaseUtils.cleanFormData(organizationMainPageSubmitForm);
     };
 
     /**
      * 删除
      */
-    var deleteData = function(obj) {
+    var organizationMainPageDeleteData = function(obj) {
         var idsArray = [];
         if (obj != null) {
             idsArray.push(obj.data.id);
         } else {
             // 获取选中的数据对象
-            var checkRows = organizationTable.checkStatus('organization_grid');
+            var checkRows = organizationMainPageTable.checkStatus('organization_mainPage_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -352,6 +407,7 @@ var SnippetOrganization = function() {
                 });
             }
         }
+        BaseUtils.checkLoginTimeoutStatus();
         if (idsArray.length > 0) {
             //询问框
             layer.confirm('你确定要删除?', {
@@ -359,7 +415,7 @@ var SnippetOrganization = function() {
                 btn: ['确定','取消'] //按钮
             }, function(index, layero){   //按钮【按钮一】的回调
                 layer.close(index);
-                Utils.pageMsgBlock();
+                BaseUtils.pageMsgBlock();
                 $.ajax({
                     type: "POST",
                     url: serverUrl + "organization/batchDelete",
@@ -369,25 +425,26 @@ var SnippetOrganization = function() {
                         _method: 'DELETE'
                     },
                     dataType: "json",
-                    headers: Utils.headers,
+                    headers: BaseUtils.serverHeaders(),
+                    crossDomain: true,
                     success:function (response) {
-                        Utils.htmPageUnblock();
+                        BaseUtils.htmPageUnblock();
                         if (response.success) {
                             if (obj != null) {
                                 obj.del();
                             } else {
-                                refreshGrid();
+                                organizationMainPageRefreshGrid();
                             }
-                            rereshNode(organizationPid);
+                            organizationMainPageRereshExpandNode(organizationMainPagePid);
                         } else if (response.status == 202) {
-                            toastr.error(Utils.delFailMsg);
+                            toastr.error(BaseUtils.delFailMsg);
                         } else {
                             toastr.error(response.message);
                         }
                     },
                     error:function (response) {
-                        Utils.htmPageUnblock();
-                        toastr.error(Utils.errorMsg);
+                        BaseUtils.htmPageUnblock();
+                        toastr.error(BaseUtils.networkErrorMsg);
                     }
                 });
             }, function () {  //按钮【按钮二】的回调
@@ -399,13 +456,13 @@ var SnippetOrganization = function() {
     /**
      *  修改状态
      */
-    var updateDataStatus = function(obj,status) {
+    var organizationMainPageUpdateDataStatus = function(obj,status) {
         var idsArray = [];
         if (obj != null) {
             idsArray.push(obj.value);
         } else {
             // 获取选中的数据对象
-            var checkRows = organizationTable.checkStatus('organization_grid');
+            var checkRows = organizationMainPageTable.checkStatus('organization_mainPage_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
@@ -414,8 +471,9 @@ var SnippetOrganization = function() {
                 });
             }
         }
+        BaseUtils.checkLoginTimeoutStatus();
         if (idsArray.length > 0) {
-            Utils.pageMsgBlock();
+            BaseUtils.pageMsgBlock();
             $.ajax({
                 type: "POST",
                 url: serverUrl + "organization/status",
@@ -426,15 +484,16 @@ var SnippetOrganization = function() {
                     _method: 'PUT'
                 },
                 dataType: "json",
-                headers: Utils.serverHeaders(),
+                headers: BaseUtils.serverHeaders(),
+                crossDomain: true,
                 success:function (response) {
-                    Utils.htmPageUnblock();
+                    BaseUtils.htmPageUnblock();
                     if (response.success) {
-                        refreshGrid();
-                        rereshNode(organizationPid);
+                        organizationMainPageRefreshGrid();
+                        organizationMainPageRereshExpandNode(organizationMainPagePid);
                     }  else if (response.status == 202) {
                         obj.othis.removeClass("layui-form-checked");
-                        layer.tips(Utils.updateMsg, obj.othis,  {
+                        layer.tips(BaseUtils.updateMsg, obj.othis,  {
                             tips: [4, '#f4516c']
                         });
                     } else {
@@ -445,8 +504,8 @@ var SnippetOrganization = function() {
                     }
                 },
                 error:function (response) {
-                    Utils.htmPageUnblock();
-                    toastr.error(Utils.errorMsg);
+                    BaseUtils.htmPageUnblock();
+                    toastr.error(BaseUtils.networkErrorMsg);
                 }
             });
         }
@@ -455,51 +514,52 @@ var SnippetOrganization = function() {
     /**
      *  同步数据
      */
-    var sync = function() {
-            Utils.pageMsgBlock();
+    var organizationMainPageSyncData = function() {
+            BaseUtils.checkLoginTimeoutStatus();
+            BaseUtils.pageMsgBlock();
             $.ajax({
                 type: "POST",
                 url: serverUrl + "organization/sync",
                 dataType: "json",
-                headers: Utils.serverHeaders(),
+                headers: BaseUtils.serverHeaders(),
+                crossDomain: true,
                 success:function (response) {
-                    Utils.htmPageUnblock();
+                    BaseUtils.htmPageUnblock();
                     if (response.success) {
-                        refreshGrid();
+                        organizationMainPageRefreshGrid();
                     }  else {
-                        toastr.error(Utils.syncMsg);
+                        toastr.error(BaseUtils.syncMsg);
                     }
                 },
                 error:function (response) {
-                    Utils.htmPageUnblock();
-                    toastr.error(Utils.errorMsg);
+                    BaseUtils.htmPageUnblock();
+                    toastr.error(BaseUtils.networkErrorMsg);
                 }
             });
     };
 
 
 
-    var initModalDialog = function() {
+    var organizationMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
-        $('#organization_form_modal').on('show.bs.modal', function (event) {
+        $('#organization_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
             var recipient = "新增组织机构";
-            $("#organization_form_org_number").removeAttr("readonly");
-            $("#organization_form_parent_name").val(organizationParentName);
-            $("#organization_form_org_number").removeClass("m-input--solid");
-            if (mark == 2) {
+            $("#organization_mainPage_dataSubmit_form_org_number").removeAttr("readonly");
+            $("#organization_mainPage_dataSubmit_form_parent_name").val(organizationMainPageParentName);
+            $("#organization_mainPage_dataSubmit_form_org_number").removeClass("m-input--solid");
+            if (organizationMainPageMark == 2) {
                 recipient = "修改组织机构";
-                $("#organization_form_org_number").addClass("m-input--solid");
-                $("#organization_form_org_number").attr("readonly", "readonly");
+                $("#organization_mainPage_dataSubmit_form_org_number").addClass("m-input--solid");
+                $("#organization_mainPage_dataSubmit_form_org_number").attr("readonly", "readonly");
             }
             var modal = $(this);
             modal.find('.modal-title').text(recipient);
-          //  modal.find('.modal-body input').val(recipient)
         });
 
         // 当调用 hide 实例方法时触发。
-        $('#organization_form_modal').on('hide.bs.modal', function (event) {
+        $('#organization_mainPage_dataSubmit_form_modal').on('hide.bs.modal', function (event) {
             // 清空form 表单数据
-            cleanForm();
+            organizationMainPageCleanForm();
             $(".modal-backdrop").remove();
         });
     };
@@ -508,37 +568,37 @@ var SnippetOrganization = function() {
     return {
         // public functions
         init: function() {
-            initTree();
-            initDataGrid();
-            initModalDialog();
-            handleorganizationFormSubmit();
-            $('#organization_delete').click(function(e) {
+            organizationMainPageInitFunctionButtonGroup();
+            organizationMainPageInitTree();
+            organizationMainPageInitDataGrid();
+            organizationMainPageInitModalDialog();
+            organizationMainPageFormSubmitHandle();
+            $('#organization_mainPage_delete_btn').click(function(e) {
                 e.preventDefault();
-                deleteData(null);
+                organizationMainPageDeleteData(null);
                 return false;
             });
-            $('#organization_add').click(function(e) {
+            $('#organization_mainPage_add_btn').click(function(e) {
                 e.preventDefault();
-                mark = 1;
+                organizationMainPageMark = 1;
                 // 显示 dialog
-                organizationFormModal.modal('show');
+                organizationMainPageFormModal.modal('show');
                 return false;
             });
-            $('#searchNode').click(function(e) {
+            $('#organization_mainPage_searchNode_btn').click(function(e) {
                 e.preventDefault();
-                searchNode();
+                organizationMainPageSearchZtreeNode();
                 return false;
             });
 
-            $('#organization_sync').click(function(e) {
+            $('#organization_mainPage_sync_btn').click(function(e) {
                 e.preventDefault();
-                sync();
+                organizationMainPageSyncData();
                 return false;
             });
-
 
             window.onresize = function(){
-                organizationTable.resize("organization_grid");
+                organizationMainPageTable.resize("organization_mainPage_grid");
             }
         }
     };
@@ -546,5 +606,5 @@ var SnippetOrganization = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetOrganization.init();
+    SnippetMainPageOrganization.init();
 });
