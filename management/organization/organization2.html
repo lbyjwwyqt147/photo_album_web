@@ -1,71 +1,120 @@
 <link rel="stylesheet" href="../../assets/custom/plugins/zTree/css/bootstrapStyle/bootstrapStyle.css" type="text/css">
 
 <style>
-    .m-portlet {
-        margin-bottom: 0rem;
-    }
-    .m-widget1 {
-        padding:0px;
-    }
-    .m-portlet .m-portlet__head {
-        border-bottom: 0px solid #ebedf2;
-    }
-    .row.m-row--col-separator-xl > div {
-        border-bottom: 0;
-        border-right: 0px solid #ebedf2;
-    }
-
-    /** layui-table 表格样式 开始 */
-
-    .layui-table, .layui-table-view {
-        margin: 0px ;
-    }
-    .layui-form.layui-border-box.layui-table-view{
-        border-bottom: none;
-    }
-
-    .layui-table-cell > .m-btn--icon.m-btn--icon-only {
-        display: inline-block;
-        position: relative;
-        padding: 0 !important;
-        width: 25px;
-        height: 25px;
-    }
-
-    .layui-table-tips-c {
-        position: absolute;
-        right: -3px;
-        top: -13px;
-        width: 20px;
-        height: 20px;
-         padding: 0px;
-        cursor: pointer;
-        background-color: #868aa8;
-        border-radius: 50%;
-        color: #fff;
-    }
+        .m-widget1 {
+             padding: 0rem;
+        }
+        .m-portlet {
+             margin-bottom: 0rem;
+        }
 
 
-    /** 分页工具栏 样式 */
-    .layui-laypage .layui-laypage-curr .layui-laypage-em {
-        position: absolute;
-        left: -1px;
-        top: -1px;
-        padding: 1px;
-        width: 100%;
-        height: 100%;
-        background-color: #34bfa3;
-    }
+        .m-btn--icon.m-btn--icon-only {
+            display: inline-block;
+            position: relative;
+            padding: 0 !important;
+            margin-top: -2px;
+            width: 27px;
+            height: 25px;
+        }
 
-    .layui-laypage .layui-laypage-count, .layui-laypage .layui-laypage-limits, .layui-laypage .layui-laypage-refresh, .layui-laypage .layui-laypage-skip {
-        margin-left: 0px !important;
-        margin-right: 8px !important;
-        padding: 0;
-        border: none;
-    }
+        .m-btn--icon.m-btn--icon-only [class^="la-"], .m-btn--icon.m-btn--icon-only [class*=" la-"] {
+            font-size: 1.1rem;
+        }
+        .m-portlet__head-tools, .btn-sm, .btn-group-sm > .btn {
+            padding: 0px;
+        }
 
-    /** layui-table 表格样式 结束 */
-</style>
+        .btn-sm, .btn-group-sm > .btn {
+            padding: 0.45rem 0.8rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-tab-content {
+            padding-top: 10px;
+            padding-left: 1px;
+            padding-bottom: 0px;
+            padding-right: 1px;
+        }
+        .layui-table-tips-c {
+            position: absolute;
+            right: -3px;
+            top: -13px;
+            width: 20px;
+            height: 20px;
+             padding: 0px;
+            cursor: pointer;
+            background-color: #666;
+            border-radius: 50%;
+            color: #fff;
+        }
+
+        .m-portlet{
+            box-shadow: none !important;
+        }
+
+        .m-portlet .m-portlet__body {
+             padding: 0 0;
+        }
+
+        .row.m-row--col-separator-xl > div {
+            border-bottom: 1px solid #ebedf2;
+            border-right: none;
+        }
+
+        .m-portlet .m-portlet__head {
+            border-bottom: 0px solid #ebedf2;
+        }
+
+            /*滚动条样式*/
+        .m-scroller::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+        }
+        .m-scroller::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.1);
+        }
+        .m-scroller::-webkit-scrollbar-track { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .layui-tab-card {
+            border: none;
+            border-style: none;
+            border-radius: 0px ;
+            box-shadow: none;
+           /*  border-width: 1px;*/
+             /*border-style: solid;
+             border-radius: 2px; */
+          /*   box-shadow: 0 2px 5px 0 rgba(0,0,0,.1); */
+        }
+
+        .layui-tab {
+            margin: 10px 0px 0px 0px;
+            text-align: left!important;
+        }
+
+        .layui-laypage .layui-laypage-count, .layui-laypage .layui-laypage-limits, .layui-laypage .layui-laypage-refresh, .layui-laypage .layui-laypage-skip {
+            margin-left: 0px;
+        }
+
+       /* .btn-sm, .btn-group-sm > .btn {
+            padding: 0.4rem;
+            font-size: 10px;
+            !* line-height: 1.5; *!
+            border-radius: 0.2rem;
+        }
+*/
+
+    </style>
 
 
 <div class="row">
@@ -84,7 +133,7 @@
                             </span>
                                 </div>
                             </div>
-                            <ul id="organization_mainPage_tree" class="ztree m-scroller" style="position: relative; overflow: auto;padding-left: 5px;"></ul>
+                            <ul id="organization_mainPage_tree" class="ztree m-scroller" style="position: relative; overflow: auto;padding-left: 0px;"></ul>
                         </div>
 
                         <!--end:: ztree -->
@@ -163,7 +212,7 @@
                                     <div class="form-group m-form__group row">
                                         <label class="col-form-label col-lg-3 col-sm-12">优先级</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control bootstrap-touchspin-vertical-btn" id="organization_mainPage_dataSubmit_form_org_seq"  name="seq" placeholder="默认10 数值越小越靠前展示"  >
+                                            <input type="text" class="form-control bootstrap-touchspin-vertical-btn"  name="seq" placeholder="默认10 数值越小越靠前展示"  >
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">

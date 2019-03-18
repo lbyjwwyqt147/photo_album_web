@@ -20,6 +20,7 @@ BaseUtils = {
     'disabled': '禁用',
     'updateMsg': "数据更新失败!",
     'syncMsg': "数据同步失败!",
+    'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
     'user_access_token': "photo_album_user_access_token_",
 
@@ -54,11 +55,6 @@ BaseUtils = {
     ztree: {
         settingZtreeProperty: function (params) {
             var setting = {
-                view: {
-                    selectedMulti: params.selectedMulti,
-                    fontCss: BaseUtils.ztree.getZtreeHighlightFontCss(),
-                    expandSpeed: "slow", //节点展开动画速度
-                },
                 check: {
                     enable: params.check
                 },
@@ -113,44 +109,12 @@ BaseUtils = {
         },
 
         /**
-         *  搜索节点
-         */
-        searchZteeNode: function (zTree, nodeList, searchValue) {
-            console.log(nodeList);
-
-            nodeList = BaseUtils.ztree.updateZtreeNodes(nodeList, false);
-            console.log(nodeList);
-            if (searchValue === "") {
-                return;
-            }
-            var keyType = "name";
-            nodeList = zTree.getNodesByParamFuzzy(keyType, searchValue);
-            BaseUtils.ztree.updateZtreeNodes(nodeList, true);
-        },
-
-        /**
-         * 更新节点
-         * @param zTree
-         * @param nodeList
-         * @param highlight
-         */
-        updateZtreeNodes: function (zTree, nodeList, highlight) {
-            var nodeLength = nodeList.length;
-            for (var i = 0; i < nodeLength; i++) {
-                nodeList[i].highlight = highlight;
-                zTree.updateNode(nodeList[i]);
-            }
-            return nodeList;
-        },
-
-        /**
          * 设置 ztree 高亮时的css
          * @param treeId
          * @param treeNode
          * @returns {*}
          */
         getZtreeHighlightFontCss: function (treeId, treeNode) {
-            console.log(treeNode);
             if (typeof(treeNode) == undefined || undefined == treeNode  || 'undefined' == treeNode) {
                 return {
                     color: "#333",
@@ -196,11 +160,32 @@ BaseUtils = {
     checkLoginTimeoutStatus:function() {
         var timeOut = BaseUtils.checkLoginTimeout();
         if (timeOut) {
-            toastr.warning("登录信息已过期,即将重新登录!");
+            toastr.warning(BaseUtils.loginTimeOutMsg);
             return true;
         }
         return false;
     },
+
+    /**
+     * 检查是否登录超时
+     * @param status
+     */
+    checkIsLoginTimeOut:function(status) {
+        if (status == 504) {
+            toastr.warning(BaseUtils.loginTimeOutMsg);
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * 登录超时
+     * @param status
+     */
+    LoginTimeOutHandler:function() {
+        toastr.warning(BaseUtils.loginTimeOutMsg);
+    },
+
 
 
     /**

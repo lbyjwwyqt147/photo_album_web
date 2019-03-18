@@ -36,7 +36,7 @@
 
         <style>
             /**  头部样式 开始  */
-            @media (min-width: 1025px) {
+           /* @media (min-width: 1025px) {
                 .m-header {
                     height: 59px; }
                 .m-header--fixed .m-header {
@@ -75,9 +75,51 @@
                     box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; }
                 body.m-aside-left--skin-light .m-header {
                     -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ;
-                    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; } }
+                    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; } }*/
 
-            @media (max-width: 1024px) {
+			.m-header {
+				height: 59px;
+			}
+			.m-header--fixed .m-header {
+				-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+				z-index: 99;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0; }
+			.m-header .m-header-head {
+				-webkit-transition: width 0.2s ease;
+				transition: width 0.2s ease; }
+			.m-header--static.m-aside-left--fixed .m-header .m-header-head {
+				-webkit-transition: width 0.2s ease;
+				transition: width 0.2s ease;
+				padding-left: 210px; }
+			.m-header--static.m-aside-left--fixed.m-aside-left--minimize .m-header .m-header-head {
+				-webkit-transition: width 0.2s ease;
+				transition: width 0.2s ease;
+				padding-left: 78px; }
+			.m-header--fixed.m-header--hide .m-header {
+				height: 59px;
+				-webkit-transition: all 0.3s ease 0.5s;
+				transition: all 0.3s ease 0.5s;
+				-webkit-transform: translateY(-100%);
+				transform: translateY(-100%); }
+			.m-header--fixed.m-header--show .m-header {
+				height: 59px;
+				-webkit-transition: all 0.3s ease;
+				transition: all 0.3s ease;
+				-webkit-transform: translateY(0);
+				transform: translateY(0); }
+			body.m-aside-left--skin-dark .m-header .m-header-head {
+				-webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ;
+				box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; }
+			body.m-aside-left--skin-light .m-header {
+				-webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ;
+				box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ;
+			}
+
+			/*@media (max-width: 1024px) {
                 .m-header {
                     height: 59px !important; }
                 .m-header .m-header__nav {
@@ -109,15 +151,21 @@
                     transform: translateY(0); }
                 .m-header--fixed-mobile .m-header .m-header-head {
                     -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ;
-                    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; } }
+                    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1) ; } }*/
 
-            @media (min-width: 1025px){
+
+          /*  @media (min-width: 1025px){
                 .m-brand .m-brand__logo, .m-brand .m-brand__tools {
                     -webkit-transition: width 0.2s ease;
                     transition: width 0.2s ease;
                     height: 59px !important;
                 }
-            }
+            }*/
+			.m-brand .m-brand__logo, .m-brand .m-brand__tools {
+				-webkit-transition: width 0.2s ease;
+				transition: width 0.2s ease;
+				height: 59px !important;
+			}
 
 
            /**  头部样式 结束  */
@@ -134,10 +182,7 @@
             }
             /** 左边菜单栏 padding样式  */
             .m-aside-menu .m-menu__nav > .m-menu__item > .m-menu__link {
-                padding-top: 0px !important;
-                padding-bottom: 0px !important;
-                padding-left: 15px !important;
-                padding-right: 25px !important;
+                padding:0px 25px 0px 15px !important;
             }
             .m-aside-menu .m-menu__nav {
                 list-style: none;
@@ -165,11 +210,14 @@
                 width: 10px;
             }
 
-            @media (min-width: 1025px){
+           /* @media (min-width: 1025px){
                 .m-aside-left--fixed.m-header--static .m-aside-left, .m-aside-left--fixed.m-header--fixed .m-aside-left {
                     top: 59px;
                 }
-            }
+            }*/
+			.m-aside-left--fixed.m-header--static .m-aside-left, .m-aside-left--fixed.m-header--fixed .m-aside-left {
+				top: 59px;
+			}
 
             .m-aside-menu .m-menu__nav .m-menu__item > .m-menu__heading, .m-aside-menu .m-menu__nav .m-menu__item > .m-menu__link {
                 display: table;
@@ -310,28 +358,40 @@
 
 
 
-            @media (min-width: 1025px){
+           /* @media (min-width: 1025px){
                 .m-header--fixed .m-body {
                     padding-top: 50px !important;
                 }
-            }
+            }*/
 
-            @media (min-width: 1025px){
+			.m-header--fixed .m-body {
+				padding-top: 50px !important;
+			}
+
+           /* @media (min-width: 1025px){
                 .m-footer--push.m-aside-left--enabled:not(.m-footer--fixed) .m-aside-right, .m-footer--push.m-aside-left--enabled:not(.m-footer--fixed) .m-wrapper {
                      margin-bottom: 0px;
                 }
-            }
+            }*/
+			.m-footer--push.m-aside-left--enabled:not(.m-footer--fixed) .m-aside-right, .m-footer--push.m-aside-left--enabled:not(.m-footer--fixed) .m-wrapper {
+				margin-bottom: 0px;
+			}
 
-            @media (min-width: 1025px){
+            /*@media (min-width: 1025px){
                 .m-aside-left--fixed .m-body {
                     -webkit-transition: width 0.2s ease;
                     transition: width 0.2s ease;
                     padding-left: 210px;
                 }
-            }
+            }*/
+			.m-aside-left--fixed .m-body {
+				-webkit-transition: width 0.2s ease;
+				transition: width 0.2s ease;
+				padding-left: 210px;
+			}
 
             /** 阴影 */
-            @media (min-width: 1025px) {
+          /*  @media (min-width: 1025px) {
                 body.m-aside-left--skin-dark .m-header .m-header-head {
                     -webkit-box-shadow: none;
                     box-shadow: none;
@@ -342,7 +402,11 @@
                     -webkit-box-shadow: none;
                     box-shadow: none;
                 }
-            }
+            }*/
+			body.m-aside-left--skin-dark .m-header .m-header-head {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
 
 
 
@@ -360,12 +424,13 @@
                 border-color: cadetblue !important;
             }
             .layui-tab-content {
-                padding: 10px;
+                padding: 0px;
                 background-color: #FFFFFF;
             }
             .layui-tab-card {
                 border-top: none;
                 border-left: none;
+				box-shadow:none;
             }
             /**  tab 样式 结束  */
 
@@ -376,7 +441,7 @@
 	<!-- end::Head -->
 
 	<!-- begin::Body -->
-	<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+	<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default" style="overflow-x:hidden">
 
 		<!-- begin:: Page -->
 		<div class="m-grid m-grid--hor m-grid--root m-page">

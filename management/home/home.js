@@ -13,6 +13,7 @@ var SnippetHomeIndex = function() {
             headers: BaseUtils.serverHeaders(),
             success:function (response) {
                 if (response.success) {
+                    BaseUtils.setCookie(BaseUtils.user_access_token, "110");
                     var $menuHtml = $("#home_menu_home_page");
                     $.each(response.data, function (i, v) {
                         var root = v;
