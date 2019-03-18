@@ -122,6 +122,9 @@ var SnippetMainPageOrganization = function() {
      * 初始化 功能按钮
      */
     var organizationMainPageInitFunctionButtonGroup = function () {
+        $.pureClearButton.setDefault({
+            icon: 'glyphicon-remove'
+        });
         //初始化 排序 控件
         BootstrapTouchspin.initByteTouchSpin("#organization_mainPage_dataSubmit_form_org_seq");
         var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
