@@ -3,10 +3,10 @@ var appId = "1550817774159";
 var appKey = "0020a9ebfc7b4667b0617488d96c788b";
 var credential = "42e853886ec8d3cbdaa062a732551b10";
 
-var BaseUtils;
-BaseUtils = {
+var BaseUtils = {
     "serverAddress": "http://127.0.0.1:18081/api/v1/",
-    "cloudServerAddress": "http://101.132.136.225:18080/api/v1/",
+    //"cloudServerAddress": "http://101.132.136.225:18080/api/v1/",
+    "cloudServerAddress": "http://127.0.0.1:18080/api/v1/",
     "systemCode": systemCode,
     "appId": appId,
     "appKey": appKey,
@@ -20,6 +20,7 @@ BaseUtils = {
     'disabled': '禁用',
     'updateMsg': "数据更新失败!",
     'syncMsg': "数据同步失败!",
+    'loadingErrorMsg': "加载数据失败!",
     'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
     'user_access_token': "photo_album_user_access_token_",
@@ -60,7 +61,10 @@ BaseUtils = {
                 },
                 data: {
                     simpleData: {
-                        enable: true
+                        enable: true,
+                        idKey:"id",
+                        pIdKey:"pid",
+                        rootPId:0
                     }
                 },
                 edit: {

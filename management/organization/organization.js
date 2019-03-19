@@ -62,7 +62,15 @@ var SnippetMainPageOrganization = function() {
      * @param id
      */
     function organizationMainPageRereshExpandNode(id) {
-        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        if (id == 0) {
+            dictMainPageRereshTree();
+            return;
+        }
+        var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        var nodes = zTreeObj.getNodesByParam("id", id, null);
+        if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
+            dictMainPageRereshTreeNode(id);
+        }
         BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
     }
 
@@ -73,8 +81,38 @@ var SnippetMainPageOrganization = function() {
      */
     function organizationMainPageRereshTree(){
         var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
-        BaseUtils.ztree.rereshzTree(zTreeObj);
+        zTreeObj.destroy();
+        organizationMainPageInitTree();
     };
+
+    /**
+     * 异步加载ztree 数数据
+     * @param id
+     */
+    function organizationMainPageRereshTreeNode(id) {
+        $.ajax({
+            type: "get",
+            url: serverUrl + "tree/organization/ztree",
+            data: {
+                id:id
+            },
+            dataType: "json",
+            headers: BaseUtils.serverHeaders(),
+            crossDomain: true,
+            success:function (data) {
+                var treeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+                //获取指定父节点
+                var parentZNode = treeObj.getNodeByParam("id", organizationMainPagePid, null);
+                treeObj.addNodes(parentZNode,data, false);
+            },
+            error:function (response) {
+                toastr.error(BaseUtils.networkErrorMsg);
+            },
+            beforeSend:function () {
+
+            }
+        });
+    }
 
     /**
      *  搜索节点
@@ -336,14 +374,7 @@ var SnippetMainPageOrganization = function() {
      * 刷新grid和tree
      */
     var organizationMainPageRefreshGridAndTree = function () {
-        organizationMainPageTable.reload('organization_mainPage_grid',{
-            where: {   //传递额外参数
-                'parentId' : organizationMainPagePid
-            },
-            page: {
-                curr: 1 //重新从第 1 页开始
-            }
-        });
+        organizationMainPageRefreshGrid();
         //刷新树
         organizationMainPageRereshExpandNode(organizationMainPagePid);
     };
@@ -578,7 +609,6 @@ var SnippetMainPageOrganization = function() {
                         }
                         BaseUtils.LoginTimeOutHandler();
                     } else {
-                        console.log(status);
                         if (status == 1) {
                             obj.othis.removeClass("layui-form-checked");
                             $(obj.elem).removeAttr("checked");
