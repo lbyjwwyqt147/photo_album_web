@@ -7,6 +7,7 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageTable;
     var organizationMainPageFormModal = $('#organization_mainPage_dataSubmit_form_modal');
     var organizationMainPageSubmitForm = $("#organization_mainPage_dataSubmit_form");
+    var organizationMainPageSubmitFormId = "#organization_mainPage_dataSubmit_form";
     var organizationMainPageMark = 1;
     var organizationMainPagePid = 0;
     var organizationMainPageParentName = "";
@@ -79,9 +80,6 @@ var SnippetMainPageOrganization = function() {
      *  搜索节点
      */
     function organizationMainPageSearchZtreeNode() {
-        /*if (BaseUtils.checkLoginTimeoutStatus()) {
-            return;
-        }*/
         var searchZtreeValue = $.trim($("#organization-mainPage-nodeName-search").val());
        organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList,false);
         if (searchZtreeValue == "") {
@@ -119,13 +117,18 @@ var SnippetMainPageOrganization = function() {
     };
 
     /**
+     * 设置 tree 最大高度样式
+     */
+    function organizationMainPageZtreeMaxHeight() {
+         var layGridHeight = $(".layui-form.layui-border-box.layui-table-view").outerHeight();
+        $("#organization_mainPage_tree").css("max-height", layGridHeight);
+    }
+
+    /**
      * 初始化 功能按钮
      */
     var organizationMainPageInitFunctionButtonGroup = function () {
-        $.pureClearButton.setDefault({
-            icon: 'glyphicon-remove'
-        });
-        //初始化 排序 控件
+        //初始化 优先级 控件
         BootstrapTouchspin.initByteTouchSpin("#organization_mainPage_dataSubmit_form_org_seq");
         var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
         if (functionButtonGroup != null) {
@@ -250,6 +253,7 @@ var SnippetMainPageOrganization = function() {
                     };
                 },
                 done: function (res, curr, count) {
+                    organizationMainPageZtreeMaxHeight();
                     var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
                     var status_table_index = $.inArray("3", curFunctionButtonGroup);
                     if (status_table_index != -1) {
@@ -260,7 +264,8 @@ var SnippetMainPageOrganization = function() {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
                     }
-                    BaseUtils.checkIsLoginTimeOut(res.status) ;
+                    BaseUtils.checkIsLoginTimeOut(res.status);
+
                 }
             });
 
@@ -285,12 +290,16 @@ var SnippetMainPageOrganization = function() {
             //监听锁定操作
             layuiForm.on('checkbox(lock)', function(obj){
                 var statusValue = 0;
-                if (obj.elem.checked) {
+                // 选中返回 true  没有选中返回false
+                var isChecked = obj.elem.checked;
+                var lockChecked = $(obj.elem).attr("checked");
+                if (lockChecked == undefined || lockChecked == 'undefined' || typeof (lockChecked) == undefined) {
                     statusValue = 1;
                 }
                 if (BaseUtils.checkLoginTimeoutStatus()) {
                     if (statusValue == 1) {
                         obj.othis.removeClass("layui-form-checked");
+                        $(obj.elem).removeAttr("checked");
                     } else {
                         obj.othis.addClass("layui-form-checked");
                     }
@@ -301,7 +310,10 @@ var SnippetMainPageOrganization = function() {
 
             //监听行双击事件
             organizationMainPageTable.on('rowDouble(organization_mainPage_grid)', function(obj){
-
+                organizationMainPageMark = 3;
+                organizationMainPageSubmitForm.setForm(obj.data);
+                BaseUtils.readonlyForm(organizationMainPageSubmitFormId);
+                organizationMainPageFormModal.modal('show');
             });
         });
     };
@@ -342,7 +354,11 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageFormSubmitHandle = function() {
         $('#organization_mainPage_dataSubmit_form_submit').click(function(e) {
             e.preventDefault();
-            BaseUtils.formInputTrim("#organization_mainPage_dataSubmit_form");
+            BaseUtils.formInputTrim(organizationMainPageSubmitFormId);
+            if ($("#organization_mainPage_dataSubmit_form_parent_name").val() == "") {
+                organizationMainPagePid = 0;
+                organizationMainPageParentName = "";
+            }
             organizationMainPageSubmitForm.validate({
                 rules: {
                     orgNumber: {
@@ -556,13 +572,16 @@ var SnippetMainPageOrganization = function() {
                     } else if (response.status == 504) {
                         if (status == 1) {
                             obj.othis.removeClass("layui-form-checked");
+                            $(obj.elem).removeAttr("checked");
                         } else {
                             obj.othis.addClass("layui-form-checked");
                         }
                         BaseUtils.LoginTimeOutHandler();
                     } else {
+                        console.log(status);
                         if (status == 1) {
                             obj.othis.removeClass("layui-form-checked");
+                            $(obj.elem).removeAttr("checked");
                         } else {
                             obj.othis.addClass("layui-form-checked");
                         }
@@ -619,17 +638,39 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#organization_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
-            var recipient = "新增组织机构";
-            $("#organization_mainPage_dataSubmit_form_org_number").removeAttr("readonly");
+            var zTreeOjb = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+            var selectedNodes = zTreeOjb.getSelectedNodes();
+            if (selectedNodes.length > 0) {
+                var selectedNode = selectedNodes[0];
+                organizationMainPageParentName = selectedNode.name;
+                organizationMainPagePid = selectedNode.id;
+            }
+            var modalDialogTitle = "新增组织机构";
+            if (organizationMainPageMark == 1) {
+                BaseUtils.cleanFormReadonly(organizationMainPageSubmitFormId);
+            }
             $("#organization_mainPage_dataSubmit_form_parent_name").val(organizationMainPageParentName);
-            $("#organization_mainPage_dataSubmit_form_org_number").removeClass("m-input--solid");
             if (organizationMainPageMark == 2) {
-                recipient = "修改组织机构";
+                modalDialogTitle = "修改组织机构";
+                BaseUtils.cleanFormReadonly(organizationMainPageSubmitFormId);
                 $("#organization_mainPage_dataSubmit_form_org_number").addClass("m-input--solid");
                 $("#organization_mainPage_dataSubmit_form_org_number").attr("readonly", "readonly");
             }
+            $("#org-fullName-form-div").hide();
+            $(".has-danger-error").show();
+            $(".glyphicon.glyphicon-remove.form-control-feedback").show();
+            $("#organization_mainPage_dataSubmit_form_submit").show();
+            $("#organization_mainPage_dataSubmit_form_parent_name").addClass("m-input--solid");
+            $("#organization_mainPage_dataSubmit_form_parent_name").attr("readonly", "readonly");
+            if (organizationMainPageMark == 3) {
+                modalDialogTitle = "组织机构信息";
+                $(".glyphicon.glyphicon-remove.form-control-feedback").hide();
+                $("#org-fullName-form-div").show();
+                $(".has-danger-error").hide();
+                $("#organization_mainPage_dataSubmit_form_submit").hide();
+            }
             var modalDialog = $(this);
-            modalDialog.find('.modal-title').text(recipient);
+            modalDialog.find('.modal-title').text(modalDialogTitle);
         });
 
         // 当调用 hide 实例方法时触发。
@@ -669,9 +710,9 @@ var SnippetMainPageOrganization = function() {
             });
             $('#organization_mainPage_searchNode_btn').click(function(e) {
                 e.preventDefault();
-                /*if (BaseUtils.checkLoginTimeoutStatus()) {
+                if (BaseUtils.checkLoginTimeoutStatus()) {
                     return;
-                }*/
+                }
                 organizationMainPageSearchZtreeNode();
                 return false;
             });
@@ -687,7 +728,9 @@ var SnippetMainPageOrganization = function() {
 
             window.onresize = function(){
                 organizationMainPageTable.resize("organization_mainPage_grid");
+                organizationMainPageZtreeMaxHeight();
             }
+
         }
     };
 }();

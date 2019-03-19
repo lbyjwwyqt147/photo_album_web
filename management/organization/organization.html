@@ -15,6 +15,39 @@
         border-right: 0px solid #ebedf2;
     }
 
+    .ztree {
+        margin: 0;
+        padding: 5px 5px 5px 21px;
+        color: #333;
+    }
+
+    /** tree 滚动条样式 开始 */
+
+    .m-scroller::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        cursor: pointer;
+    }
+    .m-scroller::-webkit-scrollbar-thumb {/*滚动条里面线条*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(234, 234, 239, 1);
+        background: rgba(234, 234, 239, 1);
+        cursor: pointer;
+    }
+    .m-scroller::-webkit-scrollbar-track { /*滚动条里面轨道线条背景*/
+        -webkit-box-shadow: inset 0 0 5px rgba(234, 234, 239, 0.3);
+        border-radius: 0;
+        background: rgba(234, 234, 239, 0.3);
+        cursor: pointer;
+    }
+
+    /** tree 滚动条样式 结束 */
+
+    /**  modal 样式  开始   */
+
+
+    /**  modal 样式  结束   */
+
 
 </style>
 
@@ -27,7 +60,7 @@
                     <div class="col-xl-2">
                         <!--begin:: ztree -->
                         <div class="m-widget1" >
-                            <div class="input-group">
+                            <div class="input-group" style="padding-left: 16px">
                                 <input type="text" class="form-control form-control-danger" id="organization-mainPage-nodeName-search" placeholder="输入名称搜索" style="height: 41px;">
                                 <div class="input-group-append" style="cursor: pointer" id="organization_mainPage_searchNode_btn">
                             <span class="input-group-text" >
@@ -35,7 +68,7 @@
                             </span>
                                 </div>
                             </div>
-                            <ul id="organization_mainPage_tree" class="ztree m-scroller" style="position: relative; overflow: auto;padding-left: 5px;"></ul>
+                            <ul id="organization_mainPage_tree" class="ztree m-scroller" style="overflow:auto;min-height: 300px;" ></ul>
                         </div>
 
                         <!--end:: ztree -->
@@ -96,7 +129,8 @@
                                     <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">上级机构</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input  class="form-control m-input" id="organization_mainPage_dataSubmit_form_parent_name" name="organizationParentName" placeholder="上级机构"  autocomplete="off" data-pure-clear-button>
+                                            <input  class="form-control m-input m-input--solid" id="organization_mainPage_dataSubmit_form_parent_name" name="organizationParentName" placeholder="上级机构" readonly autocomplete="off" >
+                                            <span aria-hidden="true" class="glyphicon glyphicon-remove form-control-feedback" data-pure-clear-button="event" style="cursor: pointer; pointer-events: auto;" data-container="body" data-toggle="m-tooltip" data-placement="bottom" title="清除内容后将会默认为一级机构"><i class="la la-close"></i></span>
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row ">
@@ -111,6 +145,13 @@
                                             <input type="text" class="form-control m-input" name="orgName" placeholder="机构名称必须填写" autocomplete="off">
                                         </div>
                                     </div>
+                                    <div class="form-group m-form__group row" id="org-fullName-form-div" style="display: none">
+                                        <label class="col-form-label col-lg-3 col-sm-12">机构全名称</label>
+                                        <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <input type="text" class="form-control m-input" name="fullName" placeholder="机构全名称" autocomplete="off">
+                                        </div>
+                                    </div>
+
                                     <div class="form-group m-form__group row">
                                         <label class="col-form-label col-lg-3 col-sm-12">优先级</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
@@ -167,6 +208,6 @@
 </script>
 
 <script type="text/javascript" src="../../assets/custom/plugins/zTree/js/jquery.ztree.core.js"></script>
-<script type="text/javascript" src="../../assets/custom/plugins/bootstrap-pureClearButton/jquery.bootstrap-pureClearButton.min.js"></script>
+<script type="text/javascript" src="../../assets/custom/plugins/bootstrap-pureClearButton/jquery.bootstrap-pureClearButton.js"></script>
 
 <script src="../../management/organization/organization.js" type="text/javascript"></script>

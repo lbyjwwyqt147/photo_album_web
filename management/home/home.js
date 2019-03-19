@@ -1,5 +1,5 @@
 //== Class Definition
-var SnippetHomeIndex = function() {
+var SnippetMainPageHomeIndex = function() {
     var layer;
     /**
      * 初始化菜单数据项
@@ -181,5 +181,5 @@ var SnippetHomeIndex = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetHomeIndex.init();
+    SnippetMainPageHomeIndex.init();
 });

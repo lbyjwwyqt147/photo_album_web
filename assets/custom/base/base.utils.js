@@ -427,7 +427,7 @@ BaseUtils = {
     },
 
     /**
-     *  清楚form 元素
+     *  清除 form 数据
      * @param formId
      */
     cleanFormData: function (form) {
@@ -436,9 +436,43 @@ BaseUtils = {
         $.each(input, function (i, v) {
             $(v).removeAttr("value");
         });
-        var formControlFeedback = $(".form-control-feedback");
+        var textarea = form.find("textarea");
+        $.each(textarea, function (i, v) {
+            $(v).removeAttr("value");
+        });
+        var formControlFeedback = $(".error.form-control-feedback");
         formControlFeedback.parent("div").parent("div").removeClass("has-danger");
         formControlFeedback.remove();
+    },
+
+    /**
+     *  将 form 全部设置为 readonly
+     * @param formId
+     */
+    readonlyForm: function (form) {
+        $(form + " input").each(function () {
+            $(this).addClass("m-input--solid");
+            $(this).attr("readonly", "readonly");
+        });
+        $(form + " textarea").each(function () {
+            $(this).addClass("m-input--solid");
+            $(this).attr("readonly", "readonly");
+        });
+    },
+
+    /**
+     *  将 form 全部设置为 readonly
+     * @param formId
+     */
+    cleanFormReadonly: function (form) {
+        $(form + " input").each(function () {
+            $(this).removeClass("m-input--solid");
+            $(this).removeAttr("readonly", "readonly");
+        });
+        $(form + " textarea").each(function () {
+            $(this).removeClass("m-input--solid");
+            $(this).removeAttr("readonly", "readonly");
+        });
     },
 
     tipsFormat: function (msg) {
