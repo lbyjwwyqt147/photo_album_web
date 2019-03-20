@@ -62,14 +62,12 @@ var SnippetMainPageDict = function() {
      * @param id
      */
     function dictMainPageRereshExpandNode(id) {
-        console.log(id);
         if (id == 0) {
             dictMainPageRereshTree();
             return;
         }
        var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
        var nodes = zTreeObj.getNodesByParam("id", id, null);
-       console.log(nodes);
        if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
            dictMainPageRereshTreeNode(id);
        }
@@ -255,6 +253,7 @@ var SnippetMainPageDict = function() {
                     {field:'dictCode', title:'字典代码'},
                     {field:'dictName', title:'字段名称'},
                     {field:'priority', title:'优先级'},
+                    {field:'fullParentCode', title:'完整父级代码'},
                     {field:'description', title:'描述'},
                     {field:'status', title:'状态', align: 'center', unresize:true,
                         templet : function (row) {
@@ -401,16 +400,21 @@ var SnippetMainPageDict = function() {
                 rules: {
                     dictCode: {
                         required: true,
+                        alnumCode:true,
                         maxlength: 32
                     },
                     dictName: {
                         required: true,
+                        alnumName:true,
                         maxlength: 32
                     },
                     priority: {
+                        digits:true,
                         range: [1,999]
                     },
                     description: {
+                        htmlLabel:true,
+                        illegitmacy:true,
                         maxlength: 50
                     }
                 },

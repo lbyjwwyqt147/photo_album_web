@@ -21,7 +21,7 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "tree/organization/ztree",
+        "url":serverUrl + "tree/organization/all/ztree",
         "headers":BaseUtils.serverHeaders(),
     });
     organizationMainPageZtreeSetting.view = {
@@ -63,13 +63,13 @@ var SnippetMainPageOrganization = function() {
      */
     function organizationMainPageRereshExpandNode(id) {
         if (id == 0) {
-            dictMainPageRereshTree();
+            organizationMainPageRereshTree();
             return;
         }
         var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
         var nodes = zTreeObj.getNodesByParam("id", id, null);
         if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
-            dictMainPageRereshTreeNode(id);
+            organizationMainPageRereshTreeNode(id);
         }
         BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
     }
@@ -92,7 +92,7 @@ var SnippetMainPageOrganization = function() {
     function organizationMainPageRereshTreeNode(id) {
         $.ajax({
             type: "get",
-            url: serverUrl + "tree/organization/ztree",
+            url: serverUrl + "tree/organization/all/ztree",
             data: {
                 id:id
             },
@@ -394,16 +394,21 @@ var SnippetMainPageOrganization = function() {
                 rules: {
                     orgNumber: {
                         required: true,
+                        alnumCode:true,
                         maxlength: 15
                     },
                     orgName: {
                         required: true,
+                        alnumName:true,
                         maxlength: 32
                     },
                     seq: {
+                        digits:true,
                         range: [1,999]
                     },
                     description: {
+                        htmlLabel:true,
+                        illegitmacy:true,
                         maxlength: 100
                     }
                 },
