@@ -423,10 +423,14 @@ var BaseUtils = {
      */
     formInputTrim: function (form) {
         $(form + " input").each(function () {
-            $(this).val($.trim($(this).val()))
+            var trimValue = $.trim($(this).val());
+            var curValue = trimValue.replace(/\+/g,' ');
+            $(this).val($.trim(curValue));
         });
         $(form + " textarea").each(function () {
-            $(this).val($.trim($(this).val()))
+            var trimValue = $.trim($(this).val());
+            var curValue = trimValue.replace(/\+/g,' ');
+            $(this).val($.trim(curValue));
         });
     },
 
