@@ -7,6 +7,8 @@ var BaseUtils = {
     "serverAddress": "http://127.0.0.1:18081/api/v1/",
     //"cloudServerAddress": "http://101.132.136.225:18080/api/v1/",
     "cloudServerAddress": "http://127.0.0.1:18080/api/v1/",
+    "privateKey":"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJ6bNnAgmUZ615mmqo1FzdS+f+mdV6U4bP3fZgyy0mvmauVOveR/w/QusgP1NLdWHP/f5S/E566fU5IfH9qFnBJVlJ4evSHxAbuQT1O4wqBvGzIDQBUZ72IXquYkkQAmQ1bShplGzZ/uTKAtTe53fjQY1Pe8ve23FQpHLDqbAbE7AgMBAAECgYEAmSzzVTTWcq/emsDQhCF/GNBl/nt7ktA8yq4/A1KMT7K3WABE+nG+EIwsVhAxOkKLPT7BO/Ihgo7TChLPE57ny26g447okGGjR3Xk7M3zxXBtsUIdgFL/zTYvBZubQp7/Jnhqtx5aABt+BHNiInmxrzVW1fIM34FlbqwVOVlbeCECQQDtokziFS8xSqPVWT+5LEksZPsW0h9BLm9kjEHnbYcOs5I3cNdcgaRnboo3+jAyrlKQZWeEYtH3wVLKac0+uq0RAkEAqt1QAyDIK3JYSGC+5AU7eAIMroKu+lHrssqHeoVsES8eUpdnTU1RyB2l7mBBBqP+F6Q/i57UjUMgDGDhPw4piwJAbenZF+Vmi60TdHYwhEzYl6EphlewPyzkNySswwelJYanhd86rb4FNhYp9lRRgM+ivsk4hUJUDf2sdpVTasVbkQJAGrfQsyyFIIYY1/iI4Q8QZYusf/1fbzUwLh0NYlNKusUrcK7MMIJOr4QzVjsm7+rk6L1+Uk7b3dsJP+ZGUp3cUQJAYILnmJujQBDafErJ+4yQlh2q5X3+f4xH1OCViBvhMo3leNUQBGD3IZhVkLqxP6B/B2xAYfnEvM2zd4sqhvUoVg==",
+    "publicKey":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCemzZwIJlGeteZpqqNRc3Uvn/pnVelOGz932YMstJr5mrlTr3kf8P0LrID9TS3Vhz/3+UvxOeun1OSHx/ahZwSVZSeHr0h8QG7kE9TuMKgbxsyA0AVGe9iF6rmJJEAJkNW0oaZRs2f7kygLU3ud340GNT3vL3ttxUKRyw6mwGxOwIDAQAB",
     "systemCode": systemCode,
     "appId": appId,
     "appKey": appKey,

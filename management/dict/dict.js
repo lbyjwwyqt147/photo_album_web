@@ -453,10 +453,23 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='systemCode']").val(BaseUtils.systemCode);
             $("#dict_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
+            // 加密
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey(BaseUtils.publicKey);
+            console.log(dictMainPageSubmitForm.serializeJSON());
+            var formData = JSON.stringify(dictMainPageSubmitForm.serializeJSON());
+            //包含中文
+            var cnEscapeData = window.btoa(window.encodeURIComponent(formData));
+            console.log(cnEscapeData);
+            var encryptData = encrypt.encryptLong(cnEscapeData);
+            console.log(encryptData);
+      //      console.log(bytesToHex(encryptData));
+
             $.ajax({
                 type: "POST",
-                url: serverUrl + "dict/save",
-                data: dictMainPageSubmitForm.serializeJSON(),
+                url: serverUrl + "dict/s",
+                data: encryptData,
+                contentType: "application/json", //如果想以json格式把数据提交到后台的话，这个必须有，否则只会当做表单提交
                 dataType: "json",
                 headers: BaseUtils.cloudHeaders,
                 crossDomain: true,
