@@ -16,20 +16,6 @@ var SnippetMainPageHomeIndex = function() {
                     BaseUtils.setCookie(BaseUtils.user_access_token, "110");
                     var $menuHtml = $("#home_menu_home_page");
 
-
-
-                    // 加密
-                    var encrypt1 = new JSEncrypt();
-                    encrypt1.setPublicKey(BaseUtils.publicKey);
-                    var encryptData1 = encrypt1.encrypt("https://blog.csdn.net/qy20115549/article/details/83105736");
-                    console.log(encryptData1)
-
-                    //解密
-                    var encrypt = new JSEncrypt();
-                    encrypt.setPrivateKey(BaseUtils.privateKey);
-                    var encryptData = encrypt.decrypt("W+Pxq/cx633xqbem5VVskMVNYsqQ6PXvcsRWCh90dbmB6pQcJTElKVaMPtvWVyRk1we47/B45OQ244x7uOnDAl6L4czkMBcbnmUCaLRVNoM/QkfvqUuTKxr8srN0kbAB9c+RDBf2QkJybcDkba/PKqSTTeRvy0fLOJ7JqktFle0=");
-                    console.log(encryptData);
-
                     $.each(response.data, function (i, v) {
                         var root = v;
                         // 将页面功能按钮信息存放到本地

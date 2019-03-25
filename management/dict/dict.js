@@ -21,7 +21,7 @@ var SnippetMainPageDict = function() {
     var dictMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "tree/dict/all/ztree?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
+        "url":serverUrl + "v1/tree/dict/all/ztree?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
         "headers":BaseUtils.cloudHeaders,
     });
     dictMainPageZtreeSetting.view = {
@@ -92,7 +92,7 @@ var SnippetMainPageDict = function() {
     function dictMainPageRereshTreeNode(id) {
         $.ajax({
             type: "get",
-            url: serverUrl + "tree/dict/all/ztree",
+            url: serverUrl + "v1/tree/dict/all/ztree",
             data: {
                 id:id,
                 systemCode:BaseUtils.systemCode,
@@ -230,7 +230,7 @@ var SnippetMainPageDict = function() {
             var layuiForm = layui.form;
             dictMainPageTable.render({
                 elem: '#dict_mainPage_grid',
-                url: serverUrl + 'table/dict/grid',
+                url: serverUrl + 'v1/table/dict/grid',
                 where: {   //传递额外参数
                     'pid' : dictMainPagePid,
                     'credential': BaseUtils.credential,
@@ -453,50 +453,29 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='systemCode']").val(BaseUtils.systemCode);
             $("#dict_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
-            // 加密
-            var encrypt = new JSEncrypt();
-            encrypt.setPublicKey(BaseUtils.publicKey);
-            console.log(dictMainPageSubmitForm.serializeJSON());
+
             var formData = JSON.stringify(dictMainPageSubmitForm.serializeJSON());
-            //包含中文
-            var cnEscapeData = window.btoa(window.encodeURIComponent(formData));
-            console.log(cnEscapeData);
-            var encryptData = encrypt.encryptLong(cnEscapeData);
-            console.log(encryptData);
-      //      console.log(bytesToHex(encryptData));
-
-            $.ajax({
-                type: "POST",
-                url: serverUrl + "dict/s",
-                data: encryptData,
-                contentType: "application/json", //如果想以json格式把数据提交到后台的话，这个必须有，否则只会当做表单提交
-                dataType: "json",
-                headers: BaseUtils.cloudHeaders,
-                crossDomain: true,
-                success:function (response) {
-                    BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
-                    if (response.success) {
-                        // toastr.success(BaseUtils.saveSuccessMsg);
-                        // 刷新表格
-                        dictMainPageRefreshGridAndTree();
-                        // 关闭 dialog
-                        dictMainPageFormModal.modal('hide');
-                    }  else if (response.status == 202) {
-                        toastr.error(BaseUtils.saveFailMsg);
-                    } else if (response.status == 504) {
-                        BaseUtils.LoginTimeOutHandler();
-                    }  else {
-                        toastr.error(BaseUtils.tipsFormat(response.message));
-                    }
-
-                },
-                error:function (response) {
-                    BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
-                    toastr.error(BaseUtils.networkErrorMsg);
-                },
-                beforeSend:function () {
-
+            $encryptPostAjax({
+                url:serverUrl + "v1/1010/10",
+                data:formData
+            }, function (response) {
+                BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
+                if (response.success) {
+                    // toastr.success(BaseUtils.saveSuccessMsg);
+                    // 刷新表格
+                    dictMainPageRefreshGridAndTree();
+                    // 关闭 dialog
+                    dictMainPageFormModal.modal('hide');
+                }  else if (response.status == 202) {
+                    toastr.error(BaseUtils.saveFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(BaseUtils.tipsFormat(response.message));
                 }
+            }, function (data) {
+                BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
+                toastr.error(BaseUtils.networkErrorMsg);
             });
             return false;
         });
@@ -540,7 +519,7 @@ var SnippetMainPageDict = function() {
                 BaseUtils.pageMsgBlock();
                 $.ajax({
                     type: "POST",
-                    url: serverUrl + "dict/batchDelete",
+                    url: serverUrl + "v1/dict/batchDelete",
                     traditional:true,
                     data: {
                         'ids' : JSON.stringify(idsArray),
@@ -605,7 +584,7 @@ var SnippetMainPageDict = function() {
             BaseUtils.pageMsgBlock();
             $.ajax({
                 type: "POST",
-                url: serverUrl + "dict/status",
+                url: serverUrl + "v1/dict/status",
                 traditional:true,
                 data: {
                     'ids' : JSON.stringify(idsArray),
@@ -668,7 +647,7 @@ var SnippetMainPageDict = function() {
         BaseUtils.pageMsgBlock();
         $.ajax({
             type: "POST",
-            url: serverUrl + "dict/sync",
+            url: serverUrl + "v1/dict/sync",
             dataType: "json",
             headers: BaseUtils.cloudHeaders,
             crossDomain: true,
