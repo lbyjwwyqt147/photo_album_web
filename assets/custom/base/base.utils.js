@@ -2,12 +2,23 @@ var systemCode = "1001";
 var appId = "1550817774159";
 var appKey = "0020a9ebfc7b4667b0617488d96c788b";
 var credential = "42e853886ec8d3cbdaa062a732551b10";
+var secretKey = "dO6+g3+08ELBKtx/1/WBYQ==";
+
+/**
+ * 签名信息
+ */
+var signInfo = {
+    "appKey": appKey,
+    "signTime":new Date().getTime(),
+    "secret":secretKey
+};
+
 
 var BaseUtils = {
     "serverAddress": "http://127.0.0.1:18081/api/",
     //"cloudServerAddress": "http://101.132.136.225:18080/api/",
     "cloudServerAddress": "http://127.0.0.1:18080/api/",
-    "secretKey":"dO6+g3+08ELBKtx/1/WBYQ==",
+    "secretKey":secretKey,
     "systemCode": systemCode,
     "appId": appId,
     "appKey": appKey,
@@ -26,35 +37,6 @@ var BaseUtils = {
     'functionButtonKey': "photo_album_function_button_",
     'user_access_token': "photo_album_user_access_token_",
 
-    /**
-     * 签名信息
-     */
-    signInfo:{
-        "signTime":(new Date()).getTime(),
-        "secret":BaseUtils.secretKey
-    },
-    /**
-     * 访问 cloud 需要的headers
-     */
-    cloudHeaders: {
-        "appId": appId,
-        "appKey": appKey,
-        "credential": credential,
-        "systemCode": systemCode,
-        "accessToken": '',
-        "sign":this.dataEncrypt(JSON.stringify(BaseUtils.signInfo))
-    },
-
-    /**
-     * 访问自身系统 需要的 headers
-     * @returns {{appId: string, appKey: string, credential: string, systemCode: string}}
-     */
-    serverHeaders: function () {
-        var headers = {
-            "credential": ''
-        };
-        return headers;
-    },
 
     /**
      * ztree
@@ -586,7 +568,34 @@ var BaseUtils = {
             padding : CryptoJS.pad.Pkcs7
         });
         return CryptoJS.enc.Utf8.stringify(decrypt).toString();
-    }
-    
+    },
 
+
+    /**
+     * 访问 cloud 需要的headers
+     */
+    cloudHeaders: function() {
+        var sign = BaseUtils.dataEncrypt(JSON.stringify(signInfo));
+        var headers = {
+            "appId": appId,
+            "appKey": appKey,
+            "credential": credential,
+            "systemCode": systemCode,
+            "sign":sign
+        };
+        return headers;
+    },
+
+    /**
+     * 访问自身系统 需要的 headers
+     * @returns {{appId: string, appKey: string, credential: string, systemCode: string}}
+     */
+    serverHeaders: function () {
+        var sign = BaseUtils.dataEncrypt(JSON.stringify(signInfo));
+        var headers = {
+            "credential": credential,
+            "sign":sign
+        };
+        return headers;
+    }
 };

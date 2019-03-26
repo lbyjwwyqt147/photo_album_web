@@ -22,7 +22,7 @@ var SnippetMainPageDict = function() {
         "selectedMulti":false,
         "enable":false,
         "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
-        "headers":BaseUtils.cloudHeaders
+        "headers":BaseUtils.cloudHeaders()
     });
     dictMainPageZtreeSetting.view = {
             selectedMulti:false,
@@ -36,7 +36,9 @@ var SnippetMainPageDict = function() {
             dictMainPageRefreshGrid();
         },
         onAsyncSuccess:function(event, treeId, msg){ //异步加载完成后执行
-
+            if ("undefined" == $("#dict_mainPage_tree_1_a").attr("title")) {
+                $("#dict_mainPage_tree_1").remove();
+            }
         },
         onAsyncError:function(){ //异步加载出现异常执行
 
@@ -97,7 +99,7 @@ var SnippetMainPageDict = function() {
                 systemCode:BaseUtils.systemCode,
                 credential:BaseUtils.credential
             },
-            headers: BaseUtils.cloudHeaders
+            headers: BaseUtils.cloudHeaders()
         }, function (data) {
             var treeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
             //获取指定父节点
@@ -229,7 +231,7 @@ var SnippetMainPageDict = function() {
                     'credential': BaseUtils.credential,
                     'systemCode': BaseUtils.systemCode
                 },
-                headers: BaseUtils.cloudHeaders,
+                headers: BaseUtils.cloudHeaders(),
                 title: '数据字典列表',
                 initSort: {
                     field: 'priority', //排序字段，对应 cols 设定的各字段名
@@ -330,7 +332,7 @@ var SnippetMainPageDict = function() {
                 response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 },
-                headers: BaseUtils.cloudHeaders,
+                headers: BaseUtils.cloudHeaders(),
                 parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                     return {
                         "code": res.status, //解析接口状态
@@ -502,7 +504,7 @@ var SnippetMainPageDict = function() {
             $encryptPostAjax({
                 url:serverUrl + "v1/dict/s",
                 data:formData,
-                headers: BaseUtils.cloudHeaders
+                headers: BaseUtils.cloudHeaders()
             }, function (response) {
                 BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
                 if (response.success) {
@@ -560,12 +562,10 @@ var SnippetMainPageDict = function() {
                     data: {
                         'ids' : JSON.stringify(idsArray),
                         'credential': BaseUtils.credential,
-                        'systemCode': BaseUtils.systemCode,
-                        _method: 'DELETE'
+                        'systemCode': BaseUtils.systemCode
                     },
-                    headers: BaseUtils.cloudHeaders
+                    headers: BaseUtils.cloudHeaders()
                 }, function (response) {
-                    BaseUtils.htmPageUnblock();
                     if (response.success) {
                         if (obj != null) {
                             obj.del();
@@ -575,7 +575,7 @@ var SnippetMainPageDict = function() {
                         }
                     }
                 }, function (data) {
-                    BaseUtils.htmPageUnblock();
+
                 });
             }, function () {  //按钮【按钮二】的回调
 
@@ -613,12 +613,10 @@ var SnippetMainPageDict = function() {
                     'ids' : JSON.stringify(idsArray),
                     'status' : status,
                     'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode,
-                    _method: 'PUT'
+                    'systemCode': BaseUtils.systemCode
                 },
-                headers: BaseUtils.cloudHeaders
+                headers: BaseUtils.cloudHeaders()
             }, function (response) {
-                  BaseUtils.htmPageUnblock();
                   if (response.success) {
                     dictMainPageRefreshGridAndTree();
                   }  else if (response.status == 202) {
@@ -642,8 +640,8 @@ var SnippetMainPageDict = function() {
                     });
                 }
             }, function (data) {
-                    BaseUtils.htmPageUnblock();
-                });
+
+            });
         }
     };
 
@@ -657,7 +655,7 @@ var SnippetMainPageDict = function() {
         BaseUtils.pageMsgBlock();
         $postAjax({
             url: serverUrl + "v1/dict/sync",
-            headers: BaseUtils.cloudHeaders
+            headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
             if (response.success) {

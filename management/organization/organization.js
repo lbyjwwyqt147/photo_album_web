@@ -21,7 +21,7 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "tree/organization/all/ztree",
+        "url":serverUrl + "v1/tree/organization/all/z",
         "headers":BaseUtils.serverHeaders(),
     });
     organizationMainPageZtreeSetting.view = {
@@ -36,7 +36,9 @@ var SnippetMainPageOrganization = function() {
             organizationMainPageRefreshGrid();
         },
         onAsyncSuccess:function(event, treeId, msg){ //异步加载完成后执行
-
+            if ("undefined" == $("#organization_mainPage_tree_1_a").attr("title")) {
+                $("#organization_mainPage_tree_1").remove();
+            }
         },
         onAsyncError:function(){ //异步加载出现异常执行
 
@@ -90,27 +92,19 @@ var SnippetMainPageOrganization = function() {
      * @param id
      */
     function organizationMainPageRereshTreeNode(id) {
-        $.ajax({
-            type: "get",
-            url: serverUrl + "tree/organization/all/ztree",
+        $getAjax({
+            url: serverUrl + "v1/tree/organization/all/z",
             data: {
                 id:id
             },
-            dataType: "json",
-            headers: BaseUtils.serverHeaders(),
-            crossDomain: true,
-            success:function (data) {
-                var treeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
-                //获取指定父节点
-                var parentZNode = treeObj.getNodeByParam("id", organizationMainPagePid, null);
-                treeObj.addNodes(parentZNode,data, false);
-            },
-            error:function (response) {
-                toastr.error(BaseUtils.networkErrorMsg);
-            },
-            beforeSend:function () {
+            headers: BaseUtils.serverHeaders()
+        }, function (data) {
+            var treeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+            //获取指定父节点
+            var parentZNode = treeObj.getNodeByParam("id", organizationMainPagePid, null);
+            treeObj.addNodes(parentZNode,data, false);
+        }, function (response) {
 
-            }
         });
     }
 
@@ -224,21 +218,16 @@ var SnippetMainPageOrganization = function() {
      */
     var organizationMainPageInitDataGrid = function () {
         layui.use('table', function(){
-             organizationMainPageTable = layui.table;
             var layuiForm = layui.form;
-            organizationMainPageTable.render({
+            organizationMainPageTable =  $initEncrypDataGrid({
                 elem: '#organization_mainPage_grid',
-                url: serverUrl + 'table/organization/grid',
+                url: serverUrl + 'v1/table/organization/g',
+                method:"get",
                 where: {   //传递额外参数
                     'parentId' : organizationMainPagePid
                 },
-                title: '数据字典列表',
-                text: {
-                    none: '暂无相关数据'   // 空数据时的异常提示
-                },
-                cellMinWidth: 50, //全局定义常规单元格的最小宽度
-                height: 'full-152', //高度最大化减去差值
-                even: true,
+                headers: BaseUtils.serverHeaders(),
+                title: '组织机构列表',
                 initSort: {
                     field: 'seq', //排序字段，对应 cols 设定的各字段名
                     type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
@@ -264,47 +253,21 @@ var SnippetMainPageOrganization = function() {
                     },
                     {fixed: 'right', title:'操作', unresize:true, toolbar: '#organization_mainPage_table_toolbar', align: 'center', width:200}
                 ]],
-                page: {
-                    layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
-                    curr: 1 ,//设定初始在第 1 页
-                    groups: 10, //只显示 10 个连续页码
-                    first: true, //显示首页
-                    last: true //显示尾页
-                },
                 limit: 10,
-                limits: [10,20,30,50],
-
-                request: {
-                    pageName: 'pageNumber', //页码的参数名称，默认：page
-                    limitName: 'pageSize' //每页数据量的参数名，默认：limit
-                },
-                response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-                },
-                headers: BaseUtils.serverHeaders(),
-                parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                    return {
-                        "code": res.status, //解析接口状态
-                        "msg": res.message, //解析提示文本
-                        "count": res.total, //解析数据长度
-                        "data": res.data //解析数据列表
-                    };
-                },
-                done: function (res, curr, count) {
-                    organizationMainPageZtreeMaxHeight();
-                    var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
-                    var status_table_index = $.inArray("3", curFunctionButtonGroup);
-                    if (status_table_index != -1) {
-                        $(".layui-unselect.layui-form-checkbox").show();
-                    } else {
-                        $(".layui-unselect.layui-form-checkbox").hide();
-                    }
-                    if (BaseUtils.checkLoginTimeoutStatus()) {
-                        return;
-                    }
-                    BaseUtils.checkIsLoginTimeOut(res.status);
-
+                limits: [10,20,30,50]
+            }, function(res, curr, count){
+                organizationMainPageZtreeMaxHeight();
+                var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(organizationMainPageModuleCode);
+                var status_table_index = $.inArray("3", curFunctionButtonGroup);
+                if (status_table_index != -1) {
+                    $(".layui-unselect.layui-form-checkbox").show();
+                } else {
+                    $(".layui-unselect.layui-form-checkbox").hide();
                 }
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                BaseUtils.checkIsLoginTimeOut(res.status);
             });
 
             //监听行工具事件
@@ -403,8 +366,7 @@ var SnippetMainPageOrganization = function() {
                         maxlength: 32
                     },
                     seq: {
-                        digits:true,
-                        range: [1,999]
+                        range: [0,999]
                     },
                     description: {
                         htmlLabel:true,
@@ -445,37 +407,22 @@ var SnippetMainPageOrganization = function() {
             }
             BaseUtils.modalBlock("#organization_mainPage_dataSubmit_form_modal");
             $("#organization_mainPage_dataSubmit_form input[name='parentId']").val(organizationMainPagePid);
-            $.ajax({
-                type: "POST",
-                url: serverUrl + "organization/save",
-                data: organizationMainPageSubmitForm.serializeJSON(),
-                dataType: "json",
-                headers: BaseUtils.serverHeaders(),
-                crossDomain: true,
-                success:function (response) {
-                    BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
-                    if (response.success) {
-                        // toastr.success(BaseUtils.saveSuccessMsg);
-                        // 刷新表格
-                        organizationMainPageRefreshGridAndTree();
-                        // 关闭 dialog
-                        organizationMainPageFormModal.modal('hide');
-                    }  else if (response.status == 202) {
-                        toastr.error(BaseUtils.saveFailMsg);
-                    } else if (response.status == 504) {
-                        BaseUtils.LoginTimeOutHandler();
-                    }  else {
-                        toastr.error(BaseUtils.tipsFormat(response.message));
-                    }
-
-                },
-                error:function (response) {
-                    BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
-                    toastr.error(BaseUtils.networkErrorMsg);
-                },
-                beforeSend:function () {
-
+            var formData = JSON.stringify(organizationMainPageSubmitForm.serializeJSON());
+            $encryptPostAjax({
+                url:serverUrl + "v1/organization/s",
+                data:formData,
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
+                if (response.success) {
+                    // toastr.success(BaseUtils.saveSuccessMsg);
+                    // 刷新表格
+                    organizationMainPageRefreshGridAndTree();
+                    // 关闭 dialog
+                    organizationMainPageFormModal.modal('hide');
                 }
+            }, function (data) {
+                BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
             });
             return false;
         });
@@ -517,38 +464,23 @@ var SnippetMainPageOrganization = function() {
             }, function(index, layero){   //按钮【按钮一】的回调
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
-                $.ajax({
-                    type: "POST",
-                    url: serverUrl + "organization/batchDelete",
-                    traditional:true,
+                $encrypDeleteAjax({
+                    url:serverUrl + "v1/organization/batch/d",
                     data: {
-                        'ids' : JSON.stringify(idsArray),
-                        _method: 'DELETE'
+                        'ids' : JSON.stringify(idsArray)
                     },
-                    dataType: "json",
-                    headers: BaseUtils.serverHeaders(),
-                    crossDomain: true,
-                    success:function (response) {
-                        BaseUtils.htmPageUnblock();
-                        if (response.success) {
-                            if (obj != null) {
-                                obj.del();
-                                organizationMainPageRereshExpandNode(organizationMainPagePid);
-                            } else {
-                                organizationMainPageRefreshGridAndTree();
-                            }
-                        } else if (response.status == 202) {
-                            toastr.error(BaseUtils.delFailMsg);
-                        } else if (response.status == 504) {
-                            BaseUtils.LoginTimeOutHandler();
-                        }  else {
-                            toastr.error(response.message);
+                    headers: BaseUtils.serverHeaders()
+                }, function (response) {
+                    if (response.success) {
+                        if (obj != null) {
+                            obj.del();
+                            organizationMainPageRereshExpandNode(organizationMainPagePid);
+                        } else {
+                            organizationMainPageRefreshGridAndTree();
                         }
-                    },
-                    error:function (response) {
-                        BaseUtils.htmPageUnblock();
-                        toastr.error(BaseUtils.networkErrorMsg);
                     }
+                }, function (data) {
+
                 });
             }, function () {  //按钮【按钮二】的回调
 
@@ -580,55 +512,46 @@ var SnippetMainPageOrganization = function() {
         BaseUtils.checkLoginTimeoutStatus();
         if (idsArray.length > 0) {
             BaseUtils.pageMsgBlock();
-            $.ajax({
-                type: "POST",
-                url: serverUrl + "organization/status",
-                traditional:true,
+            $encrypPutAjax({
+                url: serverUrl + "v1/organization/st",
                 data: {
                     'ids' : JSON.stringify(idsArray),
-                    'status' : status,
-                    _method: 'PUT'
+                    'status' : status
                 },
-                dataType: "json",
-                headers: BaseUtils.serverHeaders(),
-                crossDomain: true,
-                success:function (response) {
-                    BaseUtils.htmPageUnblock();
-                    if (response.success) {
-                        organizationMainPageRefreshGridAndTree();
-                    }  else if (response.status == 202) {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        layer.tips(BaseUtils.updateMsg, obj.othis,  {
-                            tips: [4, '#f4516c']
-                        });
-                    } else if (response.status == 504) {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                            $(obj.elem).removeAttr("checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        BaseUtils.LoginTimeOutHandler();
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                if (response.success) {
+                    organizationMainPageRefreshGridAndTree();
+                }  else if (response.status == 202) {
+                    if (status == 1) {
+                        obj.othis.removeClass("layui-form-checked");
                     } else {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                            $(obj.elem).removeAttr("checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        layer.tips(response.message, obj.othis,  {
-                            tips: [4, '#f4516c']
-                        });
+                        obj.othis.addClass("layui-form-checked");
                     }
-                },
-                error:function (response) {
-                    BaseUtils.htmPageUnblock();
-                    toastr.error(BaseUtils.networkErrorMsg);
+                    layer.tips(BaseUtils.updateMsg, obj.othis,  {
+                        tips: [4, '#f4516c']
+                    });
+                } else if (response.status == 504) {
+                    if (status == 1) {
+                        obj.othis.removeClass("layui-form-checked");
+                        $(obj.elem).removeAttr("checked");
+                    } else {
+                        obj.othis.addClass("layui-form-checked");
+                    }
+                    BaseUtils.LoginTimeOutHandler();
+                } else {
+                    if (status == 1) {
+                        obj.othis.removeClass("layui-form-checked");
+                        $(obj.elem).removeAttr("checked");
+                    } else {
+                        obj.othis.addClass("layui-form-checked");
+                    }
+                    layer.tips(response.message, obj.othis,  {
+                        tips: [4, '#f4516c']
+                    });
                 }
+            }, function (data) {
+
             });
         }
     };
@@ -641,30 +564,18 @@ var SnippetMainPageOrganization = function() {
             return;
         }
         BaseUtils.pageMsgBlock();
-        $.ajax({
-            type: "POST",
-            url: serverUrl + "organization/sync",
-            dataType: "json",
-            headers: BaseUtils.serverHeaders(),
-            crossDomain: true,
-            success:function (response) {
-                BaseUtils.htmPageUnblock();
-                if (response.success) {
-                    organizationMainPagePid = 0;
-                    organizationMainPageZtreeNodeList = [];
-                    organizationMainPageRefreshGridAndTree();
-                } else if (response.status == 504) {
-                    BaseUtils.LoginTimeOutHandler();
-                }  else if (response.status == 202) {
-                    toastr.error(BaseUtils.syncMsg);
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-            error:function (response) {
-                BaseUtils.htmPageUnblock();
-                toastr.error(BaseUtils.networkErrorMsg);
+        $postAjax({
+            url: serverUrl + "v1/organization/sync",
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            BaseUtils.htmPageUnblock();
+            if (response.success) {
+                organizationMainPagePid = 0;
+                organizationMainPageZtreeNodeList = [];
+                organizationMainPageRefreshGridAndTree();
             }
+        },function (response) {
+            BaseUtils.htmPageUnblock();
         });
     };
 
@@ -713,6 +624,8 @@ var SnippetMainPageOrganization = function() {
             // 清空form 表单数据
             organizationMainPageCleanForm();
             $(".modal-backdrop").remove();
+            BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
+
         });
     };
 

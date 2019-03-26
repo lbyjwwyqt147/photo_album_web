@@ -111,6 +111,7 @@ jQuery(document).ready(function() {
             crossDomain: true,
             timeout: 30000,
             success: function (response) {
+                BaseUtils.htmPageUnblock();
                 successCallback(response);
                 if (response.success) {
 
@@ -123,6 +124,7 @@ jQuery(document).ready(function() {
                 }
             },
             error: function (data) {
+                BaseUtils.htmPageUnblock();
                 errorCallback(data);
                 toastr.error(BaseUtils.networkErrorMsg);
             }
@@ -153,6 +155,7 @@ jQuery(document).ready(function() {
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
+                BaseUtils.htmPageUnblock();
                 var response = null;
                 if (isJsonObject(data)) {
                     response = JSON.parse(data);
@@ -172,6 +175,7 @@ jQuery(document).ready(function() {
                 }
             },
             error: function (data) {
+                BaseUtils.htmPageUnblock();
                 errorCallback(data);
                 toastr.error(BaseUtils.networkErrorMsg);
             }
@@ -200,9 +204,11 @@ jQuery(document).ready(function() {
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
+                BaseUtils.htmPageUnblock();
                 successCallback(data);
             },
             error: function (data) {
+                BaseUtils.htmPageUnblock();
                 errorCallback(data);
                 toastr.error(BaseUtils.networkErrorMsg);
             }
@@ -233,6 +239,7 @@ jQuery(document).ready(function() {
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
+                BaseUtils.htmPageUnblock();
                 if (isJsonObject(data)) {
                     successCallback(JSON.parse(data));
                 } else {
@@ -241,6 +248,7 @@ jQuery(document).ready(function() {
                 }
             },
             error: function (data) {
+                BaseUtils.htmPageUnblock();
                 errorCallback(data);
                 toastr.error(BaseUtils.networkErrorMsg);
             }
@@ -266,8 +274,17 @@ jQuery(document).ready(function() {
             headers:ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
-            success: function (data) {
-                successCallback(data);
+            success: function (response) {
+                successCallback(response);
+                if (response.success) {
+
+                } else if (response.status == 202) {
+                    toastr.error(BaseUtils.delFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(response.message);
+                }
             },
             error: function (data) {
                 errorCallback(data);
@@ -299,12 +316,25 @@ jQuery(document).ready(function() {
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
+                var  response = null;
                 if (isJsonObject(data)) {
-                    successCallback(data);
+                    response = data;
                 } else {
                     var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
-                    successCallback(JSON.parse(decryptData));
+                    response = JSON.parse(decryptData);
                 }
+                successCallback(response);
+
+                if (response.success) {
+
+                } else if (response.status == 202) {
+                    toastr.error(BaseUtils.delFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(response.message);
+                }
+
             },
             error: function (data) {
                 errorCallback(data);
@@ -356,6 +386,9 @@ jQuery(document).ready(function() {
             },
             headers: params.headers,
             parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                if (res.status != 200) {
+                    toastr.error(res.message);
+                }
                 return {
                     "code": res.status, //解析接口状态
                     "msg": res.message, //解析提示文本
@@ -413,8 +446,18 @@ jQuery(document).ready(function() {
             },
             headers: params.headers,
             parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                var decryptData = BaseUtils.dataDecrypt(res.data.replace("\"",""));
-                var tableData = JSON.parse(decryptData);
+                var tableData = [];
+                if (res.status == 200) {
+                    if (isJsonObject(res.data)){
+                        tableData = res.data;
+                    } else {
+                        var decryptData = BaseUtils.dataDecrypt(res.data.replace("\"",""));
+                        tableData = JSON.parse(decryptData);
+                    }
+                } else {
+                    toastr.error(res.message);
+                }
+
                 return {
                     "code": res.status, //解析接口状态
                     "msg": res.message, //解析提示文本

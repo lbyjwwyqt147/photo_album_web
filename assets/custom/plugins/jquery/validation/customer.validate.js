@@ -55,8 +55,8 @@ jQuery.validator.addMethod("alnumCode", function(value, element) {
  *  html 标签 认证
  */
 jQuery.validator.addMethod("htmlLabel", function(value, element) {
-    return this.optional(element) || /<(.*)>.*<///1>|<(.*) //>/.test(value);
-}, "请不要输入非法字符");
+    return this.optional(element) || /<\/?[\s\S]*?(?:".*")*>/.test(value);
+}, "内容含有html 标签,请清除");
 
 /**
  *  汉字 字母 数字 下划线
