@@ -21,8 +21,8 @@ var SnippetMainPageDict = function() {
     var dictMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "v1/tree/dict/all/ztree?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
-        "headers":BaseUtils.cloudHeaders,
+        "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
+        "headers":BaseUtils.cloudHeaders
     });
     dictMainPageZtreeSetting.view = {
             selectedMulti:false,
@@ -90,29 +90,21 @@ var SnippetMainPageDict = function() {
      * @param id
      */
     function dictMainPageRereshTreeNode(id) {
-        $.ajax({
-            type: "get",
-            url: serverUrl + "v1/tree/dict/all/ztree",
+        $getAjax({
+            url: serverUrl + "v1/tree/dict/all/z",
             data: {
                 id:id,
                 systemCode:BaseUtils.systemCode,
                 credential:BaseUtils.credential
             },
-            dataType: "json",
-            headers: BaseUtils.cloudHeaders,
-            crossDomain: true,
-            success:function (data) {
-                var treeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
-                //获取指定父节点
-                var parentZNode = treeObj.getNodeByParam("id", dictMainPagePid, null);
-                treeObj.addNodes(parentZNode,data, false);
-            },
-            error:function (response) {
-                toastr.error(BaseUtils.networkErrorMsg);
-            },
-            beforeSend:function () {
+            headers: BaseUtils.cloudHeaders
+        }, function (data) {
+            var treeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+            //获取指定父节点
+            var parentZNode = treeObj.getNodeByParam("id", dictMainPagePid, null);
+            treeObj.addNodes(parentZNode,data, false);
+        }, function (response) {
 
-            }
         });
     }
 
@@ -226,9 +218,61 @@ var SnippetMainPageDict = function() {
      */
     var dictMainPageInitDataGrid = function () {
         layui.use('table', function(){
-             dictMainPageTable = layui.table;
+            // dictMainPageTable = layui.table;
             var layuiForm = layui.form;
-            dictMainPageTable.render({
+            dictMainPageTable =  $initEncrypDataGrid({
+                elem: '#dict_mainPage_grid',
+                url: serverUrl + 'v1/table/dict/g',
+                method:"get",
+                where: {   //传递额外参数
+                    'pid' : dictMainPagePid,
+                    'credential': BaseUtils.credential,
+                    'systemCode': BaseUtils.systemCode
+                },
+                headers: BaseUtils.cloudHeaders,
+                title: '数据字典列表',
+                initSort: {
+                    field: 'priority', //排序字段，对应 cols 设定的各字段名
+                    type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+                },
+                cols: [[
+                    {checkbox: true},
+                    {field:'id', title:'ID', unresize:true, hide:true },
+                    {field:'dictCode', title:'字典代码'},
+                    {field:'dictName', title:'字段名称'},
+                    {field:'priority', title:'优先级'},
+                    {field:'fullParentCode', title:'完整父级代码'},
+                    {field:'description', title:'描述'},
+                    {field:'status', title:'状态', align: 'center', unresize:true,
+                        templet : function (row) {
+                            var value = row.status;
+                            var spanCss = "m-badge--success";
+                            if (value == 1)  {
+                                spanCss = "m-badge--warning";
+                            }
+                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + BaseUtils.statusText(value) + '</span>';
+                            return spanHtml;
+                        }
+                    },
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#dict_mainPage_table_toolbar', align: 'center', width:200}
+                ]],
+                limit: 20,
+                limits: [20,30,40,50]
+            }, function(res, curr, count){
+                dictMainPageZtreeMaxHeight();
+                var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(dictMainPageModuleCode);
+                var status_table_index = $.inArray("3", curFunctionButtonGroup);
+                if (status_table_index != -1) {
+                    $(".layui-unselect.layui-form-checkbox").show();
+                } else {
+                    $(".layui-unselect.layui-form-checkbox").hide();
+                }
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                BaseUtils.checkIsLoginTimeOut(res.status);
+            });
+            /*dictMainPageTable.render({
                 elem: '#dict_mainPage_grid',
                 url: serverUrl + 'v1/table/dict/grid',
                 where: {   //传递额外参数
@@ -269,6 +313,7 @@ var SnippetMainPageDict = function() {
                     {fixed: 'right', title:'操作', unresize:true, toolbar: '#dict_mainPage_table_toolbar', align: 'center', width:200}
                 ]],
                 page: {
+                    theme: 'cadetblue',
                     layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
                     curr: 1 ,//设定初始在第 1 页
                     groups: 10, //只显示 10 个连续页码
@@ -309,7 +354,7 @@ var SnippetMainPageDict = function() {
                     BaseUtils.checkIsLoginTimeOut(res.status);
 
                 }
-            });
+            });*/
 
             //监听行工具事件
             dictMainPageTable.on('tool(dict_mainPage_grid)', function(obj){
@@ -409,8 +454,7 @@ var SnippetMainPageDict = function() {
                         maxlength: 32
                     },
                     priority: {
-                        digits:true,
-                        range: [1,999]
+                        range: [0,999]
                     },
                     description: {
                         htmlLabel:true,
@@ -456,8 +500,9 @@ var SnippetMainPageDict = function() {
 
             var formData = JSON.stringify(dictMainPageSubmitForm.serializeJSON());
             $encryptPostAjax({
-                url:serverUrl + "v1/1010/10",
-                data:formData
+                url:serverUrl + "v1/dict/s",
+                data:formData,
+                headers: BaseUtils.cloudHeaders
             }, function (response) {
                 BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
                 if (response.success) {
@@ -466,16 +511,9 @@ var SnippetMainPageDict = function() {
                     dictMainPageRefreshGridAndTree();
                     // 关闭 dialog
                     dictMainPageFormModal.modal('hide');
-                }  else if (response.status == 202) {
-                    toastr.error(BaseUtils.saveFailMsg);
-                } else if (response.status == 504) {
-                    BaseUtils.LoginTimeOutHandler();
-                }  else {
-                    toastr.error(BaseUtils.tipsFormat(response.message));
                 }
             }, function (data) {
                 BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
-                toastr.error(BaseUtils.networkErrorMsg);
             });
             return false;
         });
@@ -517,40 +555,27 @@ var SnippetMainPageDict = function() {
             }, function(index, layero){   //按钮【按钮一】的回调
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
-                $.ajax({
-                    type: "POST",
-                    url: serverUrl + "v1/dict/batchDelete",
-                    traditional:true,
+                $encrypDeleteAjax({
+                    url:serverUrl + "v1/dict/batch/d",
                     data: {
                         'ids' : JSON.stringify(idsArray),
                         'credential': BaseUtils.credential,
                         'systemCode': BaseUtils.systemCode,
                         _method: 'DELETE'
                     },
-                    dataType: "json",
-                    headers: BaseUtils.cloudHeaders,
-                    crossDomain: true,
-                    success:function (response) {
-                        BaseUtils.htmPageUnblock();
-                        if (response.success) {
-                            if (obj != null) {
-                                obj.del();
-                                dictMainPageRereshExpandNode(dictMainPagePid);
-                            } else {
-                                dictMainPageRefreshGridAndTree();
-                            }
-                        } else if (response.status == 202) {
-                            toastr.error(BaseUtils.delFailMsg);
-                        } else if (response.status == 504) {
-                            BaseUtils.LoginTimeOutHandler();
-                        }  else {
-                            toastr.error(response.message);
+                    headers: BaseUtils.cloudHeaders
+                }, function (response) {
+                    BaseUtils.htmPageUnblock();
+                    if (response.success) {
+                        if (obj != null) {
+                            obj.del();
+                            dictMainPageRereshExpandNode(dictMainPagePid);
+                        } else {
+                            dictMainPageRefreshGridAndTree();
                         }
-                    },
-                    error:function (response) {
-                        BaseUtils.htmPageUnblock();
-                        toastr.error(BaseUtils.networkErrorMsg);
                     }
+                }, function (data) {
+                    BaseUtils.htmPageUnblock();
                 });
             }, function () {  //按钮【按钮二】的回调
 
@@ -582,10 +607,8 @@ var SnippetMainPageDict = function() {
         BaseUtils.checkLoginTimeoutStatus();
         if (idsArray.length > 0) {
             BaseUtils.pageMsgBlock();
-            $.ajax({
-                type: "POST",
-                url: serverUrl + "v1/dict/status",
-                traditional:true,
+            $encrypPutAjax({
+                url: serverUrl + "v1/dict/st",
                 data: {
                     'ids' : JSON.stringify(idsArray),
                     'status' : status,
@@ -593,47 +616,34 @@ var SnippetMainPageDict = function() {
                     'systemCode': BaseUtils.systemCode,
                     _method: 'PUT'
                 },
-                dataType: "json",
-                headers: BaseUtils.cloudHeaders,
-                crossDomain: true,
-                success:function (response) {
-                    BaseUtils.htmPageUnblock();
-                    if (response.success) {
-                        dictMainPageRefreshGridAndTree();
-                    }  else if (response.status == 202) {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        layer.tips(BaseUtils.updateMsg, obj.othis,  {
-                            tips: [4, '#f4516c']
-                        });
-                    } else if (response.status == 504) {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                            $(obj.elem).removeAttr("checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        BaseUtils.LoginTimeOutHandler();
+                headers: BaseUtils.cloudHeaders
+            }, function (response) {
+                  BaseUtils.htmPageUnblock();
+                  if (response.success) {
+                    dictMainPageRefreshGridAndTree();
+                  }  else if (response.status == 202) {
+                    if (status == 1) {
+                        obj.othis.removeClass("layui-form-checked");
                     } else {
-                        if (status == 1) {
-                            obj.othis.removeClass("layui-form-checked");
-                            $(obj.elem).removeAttr("checked");
-                        } else {
-                            obj.othis.addClass("layui-form-checked");
-                        }
-                        layer.tips(response.message, obj.othis,  {
-                            tips: [4, '#f4516c']
-                        });
+                        obj.othis.addClass("layui-form-checked");
                     }
-                },
-                error:function (response) {
-                    BaseUtils.htmPageUnblock();
-                    toastr.error(BaseUtils.networkErrorMsg);
+                    layer.tips(BaseUtils.updateMsg, obj.othis,  {
+                        tips: [4, '#f4516c']
+                    });
+                } else {
+                    if (status == 1) {
+                        obj.othis.removeClass("layui-form-checked");
+                        $(obj.elem).removeAttr("checked");
+                    } else {
+                        obj.othis.addClass("layui-form-checked");
+                    }
+                    layer.tips(response.message, obj.othis,  {
+                        tips: [4, '#f4516c']
+                    });
                 }
-            });
+            }, function (data) {
+                    BaseUtils.htmPageUnblock();
+                });
         }
     };
 
@@ -645,30 +655,18 @@ var SnippetMainPageDict = function() {
             return;
         }
         BaseUtils.pageMsgBlock();
-        $.ajax({
-            type: "POST",
+        $postAjax({
             url: serverUrl + "v1/dict/sync",
-            dataType: "json",
-            headers: BaseUtils.cloudHeaders,
-            crossDomain: true,
-            success:function (response) {
-                BaseUtils.htmPageUnblock();
-                if (response.success) {
-                    dictMainPagePid = 0;
-                    dictMainPageZtreeNodeList = [];
-                    dictMainPageRefreshGridAndTree();
-                } else if (response.status == 504) {
-                    BaseUtils.LoginTimeOutHandler();
-                }  else if (response.status == 202) {
-                    toastr.error(BaseUtils.syncMsg);
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-            error:function (response) {
-                BaseUtils.htmPageUnblock();
-                toastr.error(BaseUtils.networkErrorMsg);
+            headers: BaseUtils.cloudHeaders
+        }, function (response) {
+            BaseUtils.htmPageUnblock();
+            if (response.success) {
+                dictMainPagePid = 0;
+                dictMainPageZtreeNodeList = [];
+                dictMainPageRefreshGridAndTree();
             }
+        },function (response) {
+            BaseUtils.htmPageUnblock();
         });
     };
 
@@ -715,6 +713,7 @@ var SnippetMainPageDict = function() {
             // 清空form 表单数据
             dictMainPageCleanForm();
             $(".modal-backdrop").remove();
+            BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
         });
     };
 

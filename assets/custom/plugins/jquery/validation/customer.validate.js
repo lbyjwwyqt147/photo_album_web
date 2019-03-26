@@ -69,7 +69,7 @@ jQuery.validator.addMethod("alnumName", function(value, element) {
  *  非法字符 验证
  */
 jQuery.validator.addMethod("illegitmacy", function(value, element) {
-    return this.optional(element) || /^(?!_)(?!.*?_$)[a-zA-Z0-9-_.@#%$*()={}""?<>, \u4e00-\u9fa5]+$/.test(value);
+    return this.optional(element) || /^(?!_)(?!.*?_$)[a-zA-Z0-9-_.@#%$*()={}\"\"?<>, \u4e00-\u9fa5]+$/.test(value);
 }, "存在非法输入字符,请检查输入法是否正确");
 
 /**

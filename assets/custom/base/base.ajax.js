@@ -10,8 +10,8 @@ jQuery(document).ready(function() {
      * @param errorCallback
      */
     $postAjax = function (ajaxParam, successCallback, errorCallback) {
-        _url = ajaxParam.url;
-        _data = ajaxParam.data;
+        var _url = ajaxParam.url;
+        var _data = ajaxParam.data;
         $.ajax({
             url: _url,
             dataType: "json",
@@ -19,14 +19,24 @@ jQuery(document).ready(function() {
             async: true,
             type: "POST",
             data: _data,
-            headers: BaseUtils.cloudHeaders,
+            headers:ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
-            success: function (data) {
-                successCallback(data);
+            success: function (response) {
+                successCallback(response);
+                if (response.success) {
+                    // toastr.success(BaseUtils.saveSuccessMsg);
+                }  else if (response.status == 202) {
+                    toastr.error(BaseUtils.saveFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(BaseUtils.tipsFormat(response.message));
+                }
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -38,8 +48,8 @@ jQuery(document).ready(function() {
      * @param errorCallback
      */
     $encryptPostAjax = function (ajaxParam, successCallback, errorCallback) {
-        _url = ajaxParam.url;
-        _data = ajaxParam.data;
+        var _url = ajaxParam.url;
+        var _data = ajaxParam.data;
         var encryptData = BaseUtils.dataEncrypt(_data);
         $.ajax({
             url: _url,
@@ -49,15 +59,31 @@ jQuery(document).ready(function() {
             async: true,
             contentType: "application/json",
             data: encryptData,
-            headers: BaseUtils.cloudHeaders,
+            headers: ajaxParam.headers,
             crossDomain: true,
             timeout:30000,
-            success:function(data){
-                var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
-                successCallback(JSON.parse(decryptData));
+            success: function (data) {
+                var response = null;
+                if (isJsonObject(data)) {
+                    response = JSON.parse(data);
+                } else {
+                    var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
+                    response = JSON.parse(decryptData);
+                }
+                successCallback(response);
+                if (response.success) {
+                    // toastr.success(BaseUtils.saveSuccessMsg);
+                }  else if (response.status == 202) {
+                    toastr.error(BaseUtils.saveFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(BaseUtils.tipsFormat(response.message));
+                }
             },
-            error:function(data){
+            error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -81,14 +107,24 @@ jQuery(document).ready(function() {
             type: "POST",
             traditional:true,
             data: _data,
-            headers: BaseUtils.cloudHeaders,
+            headers: ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
-            success: function (data) {
-                successCallback(data);
+            success: function (response) {
+                successCallback(response);
+                if (response.success) {
+
+                } else if (response.status == 202) {
+                    toastr.error(BaseUtils.delFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(response.message);
+                }
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -103,26 +139,41 @@ jQuery(document).ready(function() {
     $encrypDeleteAjax = function (ajaxParam, successCallback, errorCallback) {
         _url = ajaxParam.url;
         _data = ajaxParam.data;
-        _data._method = 'DELETE';
-        var encryptData = BaseUtils.dataEncrypt(_data);
+        var encryptData = BaseUtils.dataEncrypt(JSON.stringify(_data));
         $.ajax({
             url: _url,
             dataType: "text",
             cache: false,
             async: true,
-            type: "POST",
-            contentType: "application/json;charset=UTF-8",
+            type: "DELETE",
+            contentType: "application/json",
             traditional:true,
             data: encryptData,
-            headers: BaseUtils.cloudHeaders,
+            headers: ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
-                var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
-                successCallback(JSON.parse(decryptData));
+                var response = null;
+                if (isJsonObject(data)) {
+                    response = JSON.parse(data);
+                } else {
+                    var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
+                    response = JSON.parse(decryptData);
+                }
+                successCallback(response);
+                if (response.success) {
+
+                } else if (response.status == 202) {
+                    toastr.error(BaseUtils.delFailMsg);
+                } else if (response.status == 504) {
+                    BaseUtils.LoginTimeOutHandler();
+                }  else {
+                    toastr.error(response.message);
+                }
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -145,7 +196,7 @@ jQuery(document).ready(function() {
             type: "POST",
             traditional:true,
             data: _data,
-            headers: BaseUtils.cloudHeaders,
+            headers: ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
@@ -153,6 +204,7 @@ jQuery(document).ready(function() {
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -167,26 +219,30 @@ jQuery(document).ready(function() {
     $encrypPutAjax = function (ajaxParam, successCallback, errorCallback) {
         _url = ajaxParam.url;
         _data = ajaxParam.data;
-        _data._method = 'PUT';
-        var encryptData = BaseUtils.dataEncrypt(_data);
+        var encryptData = BaseUtils.dataEncrypt(JSON.stringify(_data));
         $.ajax({
             url: _url,
             dataType: "text",
             cache: false,
             async: true,
-            type: "POST",
-            contentType: "application/json;charset=UTF-8",
+            type: "PUT",
+            contentType: "application/json",
             traditional:true,
             data: encryptData,
-            headers: BaseUtils.cloudHeaders,
+            headers:ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
-                var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
-                successCallback(JSON.parse(decryptData));
+                if (isJsonObject(data)) {
+                    successCallback(JSON.parse(data));
+                } else {
+                    var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
+                    successCallback(JSON.parse(decryptData));
+                }
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -207,7 +263,7 @@ jQuery(document).ready(function() {
             async: true,
             type: "GET",
             data: _data,
-            headers: BaseUtils.cloudHeaders,
+            headers:ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
@@ -215,6 +271,7 @@ jQuery(document).ready(function() {
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
@@ -236,19 +293,162 @@ jQuery(document).ready(function() {
             cache: false,
             async: true,
             type: "GET",
-            contentType: "application/json;charset=UTF-8",
+            contentType: "application/json",
             data: encryptData,
-            headers: BaseUtils.cloudHeaders,
+            headers: ajaxParam.headers,
             crossDomain: true,
             timeout: 30000,
             success: function (data) {
-                var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
-                successCallback(JSON.parse(decryptData));
+                if (isJsonObject(data)) {
+                    successCallback(data);
+                } else {
+                    var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
+                    successCallback(JSON.parse(decryptData));
+                }
             },
             error: function (data) {
                 errorCallback(data);
+                toastr.error(BaseUtils.networkErrorMsg);
             }
         });
     };
 
+
+    /**
+     * 初始化 dataGrid
+     * @param params
+     * @param doneCallback
+     * @returns {*|Plugin.table|table|((...tabularData: any[]) => void)|string|Array}
+     */
+    $initDataGrid = function (params, doneCallback) {
+        var layuiTable = layui.table;
+        layuiTable.render({
+            elem: params.elem,
+            url: params.url,
+            where: params.where,
+            title: params.title,
+            method:params.method,
+            text: {
+                none: '暂无相关数据'   // 空数据时的异常提示
+            },
+            cellMinWidth: 50, //全局定义常规单元格的最小宽度
+            height: 'full-152', //高度最大化减去差值
+            even: true,
+            initSort: params.initSort,
+            cols: params.cols,
+            page: {
+                layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
+                curr: 1 ,//设定初始在第 1 页
+                groups: 10, //只显示 10 个连续页码
+                first: true, //显示首页
+                last: true, //显示尾页
+                theme: 'cadetblue'
+            },
+            limit: params.limit,
+            limits: params.limits,
+
+            request: {
+                pageName: 'pageNumber', //页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            },
+            headers: params.headers,
+            parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            },
+            done: function (res, curr, count) {
+                doneCallback(res, curr, count);
+            }
+        });
+        return layuiTable;
+    };
+
+
+    /**
+     * 初始化 dataGrid (数据加密处理)
+     * @param params
+     * @param doneCallback
+     * @returns {*|Plugin.table|table|((...tabularData: any[]) => void)|string|Array}
+     */
+    $initEncrypDataGrid = function (params, doneCallback) {
+        var layuiTable = layui.table;
+        layuiTable.render({
+            elem: params.elem,
+            url: params.url,
+            where: params.where,
+            title: params.title,
+            method:params.method,
+            text: {
+                none: '暂无相关数据'   // 空数据时的异常提示
+            },
+            cellMinWidth: 50, //全局定义常规单元格的最小宽度
+            height: params.height == null ? 'full-152' : params.height, //高度最大化减去差值
+            even: true,
+            initSort: params.initSort,
+            cols: params.cols,
+            page: {
+                layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
+                curr: 1 ,//设定初始在第 1 页
+                groups: 10, //只显示 10 个连续页码
+                first: true, //显示首页
+                last: true, //显示尾页
+                theme: 'cadetblue'
+            },
+            limit: params.limit,
+            limits: params.limits,
+
+            request: {
+                pageName: 'pageNumber', //页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            },
+            headers: params.headers,
+            parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                var decryptData = BaseUtils.dataDecrypt(res.data.replace("\"",""));
+                var tableData = JSON.parse(decryptData);
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": tableData //解析数据列表
+                };
+            },
+            done: function (res, curr, count) {
+                doneCallback(res, curr, count);
+            }
+        });
+        return layuiTable;
+    }
+
+
+    /**
+     * 数据是否为json 对象
+     * @param str
+     * @returns {boolean}
+     */
+    function isJsonObject(str) {
+        if (typeof str == 'object')  {
+            return true;
+        } else if (typeof str == 'string') {
+            try {
+                var obj = JSON.parse(str);
+                if(typeof obj == 'object' && obj ){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch(e) {
+                return false;
+            }
+        }
+    }
 });

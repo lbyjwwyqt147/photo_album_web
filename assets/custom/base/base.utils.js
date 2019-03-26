@@ -27,6 +27,13 @@ var BaseUtils = {
     'user_access_token': "photo_album_user_access_token_",
 
     /**
+     * 签名信息
+     */
+    signInfo:{
+        "signTime":(new Date()).getTime(),
+        "secret":BaseUtils.secretKey
+    },
+    /**
      * 访问 cloud 需要的headers
      */
     cloudHeaders: {
@@ -34,7 +41,8 @@ var BaseUtils = {
         "appKey": appKey,
         "credential": credential,
         "systemCode": systemCode,
-        "accessToken": ''
+        "accessToken": '',
+        "sign":this.dataEncrypt(JSON.stringify(BaseUtils.signInfo))
     },
 
     /**
