@@ -407,10 +407,9 @@ var SnippetMainPageOrganization = function() {
             }
             BaseUtils.modalBlock("#organization_mainPage_dataSubmit_form_modal");
             $("#organization_mainPage_dataSubmit_form input[name='parentId']").val(organizationMainPagePid);
-            var formData = JSON.stringify(organizationMainPageSubmitForm.serializeJSON());
             $encryptPostAjax({
                 url:serverUrl + "v1/organization/s",
-                data:formData,
+                data:organizationMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.serverHeaders()
             }, function (response) {
                 BaseUtils.modalUnblock("#organization_mainPage_dataSubmit_form_modal");
@@ -465,7 +464,7 @@ var SnippetMainPageOrganization = function() {
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
                 $encrypDeleteAjax({
-                    url:serverUrl + "v1/organization/batch/d",
+                    url:serverUrl + "v1/organization/b/d",
                     data: {
                         'ids' : JSON.stringify(idsArray)
                     },
@@ -513,7 +512,7 @@ var SnippetMainPageOrganization = function() {
         if (idsArray.length > 0) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({
-                url: serverUrl + "v1/organization/st",
+                url: serverUrl + "v1/organization/p",
                 data: {
                     'ids' : JSON.stringify(idsArray),
                     'status' : status

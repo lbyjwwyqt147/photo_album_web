@@ -558,7 +558,7 @@ var SnippetMainPageDict = function() {
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
                 $encrypDeleteAjax({
-                    url:serverUrl + "v1/dict/batch/d",
+                    url:serverUrl + "v1/dict/b/d",
                     data: {
                         'ids' : JSON.stringify(idsArray),
                         'credential': BaseUtils.credential,
@@ -608,7 +608,7 @@ var SnippetMainPageDict = function() {
         if (idsArray.length > 0) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({
-                url: serverUrl + "v1/dict/st",
+                url: serverUrl + "v1/dict/p",
                 data: {
                     'ids' : JSON.stringify(idsArray),
                     'status' : status,

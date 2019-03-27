@@ -1,28 +1,13 @@
-var systemCode = "1001";
-var appId = "1550817774159";
-var appKey = "0020a9ebfc7b4667b0617488d96c788b";
-var credential = "42e853886ec8d3cbdaa062a732551b10";
-var secretKey = "dO6+g3+08ELBKtx/1/WBYQ==";
-
-/**
- * 签名信息
+/***
+ *
+ * @type {{serverAddress: string, cloudServerAddress: string, secretKey: string, systemCode: string, appId: string, appKey: string, credential: string, saveSuccessMsg: string, saveFailMsg: string, delFailMsg: string, errorMsg: string, networkErrorMsg: string, enable: string, disabled: string, updateMsg: string, syncMsg: string, loadingErrorMsg: string, loginTimeOutMsg: string, functionButtonKey: string, user_access_token: string, ztree: {settingZtreeProperty: function(*): {check: {enable: $.jstree.core.check|check|{enable}|{enable, autoCheckTrigger, chkStyle, nocheckInherit, chkDisabledInherit, radioType, chkboxType}|a.validator.check|$.validator.check|*}, data: {simpleData: {enable: boolean, idKey: string, pIdKey: string, rootPId: number}}, edit: {enable: boolean}, async: {enable: boolean, type: string, headers: *, url: *, autoParam: string[]}}, rereshExpandNode: BaseUtils.ztree.rereshExpandNode, rereshzTree: BaseUtils.ztree.rereshzTree, rereshParentNode: BaseUtils.ztree.rereshParentNode, getZtreeHighlightFontCss: BaseUtils.ztree.getZtreeHighlightFontCss}, getCurrentFunctionButtonGroup: BaseUtils.getCurrentFunctionButtonGroup, checkLoginTimeout: BaseUtils.checkLoginTimeout, checkLoginTimeoutStatus: BaseUtils.checkLoginTimeoutStatus, checkIsLoginTimeOut: BaseUtils.checkIsLoginTimeOut, LoginTimeOutHandler: BaseUtils.LoginTimeOutHandler, setCookie: BaseUtils.setCookie, getCookie: function(*=): *, delCookie: BaseUtils.delCookie, setLocalStorage: BaseUtils.setLocalStorage, getLocalStorage: BaseUtils.getLocalStorage, deleteLocalStorage: BaseUtils.deleteLocalStorage, clearLocalStorage: BaseUtils.clearLocalStorage, textareaTo: function(*): *, toTextarea: function(*): *, datatTimeFormat: function(*=): string, datatHHmmFormat: function(*=): string, datatFormat: function(*=): string, zero_fill_hex: function(*, *): string, rgb2hex: BaseUtils.rgb2hex, statusText: function(*): string, formInputTrim: BaseUtils.formInputTrim, cleanFormData: BaseUtils.cleanFormData, readonlyForm: BaseUtils.readonlyForm, cleanFormReadonly: BaseUtils.cleanFormReadonly, tipsFormat: function(*): string, modalBlock: BaseUtils.modalBlock, modalUnblock: BaseUtils.modalUnblock, pageMsgBlock: BaseUtils.pageMsgBlock, htmPageBlock: BaseUtils.htmPageBlock, htmPageUnblock: BaseUtils.htmPageUnblock, dataEncrypt: function(*=): string, dataDecrypt: function(*=): string, cloudHeaders: function(): {appId: *, appKey: *, credential: *, systemCode: *, sign: *}, serverHeaders: function(): {credential: *, sign: *}}}
  */
-var signInfo = {
-    "appKey": appKey,
-    "signTime":new Date().getTime(),
-    "secret":secretKey
-};
-
-
 var BaseUtils = {
     "serverAddress": "http://127.0.0.1:18081/api/",
     //"cloudServerAddress": "http://101.132.136.225:18080/api/",
     "cloudServerAddress": "http://127.0.0.1:18080/api/",
-    "secretKey":secretKey,
-    "systemCode": systemCode,
-    "appId": appId,
-    "appKey": appKey,
-    "credential": credential,
+    "systemCode": "1001",
+    "credential": "42e853886ec8d3cbdaa062a732551b10",
     "saveSuccessMsg": "保存数据成功!",
     "saveFailMsg": "保存数据失败!",
     "delFailMsg": "删除数据失败!",
@@ -35,7 +20,13 @@ var BaseUtils = {
     'loadingErrorMsg': "加载数据失败!",
     'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
-    'user_access_token': "photo_album_user_access_token_",
+    'user_access_token': "photo_album_user_credential_",
+    "encryption":true,
+    "secretKey":"dO6+g3+08ELBKtx/1/WBYQ==",
+    "cloudAppId": "1550817758252",
+    "cloudAppKey": "c80e645007264e2684b393533ef7e832",
+    "appKey": "0020a9ebfc7b4667b0617488d96c788b",
+    "appId": "1550817774159",
 
 
     /**
@@ -575,12 +566,17 @@ var BaseUtils = {
      * 访问 cloud 需要的headers
      */
     cloudHeaders: function() {
-        var sign = BaseUtils.dataEncrypt(JSON.stringify(signInfo));
+        var sign = BaseUtils.dataEncrypt(JSON.stringify({
+            "appKey": BaseUtils.cloudAppKey,
+            "appId": BaseUtils.cloudAppId,
+            "signTime":new Date().getTime(),
+            "secret":BaseUtils.secretKey
+        }));
         var headers = {
-            "appId": appId,
-            "appKey": appKey,
-            "credential": credential,
-            "systemCode": systemCode,
+            "appId": BaseUtils.appId,
+            "appKey": BaseUtils.appKey,
+            "credential": BaseUtils.credential,
+            "systemCode": BaseUtils.systemCode,
             "sign":sign
         };
         return headers;
@@ -591,9 +587,14 @@ var BaseUtils = {
      * @returns {{appId: string, appKey: string, credential: string, systemCode: string}}
      */
     serverHeaders: function () {
-        var sign = BaseUtils.dataEncrypt(JSON.stringify(signInfo));
+        var sign = BaseUtils.dataEncrypt(JSON.stringify({
+            "appKey": BaseUtils.appKey,
+            "appId": BaseUtils.appId,
+            "signTime":new Date().getTime(),
+            "secret":BaseUtils.secretKey
+        }));
         var headers = {
-            "credential": credential,
+            "credential": BaseUtils.credential,
             "sign":sign
         };
         return headers;

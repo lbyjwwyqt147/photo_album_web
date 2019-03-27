@@ -50,7 +50,15 @@ jQuery(document).ready(function() {
     $encryptPostAjax = function (ajaxParam, successCallback, errorCallback) {
         var _url = ajaxParam.url;
         var _data = ajaxParam.data;
-        var encryptData = BaseUtils.dataEncrypt(_data);
+        var encryptData = null;
+        var formData = JSON.stringify(_data);
+        var encryption = BaseUtils.encryption;
+        if (encryption) {
+            encryptData = BaseUtils.dataEncrypt(formData);
+        } else {
+            encryptData = formData;
+        }
+        var
         $.ajax({
             url: _url,
             type: "POST",
@@ -141,7 +149,14 @@ jQuery(document).ready(function() {
     $encrypDeleteAjax = function (ajaxParam, successCallback, errorCallback) {
         _url = ajaxParam.url;
         _data = ajaxParam.data;
-        var encryptData = BaseUtils.dataEncrypt(JSON.stringify(_data));
+        var encryptData = null;
+        var formData = JSON.stringify(_data);
+        var encryption = BaseUtils.encryption;
+        if (encryption) {
+            encryptData = BaseUtils.dataEncrypt(formData);
+        } else {
+            encryptData = formData;
+        }
         $.ajax({
             url: _url,
             dataType: "text",
@@ -225,7 +240,14 @@ jQuery(document).ready(function() {
     $encrypPutAjax = function (ajaxParam, successCallback, errorCallback) {
         _url = ajaxParam.url;
         _data = ajaxParam.data;
-        var encryptData = BaseUtils.dataEncrypt(JSON.stringify(_data));
+        var encryptData = null;
+        var formData = JSON.stringify(_data);
+        var encryption = BaseUtils.encryption;
+        if (encryption) {
+            encryptData = BaseUtils.dataEncrypt(formData);
+        } else {
+            encryptData = formData;
+        }
         $.ajax({
             url: _url,
             dataType: "text",
@@ -303,7 +325,14 @@ jQuery(document).ready(function() {
     $encrypGetAjax = function (ajaxParam, successCallback, errorCallback) {
         _url = ajaxParam.url;
         _data = ajaxParam.data;
-        var encryptData = BaseUtils.dataEncrypt(_data);
+        var encryptData = null;
+        var formData = JSON.stringify(_data);
+        var encryption = BaseUtils.encryption;
+        if (encryption) {
+            encryptData = BaseUtils.dataEncrypt(formData);
+        } else {
+            encryptData = formData;
+        }
         $.ajax({
             url: _url,
             dataType: "text",
@@ -357,12 +386,12 @@ jQuery(document).ready(function() {
             url: params.url,
             where: params.where,
             title: params.title,
-            method:params.method,
+            method:params.method != null ? params.method : "get",
             text: {
                 none: '暂无相关数据'   // 空数据时的异常提示
             },
             cellMinWidth: 50, //全局定义常规单元格的最小宽度
-            height: 'full-152', //高度最大化减去差值
+            height: params.height != null ?  params.height : 'full-152', //高度最大化减去差值
             even: true,
             initSort: params.initSort,
             cols: params.cols,
@@ -417,7 +446,7 @@ jQuery(document).ready(function() {
             url: params.url,
             where: params.where,
             title: params.title,
-            method:params.method,
+            method:params.method != null ? params.method : "get",
             text: {
                 none: '暂无相关数据'   // 空数据时的异常提示
             },
