@@ -570,7 +570,8 @@ var BaseUtils = {
             "appKey": BaseUtils.cloudAppKey,
             "appId": BaseUtils.cloudAppId,
             "signTime":new Date().getTime(),
-            "secret":BaseUtils.secretKey
+            "secret":BaseUtils.secretKey,
+            "parameter":false
         }));
         var headers = {
             "appId": BaseUtils.appId,
@@ -591,7 +592,8 @@ var BaseUtils = {
             "appKey": BaseUtils.appKey,
             "appId": BaseUtils.appId,
             "signTime":new Date().getTime(),
-            "secret":BaseUtils.secretKey
+            "secret":BaseUtils.secretKey,
+            "parameter":false
         }));
         var headers = {
             "credential": BaseUtils.credential,

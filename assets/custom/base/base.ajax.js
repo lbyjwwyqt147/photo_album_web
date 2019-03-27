@@ -58,7 +58,6 @@ jQuery(document).ready(function() {
         } else {
             encryptData = formData;
         }
-        var
         $.ajax({
             url: _url,
             type: "POST",

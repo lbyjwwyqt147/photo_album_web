@@ -252,6 +252,10 @@ body.m-aside-left--skin-light .m-header {
     background-color:cadetblue !important;
 }
 
+.m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__heading .m-menu__link-text, .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-text {
+    color: #666;
+}
+
 /**  左边菜单栏样式 结束  */
 
 
@@ -397,6 +401,11 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     border-left: none;
     box-shadow:none;
 }
+
+/*.layui-tab.layui-tab-card ul li {
+    border-right:1px solid lightgrey;
+}*/
+
 /**  tab 样式 结束  */
 
 
@@ -430,6 +439,20 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     border-radius: 50%;
     color: #fff;
 }
+
+/** table 标题栏 背景颜色  */
+.layui-table thead tr th{
+    background-color:rgba(234,234,239,0.6);
+    color:#666
+}
+
+
+/** table 更改隔行换色样式 */
+.layui-table[lay-even] tr:nth-child(even){
+    background-color:rgba(234,234,239,0.5);
+    color:#666
+}
+
 
 
 /** 分页工具栏 样式 */

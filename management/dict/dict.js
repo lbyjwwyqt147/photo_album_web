@@ -683,6 +683,7 @@ var SnippetMainPageDict = function() {
             var modalDialogTitle = "新增数据字典";
             if (dictMainPageMark == 1) {
                 BaseUtils.cleanFormReadonly(dictMainPageSubmitFormId);
+                $(".glyphicon.glyphicon-remove.form-control-feedback").show();
             }
             $("#dict_mainPage_dataSubmit_form_parent_name").val(dictMainPageParentName);
             if (dictMainPageMark == 2) {
@@ -690,9 +691,9 @@ var SnippetMainPageDict = function() {
                 BaseUtils.cleanFormReadonly(dictMainPageSubmitFormId);
                 $("#dict_mainPage_dataSubmit_form_dict_number").addClass("m-input--solid");
                 $("#dict_mainPage_dataSubmit_form_dict_number").attr("readonly", "readonly");
+                $(".glyphicon.glyphicon-remove.form-control-feedback").hide();
             }
             $(".has-danger-error").show();
-            $(".glyphicon.glyphicon-remove.form-control-feedback").show();
             $("#dict_mainPage_dataSubmit_form_submit").show();
             $("#dict_mainPage_dataSubmit_form_parent_name").addClass("m-input--solid");
             $("#dict_mainPage_dataSubmit_form_parent_name").attr("readonly", "readonly");

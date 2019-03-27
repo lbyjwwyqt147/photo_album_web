@@ -55,7 +55,7 @@ jQuery.validator.addMethod("alnumCode", function(value, element) {
  *  html 标签 认证
  */
 jQuery.validator.addMethod("htmlLabel", function(value, element) {
-    return this.optional(element) || /<\/?[\s\S]*?(?:".*")*>/.test(value);
+    return this.optional(element) || /<[^<>]+>/.test(value);
 }, "内容含有html 标签,请清除");
 
 /**
@@ -87,6 +87,14 @@ jQuery.validator.addMethod("zipcode", function(value, element) {
     var tel = /^[0-9]{6}$/;
     return this.optional(element) || (tel.test(value));
 }, "请正确填写邮政编码");
+
+/**
+ * 匹配qq
+ */
+jQuery.validator.addMethod("isQq", function (value, element) {
+    var qq = /^[1-9]\d{4,12}$/;
+    return this.optional(element) || qq.test(value);
+}, "请输入正确的QQ号码");
 
 /**
  * 汉字

@@ -75,8 +75,8 @@ var SnippetMainPageHomeIndex = function() {
     var initHomeMenuEvent = function () {
         // 鼠标移到菜单事件
         $('.m-menu__link_css').mouseout(function(element){
-            $(this).children('i').css('color','#686c89');
-            $(this).children('span').css('color','#686c89');
+            $(this).children('i').css('color','#666');
+            $(this).children('span').css('color','#666');
         }).mouseover(function(element){
             $(this).children('i').css('color','white');
             $(this).children('span').css('color','white');
@@ -135,7 +135,7 @@ var SnippetMainPageHomeIndex = function() {
                                 $('.layui-tab-title > li').on('click', function(e){
                                     e.preventDefault();
                                     var curLayId = $(this).attr("lay-id");
-                                    setingMenuCheckedCss($("#left_menu_" + curLayId))
+                                    setingMenuCheckedCss($("#left_menu_" + curLayId));
                                 })
                         },3000);
                     }
@@ -149,11 +149,16 @@ var SnippetMainPageHomeIndex = function() {
                 active[type] ? active[type].call(this, othis) : '';
             });
 
-            // 监听选项卡删除
+            // 监听选项卡切换 Tab选项卡点击切换时触发
+            element.on('tab(home_menu_content_tab)', function(data){
+                $(".layui-tab.layui-tab-card ul li[lay-id]").css("border-right","1px solid lightgrey");
+                $(this).css("border-right","none");
+            });
+
+            // 监听选项卡删除 ab选项卡被删除时触发
             element.on('tabDelete(home_menu_content_tab)', function(data){
-                if (data.index == 0) {
-                    return false;
-                }
+                var curLayId = $(".layui-this").attr("lay-id");
+                setingMenuCheckedCss($("#left_menu_" + curLayId))
             });
         });
     };

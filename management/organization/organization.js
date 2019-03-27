@@ -593,6 +593,7 @@ var SnippetMainPageOrganization = function() {
             var modalDialogTitle = "新增组织机构";
             if (organizationMainPageMark == 1) {
                 BaseUtils.cleanFormReadonly(organizationMainPageSubmitFormId);
+                $(".glyphicon.glyphicon-remove.form-control-feedback").show();
             }
             $("#organization_mainPage_dataSubmit_form_parent_name").val(organizationMainPageParentName);
             if (organizationMainPageMark == 2) {
@@ -600,10 +601,10 @@ var SnippetMainPageOrganization = function() {
                 BaseUtils.cleanFormReadonly(organizationMainPageSubmitFormId);
                 $("#organization_mainPage_dataSubmit_form_org_number").addClass("m-input--solid");
                 $("#organization_mainPage_dataSubmit_form_org_number").attr("readonly", "readonly");
+                $(".glyphicon.glyphicon-remove.form-control-feedback").hide();
             }
             $("#org-fullName-form-div").hide();
             $(".has-danger-error").show();
-            $(".glyphicon.glyphicon-remove.form-control-feedback").show();
             $("#organization_mainPage_dataSubmit_form_submit").show();
             $("#organization_mainPage_dataSubmit_form_parent_name").addClass("m-input--solid");
             $("#organization_mainPage_dataSubmit_form_parent_name").attr("readonly", "readonly");
