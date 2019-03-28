@@ -170,6 +170,8 @@
                                         <input type="hidden" class="form-control  m-input" name="dictLevel" placeholder="dictLevel"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="leaf" placeholder="leaf"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="fullDictCode" placeholder="fullDictCode"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
+
                                     </div>
                                 </div>
                             </form>
@@ -203,7 +205,7 @@
 </div>
 
 <script type="text/html" id="dict_mainPage_table_toolbar">
-    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" dataversion="{{d.dataVersion}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
 </script>
 
 <script type="text/javascript" src="../../assets/custom/plugins/zTree/js/jquery.ztree.core.js"></script>

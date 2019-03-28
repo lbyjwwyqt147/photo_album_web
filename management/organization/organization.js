@@ -441,10 +441,16 @@ var SnippetMainPageOrganization = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var idsArray = [];
+        var ajaxDelUrl = serverUrl + "v1/organization/d";
+        var delData = null;
         if (obj != null) {
-            idsArray.push(obj.data.id);
+            delData = {
+                'id' : obj.data.id,
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         } else {
+            var idsArray = [];
             // 获取选中的数据对象
             var checkRows = organizationMainPageTable.checkStatus('organization_mainPage_grid');
             //获取选中行的数据
@@ -454,8 +460,14 @@ var SnippetMainPageOrganization = function() {
                     idsArray.push(element.id);
                 });
             }
+            ajaxDelUrl = serverUrl + "v1/organization/b/d";
+            delData = {
+                'ids' : JSON.stringify(idsArray),
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         }
-        if (idsArray.length > 0) {
+        if (delData != null) {
             //询问框
             layer.confirm('你确定要删除?', {
                 shade: [0.3, 'rgb(230, 230, 230)'],
@@ -464,10 +476,8 @@ var SnippetMainPageOrganization = function() {
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
                 $encrypDeleteAjax({
-                    url:serverUrl + "v1/organization/b/d",
-                    data: {
-                        'ids' : JSON.stringify(idsArray)
-                    },
+                    url:ajaxDelUrl,
+                    data: delData,
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
                     if (response.success) {
@@ -494,10 +504,17 @@ var SnippetMainPageOrganization = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var idsArray = [];
+        var ajaxPutUrl = serverUrl + "v1/organization/p";
+        var putData = null;
         if (obj != null) {
-            idsArray.push(obj.value);
+            var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
+            putData = {
+                'id' : obj.value,
+                'status' : status,
+                'dataVersion':dataVersion
+            }
         } else {
+            var idsArray = [];
             // 获取选中的数据对象
             var checkRows = organizationMainPageTable.checkStatus('organization_mainPage_grid');
             //获取选中行的数据
@@ -507,16 +524,18 @@ var SnippetMainPageOrganization = function() {
                     idsArray.push(element.id);
                 });
             }
+            ajaxPutUrl = serverUrl + "v1/organization/b/p";
+            putData = {
+                'ids' : JSON.stringify(idsArray),
+                'status' : status
+            }
         }
         BaseUtils.checkLoginTimeoutStatus();
-        if (idsArray.length > 0) {
+        if (putData != null) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({
-                url: serverUrl + "v1/organization/p",
-                data: {
-                    'ids' : JSON.stringify(idsArray),
-                    'status' : status
-                },
+                url: ajaxPutUrl,
+                data:putData,
                 headers: BaseUtils.serverHeaders()
             }, function (response) {
                 if (response.success) {

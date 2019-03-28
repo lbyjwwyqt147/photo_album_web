@@ -172,6 +172,8 @@
                                         <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="fullParent" placeholder="fullParent"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="fullParentCode" placeholder="fullParentCode"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
+
                                     </div>
                                 </div>
                             </form>
@@ -205,7 +207,7 @@
 </div>
 
 <script type="text/html" id="organization_mainPage_table_toolbar">
-    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" lay-filter="lock" {{ d.orgStatus == 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" dataversion="{{d.dataVersion}}" lay-filter="lock" {{ d.orgStatus == 1 ? 'checked' : '' }}>
 </script>
 
 <script type="text/javascript" src="../../assets/custom/plugins/zTree/js/jquery.ztree.core.js"></script>

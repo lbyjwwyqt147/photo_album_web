@@ -533,10 +533,16 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var idsArray = [];
+        var ajaxDelUrl = serverUrl + "v1/dict/d";
+        var delData = null;
         if (obj != null) {
-            idsArray.push(obj.data.id);
+            delData = {
+                'id' : obj.data.id,
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         } else {
+            var idsArray = [];
             // 获取选中的数据对象
             var checkRows = dictMainPageTable.checkStatus('dict_mainPage_grid');
             //获取选中行的数据
@@ -546,8 +552,14 @@ var SnippetMainPageDict = function() {
                     idsArray.push(element.id);
                 });
             }
+            ajaxDelUrl = serverUrl + "v1/dict/b/d";
+            delData = {
+                'ids' : JSON.stringify(idsArray),
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         }
-        if (idsArray.length > 0) {
+        if (delData != null) {
             //询问框
             layer.confirm('你确定要删除?', {
                 shade: [0.3, 'rgb(230, 230, 230)'],
@@ -556,12 +568,8 @@ var SnippetMainPageDict = function() {
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
                 $encrypDeleteAjax({
-                    url:serverUrl + "v1/dict/b/d",
-                    data: {
-                        'ids' : JSON.stringify(idsArray),
-                        'credential': BaseUtils.credential,
-                        'systemCode': BaseUtils.systemCode
-                    },
+                    url:ajaxDelUrl,
+                    data: delData,
                     headers: BaseUtils.cloudHeaders()
                 }, function (response) {
                     if (response.success) {
@@ -588,10 +596,19 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var idsArray = [];
+        var ajaxPutUrl = serverUrl + "v1/dict/p";
+        var putData = null;
         if (obj != null) {
-            idsArray.push(obj.value);
+            var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
+            putData = {
+                'id' : obj.value,
+                'status' : status,
+                'dataVersion':dataVersion,
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         } else {
+            var idsArray = [];
             // 获取选中的数据对象
             var checkRows = dictMainPageTable.checkStatus('dict_mainPage_grid');
             //获取选中行的数据
@@ -601,18 +618,20 @@ var SnippetMainPageDict = function() {
                     idsArray.push(element.id);
                 });
             }
+            ajaxPutUrl = serverUrl + "v1/dict/b/p";
+            putData = {
+                'ids' : JSON.stringify(idsArray),
+                'status' : status,
+                'credential': BaseUtils.credential,
+                'systemCode': BaseUtils.systemCode
+            }
         }
         BaseUtils.checkLoginTimeoutStatus();
-        if (idsArray.length > 0) {
+        if (putData != null) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({
-                url: serverUrl + "v1/dict/p",
-                data: {
-                    'ids' : JSON.stringify(idsArray),
-                    'status' : status,
-                    'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
-                },
+                url: ajaxPutUrl,
+                data: putData,
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
                   if (response.success) {
