@@ -459,7 +459,6 @@ var SnippetMainPageDict = function() {
                         range: [0,999]
                     },
                     description: {
-                        htmlLabel:true,
                         illegitmacy:true,
                         maxlength: 50
                     }
@@ -500,10 +499,9 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
 
-            var formData = JSON.stringify(dictMainPageSubmitForm.serializeJSON());
             $encryptPostAjax({
                 url:serverUrl + "v1/dict/s",
-                data:formData,
+                data:dictMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
                 BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");

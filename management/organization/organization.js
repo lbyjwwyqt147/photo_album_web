@@ -68,7 +68,7 @@ var SnippetMainPageOrganization = function() {
             organizationMainPageRereshTree();
             return;
         }
-        var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
         var nodes = zTreeObj.getNodesByParam("id", id, null);
         if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
             organizationMainPageRereshTreeNode(id);
@@ -238,6 +238,7 @@ var SnippetMainPageOrganization = function() {
                     {field:'orgNumber', title:'机构代码'},
                     {field:'orgName', title:'机构名称'},
                     {field:'fullName', title:'机构全名称'},
+                    {field:'fullParentCode', title:'上级机构代码'},
                     {field:'seq', title:'优先级'},
                     {field:'description', title:'描述', hide:true},
                     {field:'orgStatus', title:'状态', align: 'center', unresize:true,
@@ -369,7 +370,6 @@ var SnippetMainPageOrganization = function() {
                         range: [0,999]
                     },
                     description: {
-                        htmlLabel:true,
                         illegitmacy:true,
                         maxlength: 100
                     }

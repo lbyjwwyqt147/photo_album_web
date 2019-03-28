@@ -55,8 +55,22 @@ jQuery.validator.addMethod("alnumCode", function(value, element) {
  *  html 标签 认证
  */
 jQuery.validator.addMethod("htmlLabel", function(value, element) {
-    return this.optional(element) || /<[^<>]+>/.test(value);
-}, "内容含有html 标签,请清除");
+    return this.optional(element) ||  /<(\S*?)[^>]*>.*?<\/\\1>|<.*? \/>/.test(value);
+}, "含有html标签字符");
+
+/**
+ *  匹配空行的正则
+ */
+jQuery.validator.addMethod("htmlLabel", function(value, element) {
+    return this.optional(element) ||  /n[s| ]*r/.test(value);
+}, "含有空行");
+
+/**
+ *  匹配首尾空格的正则
+ */
+jQuery.validator.addMethod("htmlLabel", function(value, element) {
+    return this.optional(element) || /(^s*)|(s*$)/.test(value);
+}, "含有首尾空格");
 
 /**
  *  汉字 字母 数字 下划线
@@ -69,8 +83,8 @@ jQuery.validator.addMethod("alnumName", function(value, element) {
  *  非法字符 验证
  */
 jQuery.validator.addMethod("illegitmacy", function(value, element) {
-    return this.optional(element) || /^(?!_)(?!.*?_$)[a-zA-Z0-9-_.@#%$*()={}\"\"?<>, \u4e00-\u9fa5]+$/.test(value);
-}, "存在非法输入字符,请检查输入法是否正确");
+    return this.optional(element) || !/[(\~)(\!)(\^)(\&)(\！)(\…)(\（)(\）)(\—)(\<>)(\[)(\])(\|)(\')(\')(\{)(\})(\+)(\|)(\｛)(\｝)(\【)(\】)(\‘)(\；)(\：)(\”)(\“)(\’)(\。)(\，)(\、)(\？)]+/.test(value);
+}, "含有中英文特殊字符");
 
 /**
  *  帐号认证
@@ -95,6 +109,14 @@ jQuery.validator.addMethod("isQq", function (value, element) {
     var qq = /^[1-9]\d{4,12}$/;
     return this.optional(element) || qq.test(value);
 }, "请输入正确的QQ号码");
+
+/**
+ * 匹配域名
+ */
+jQuery.validator.addMethod("isQq", function (value, element) {
+    var domain = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\/.?/;
+    return this.optional(element) || domain.test(value);
+}, "域名格式错误");
 
 /**
  * 汉字
