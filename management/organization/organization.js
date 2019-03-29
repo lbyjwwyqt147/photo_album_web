@@ -515,19 +515,26 @@ var SnippetMainPageOrganization = function() {
             }
         } else {
             var idsArray = [];
+            var putParams = [];
             // 获取选中的数据对象
             var checkRows = organizationMainPageTable.checkStatus('organization_mainPage_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
                 $.each(checkData, function(index,element){
+                    var curDataParam = {
+                        "id":element.id,
+                        "dataVersion":element.dataVersion
+                    }
+                    putParams.push(curDataParam);
                     idsArray.push(element.id);
                 });
-            }
-            ajaxPutUrl = serverUrl + "v1/organization/b/p";
-            putData = {
-                'ids' : JSON.stringify(idsArray),
-                'status' : status
+                ajaxPutUrl = serverUrl + "v1/organization/b/p";
+                putData = {
+                    'ids' : JSON.stringify(idsArray),
+                    'putParams' : JSON.stringify(idsArray),
+                    'status' : status
+                }
             }
         }
         BaseUtils.checkLoginTimeoutStatus();
@@ -549,14 +556,8 @@ var SnippetMainPageOrganization = function() {
                     layer.tips(BaseUtils.updateMsg, obj.othis,  {
                         tips: [4, '#f4516c']
                     });
-                } else if (response.status == 504) {
-                    if (status == 1) {
-                        obj.othis.removeClass("layui-form-checked");
-                        $(obj.elem).removeAttr("checked");
-                    } else {
-                        obj.othis.addClass("layui-form-checked");
-                    }
-                    BaseUtils.LoginTimeOutHandler();
+                }  else if (response.status == 409) {
+                    organizationMainPageRefreshGrid();
                 } else {
                     if (status == 1) {
                         obj.othis.removeClass("layui-form-checked");
@@ -564,9 +565,13 @@ var SnippetMainPageOrganization = function() {
                     } else {
                         obj.othis.addClass("layui-form-checked");
                     }
-                    layer.tips(response.message, obj.othis,  {
-                        tips: [4, '#f4516c']
-                    });
+                    if (response.status == 504) {
+                        BaseUtils.LoginTimeOutHandler();
+                    } else {
+                        layer.tips(response.message, obj.othis,  {
+                            tips: [4, '#f4516c']
+                        });
+                    }
                 }
             }, function (data) {
 

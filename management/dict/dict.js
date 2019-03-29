@@ -511,6 +511,8 @@ var SnippetMainPageDict = function() {
                     dictMainPageRefreshGridAndTree();
                     // 关闭 dialog
                     dictMainPageFormModal.modal('hide');
+                } else if (response.status == 409) {
+                    dictMainPageRefreshGridAndTree();
                 }
             }, function (data) {
                 BaseUtils.modalUnblock("#dict_mainPage_dataSubmit_form_modal");
@@ -609,22 +611,31 @@ var SnippetMainPageDict = function() {
             }
         } else {
             var idsArray = [];
+            var putParams = [];
             // 获取选中的数据对象
             var checkRows = dictMainPageTable.checkStatus('dict_mainPage_grid');
             //获取选中行的数据
             var checkData = checkRows.data;
             if (checkData.length > 0) {
                 $.each(checkData, function(index,element){
+                    var curDataParam = {
+                        "id":element.id,
+                        "dataVersion":element.dataVersion
+                    }
+                    putParams.push(curDataParam);
                     idsArray.push(element.id);
                 });
+
+                ajaxPutUrl = serverUrl + "v1/dict/b/p";
+                putData = {
+                    'putParams' : JSON.stringify(idsArray),
+                    'ids': JSON.stringify(idsArray),
+                    'status' : status,
+                    'credential': BaseUtils.credential,
+                    'systemCode': BaseUtils.systemCode
+                }
             }
-            ajaxPutUrl = serverUrl + "v1/dict/b/p";
-            putData = {
-                'ids' : JSON.stringify(idsArray),
-                'status' : status,
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
-            }
+
         }
         BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
@@ -645,16 +656,23 @@ var SnippetMainPageDict = function() {
                     layer.tips(BaseUtils.updateMsg, obj.othis,  {
                         tips: [4, '#f4516c']
                     });
-                } else {
-                    if (status == 1) {
+                  } else if (response.status == 409) {
+                      dictMainPageRefreshGrid();
+                  } else {
+                     if (status == 1) {
                         obj.othis.removeClass("layui-form-checked");
                         $(obj.elem).removeAttr("checked");
-                    } else {
+                     } else {
                         obj.othis.addClass("layui-form-checked");
-                    }
-                    layer.tips(response.message, obj.othis,  {
-                        tips: [4, '#f4516c']
-                    });
+                     }
+                     if (response.status == 504) {
+                         BaseUtils.LoginTimeOutHandler();
+                     } else {
+                         layer.tips(response.message, obj.othis,  {
+                             tips: [4, '#f4516c']
+                         });
+                     }
+
                 }
             }, function (data) {
 

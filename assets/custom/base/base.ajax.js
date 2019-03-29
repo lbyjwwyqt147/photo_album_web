@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
             data: _data,
             headers:ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (response) {
                 successCallback(response);
                 if (response.success) {
@@ -68,7 +68,7 @@ jQuery(document).ready(function() {
             data: encryptData,
             headers: ajaxParam.headers,
             crossDomain: true,
-            timeout:30000,
+            timeout:60000,
             success: function (data) {
                 var response = null;
                 if (isJsonObject(data)) {
@@ -116,7 +116,7 @@ jQuery(document).ready(function() {
             data: _data,
             headers: ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (response) {
                 BaseUtils.htmPageUnblock();
                 successCallback(response);
@@ -167,7 +167,7 @@ jQuery(document).ready(function() {
             data: encryptData,
             headers: ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (data) {
                 BaseUtils.htmPageUnblock();
                 var response = null;
@@ -216,7 +216,7 @@ jQuery(document).ready(function() {
             data: _data,
             headers: ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (data) {
                 BaseUtils.htmPageUnblock();
                 successCallback(data);
@@ -258,7 +258,7 @@ jQuery(document).ready(function() {
             data: encryptData,
             headers:ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (data) {
                 BaseUtils.htmPageUnblock();
                 if (isJsonObject(data)) {
@@ -294,7 +294,7 @@ jQuery(document).ready(function() {
             data: _data,
             headers:ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (response) {
                 successCallback(response);
                 if (response.success) {
@@ -342,7 +342,7 @@ jQuery(document).ready(function() {
             data: encryptData,
             headers: ajaxParam.headers,
             crossDomain: true,
-            timeout: 30000,
+            timeout: 60000,
             success: function (data) {
                 var  response = null;
                 if (isJsonObject(data)) {

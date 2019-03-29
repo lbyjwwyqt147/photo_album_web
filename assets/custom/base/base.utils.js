@@ -9,15 +9,15 @@ var BaseUtils = {
     "systemCode": "1001",
     "credential": "42e853886ec8d3cbdaa062a732551b10",
     "saveSuccessMsg": "保存数据成功!",
-    "saveFailMsg": "保存数据失败!",
-    "delFailMsg": "删除数据失败!",
-    "errorMsg": "网络连接失败!",
-    "networkErrorMsg": "网络连接失败!",
+    "saveFailMsg": "保存数据失败,请稍候再试!",
+    "delFailMsg": "删除数据失败,请稍候再试!",
+    "errorMsg": "网络连接失败,请稍候再试!",
+    "networkErrorMsg": "网络连接失败,请稍候再试!",
     'enable': '正常',
     'disabled': '禁用',
-    'updateMsg': "数据更新失败!",
-    'syncMsg': "数据同步失败!",
-    'loadingErrorMsg': "加载数据失败!",
+    'updateMsg': "数据更新失败,请稍候再试!",
+    'syncMsg': "数据同步失败,请稍候再试!",
+    'loadingErrorMsg': "加载数据失败,请稍候再试!",
     'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
     'user_access_token': "photo_album_user_credential_",
@@ -403,12 +403,12 @@ var BaseUtils = {
     formInputTrim: function (form) {
         $(form + " input").each(function () {
             var trimValue = $.trim($(this).val());
-            var curValue = trimValue.replace(/\+/g,' ');
+            var curValue = trimValue.replace(/\s+/g,"");
             $(this).val($.trim(curValue));
         });
         $(form + " textarea").each(function () {
             var trimValue = $.trim($(this).val());
-            var curValue = trimValue.replace(/\+/g,' ');
+            var curValue = trimValue.replace(/\s+/g,"");
             $(this).val($.trim(curValue));
         });
     },
