@@ -89,7 +89,7 @@ jQuery.validator.addMethod("illegitmacy", function(value, element) {
 /**
  *  帐号认证
  */
-jQuery.validator.addMethod("accountingNumber ", function(value, element) {
+jQuery.validator.addMethod("accountingNumber", function(value, element) {
     return this.optional(element) || /^[a-zA-Z][a-zA-Z0-9_]{5,17}$/.test(value);
 }, "只能以字母开头，允许6-18字节，允许字母数字下划线");
 
@@ -125,6 +125,14 @@ jQuery.validator.addMethod("chcharacter", function(value, element) {
     var tel = /^[u4e00-u9fa5]+$/;
     return this.optional(element) || (tel.test(value));
 }, "请输入汉字");
+
+/**
+ * 只能输入汉字数字字母，并且数字不能开头
+ */
+jQuery.validator.addMethod("chcharacterNum", function(value, element) {
+    var tel = /^[a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*$/;
+    return this.optional(element) || (tel.test(value));
+}, "只能输入汉字数字字母，并且数字不能开头");
 
 /**
  * 身份证 号

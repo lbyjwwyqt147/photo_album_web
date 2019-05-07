@@ -307,6 +307,54 @@ var BaseUtils = {
     },
 
     /**
+     * ajax 获取select 下拉框值
+     * @param dictCode  字典编码
+     * @param successCallback  成功后回调函数
+     */
+    dictDataSelect : function(dictCode, successCallback) {
+        $.ajax({
+            type: "get",
+            url: BaseUtils.cloudServerAddress + 'dict/combox',
+            data:{
+                systemCode : BaseUtils.systemCode,
+                dictCode : dictCode
+            },
+            async:false,
+            dataType: "json",
+            headers: BaseUtils.cloudHeaders,
+            success: function(data){
+                if (data != null) {
+                    successCallback(data);
+                }
+            }
+        });
+    },
+
+    /**
+     * ajax 获取 省市区 select 下拉框值
+     * @param code 区划编码
+     * @param successCallback  成功后回调函数
+     */
+    distDataSelect : function(code, successCallback) {
+        $.ajax({
+            type: "get",
+            url: BaseUtils.cloudServerAddress + 'area/combox',
+            data:{
+                systemCode : BaseUtils.systemCode,
+                pid : code
+            },
+            async:false,
+            dataType: "json",
+            headers: BaseUtils.cloudHeaders,
+            success: function(data){
+                if (data != null) {
+                    successCallback(data);
+                }
+            }
+        });
+    },
+
+    /**
      *  时间戳格式化为日期 返回 2018-08-09 13:48:10
      *  @param time
      * @param timestamp yyyy-MM-dd HH:mm:ss

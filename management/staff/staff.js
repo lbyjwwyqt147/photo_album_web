@@ -2,8 +2,8 @@
  * 员工管理
  * @type {{init}}
  */
-var SnippetMainPagestaff = function() {
-    var serverUrl = BaseUtils.cloudServerAddress;
+var SnippetMainPageStaff = function() {
+    var serverUrl = BaseUtils.serverAddress;
     var staffMainPageTable;
     var staffMainPageFormModal = $('#staff_mainPage_dataSubmit_form_modal');
     var staffMainPageSubmitForm = $("#staff_mainPage_dataSubmit_form");
@@ -12,7 +12,7 @@ var SnippetMainPagestaff = function() {
     var staffMainPagePid = 0;
     var staffMainPageParentName = "";
     var staffMainPageZtreeNodeList = [];
-    var staffMainPageModuleCode = '1010';
+    var staffMainPageModuleCode = '1030';
 
     /**
      * ztree 基础属性
@@ -58,57 +58,8 @@ var SnippetMainPagestaff = function() {
         $.fn.zTree.init($("#staff_mainPage_tree"), staffMainPageZtreeSetting);
     };
 
-    /**
-     * 刷新 指定 节点
-     * 在指定的节点下面增加子节点之后调用的方法。
-     * @param id
-     */
-    function staffMainPageRereshExpandNode(id) {
-        if (id == 0) {
-            staffMainPageRereshTree();
-            return;
-        }
-       var zTreeObj = $.fn.zTree.getZTreeObj("staff_mainPage_tree");
-       var nodes = zTreeObj.getNodesByParam("id", id, null);
-       if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
-           staffMainPageRereshTreeNode(id);
-       }
-       BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
-    }
 
 
-    /**
-     *  刷新树
-     * @param id
-     */
-    function staffMainPageRereshTree(){
-        var zTreeObj = $.fn.zTree.getZTreeObj("staff_mainPage_tree");
-        zTreeObj.destroy();
-        staffMainPageInitTree();
-    };
-
-    /**
-     * 异步加载ztree 数数据
-     * @param id
-     */
-    function staffMainPageRereshTreeNode(id) {
-        $getAjax({
-            url: serverUrl + "v1/tree/staff/all/z",
-            data: {
-                id:id,
-                systemCode:BaseUtils.systemCode,
-                credential:BaseUtils.credential
-            },
-            headers: BaseUtils.cloudHeaders()
-        }, function (data) {
-            var treeObj = $.fn.zTree.getZTreeObj("staff_mainPage_tree");
-            //获取指定父节点
-            var parentZNode = treeObj.getNodeByParam("id", staffMainPagePid, null);
-            treeObj.addNodes(parentZNode,data, false);
-        }, function (response) {
-
-        });
-    }
 
     /**
      *  搜索节点
@@ -150,13 +101,7 @@ var SnippetMainPagestaff = function() {
        return BaseUtils.ztree.getZtreeHighlightFontCss(treeId, treeNode)
     };
 
-    /**
-     * 设置 tree 最大高度样式
-     */
-    function staffMainPageZtreeMaxHeight() {
-         var layGridHeight = $(".layui-form.layui-border-box.layui-table-view").outerHeight();
-        $("#staff_mainPage_tree").css("max-height", layGridHeight);
-    }
+
 
     /**
      * 初始化 功能按钮
@@ -220,39 +165,61 @@ var SnippetMainPagestaff = function() {
      */
     var staffMainPageInitDataGrid = function () {
         layui.use('table', function(){
-            // staffMainPageTable = layui.table;
             var layuiForm = layui.form;
             staffMainPageTable =  $initEncrypDataGrid({
                 elem: '#staff_mainPage_grid',
                 url: serverUrl + 'v1/table/staff/g',
                 method:"get",
                 where: {   //传递额外参数
-                    'pid' : staffMainPagePid,
-                    'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
+
                 },
                 headers: BaseUtils.cloudHeaders(),
                 title: '员工信息列表',
                 initSort: {
-                    field: 'priority', //排序字段，对应 cols 设定的各字段名
-                    type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+                    field: 'entryDate', //排序字段，对应 cols 设定的各字段名
+                    type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
                 },
                 cols: [[
                     {checkbox: true},
                     {field:'id', title:'ID', unresize:true, hide:true },
-                    {field:'staffCode', title:'字典代码'},
-                    {field:'staffName', title:'字段名称'},
-                    {field:'priority', title:'优先级'},
-                    {field:'fullParentCode', title:'完整父级代码'},
-                    {field:'description', title:'描述'},
-                    {field:'status', title:'状态', align: 'center', unresize:true,
+                    {field:'staffPortraitTiny', title:'头像', unresize:true,
                         templet : function (row) {
-                            var value = row.status;
+                            var spanHtml = '<img style="display: inline-block; width: 50%; height: 100%;" src="' + value + '">';
+                            return spanHtml;
+                        }
+                        },
+                    {field:'staffNumber', title:'工号'},
+                    {field:'staffName', title:'姓名'},
+                    {field:'staffNickName', title:'昵称'},
+                    {field:'mobilePhone', title:'手机号'},
+                    {field:'staffPositionText', title:'职务'},
+                    {field:'entryDate', title:'入职日期', sort:true},
+                    {field:'staffSex', title:'性别'},
+                    {field:'staffEmail', title:'电子邮箱'},
+                    {field:'orgName', title:'组织机构'},
+                    {field:'duration', title:'在职年限', sort:true, unresize:true,
+                        templet : function (row) {
+                            return value + "月";
+                        }
+                     },
+                    {field:'staffStatus', title:'状态', align: 'center', unresize:true,
+                        templet : function (row) {
+                            var value = row.staffStatus;
                             var spanCss = "m-badge--success";
-                            if (value == 1)  {
-                                spanCss = "m-badge--warning";
+                            var curStatusText = "在职";
+                            switch (value) {
+                                case 1:
+                                    curStatusText = "禁用";
+                                    spanCss = "m-badge--warning";
+                                    break;
+                                case 2:
+                                    curStatusText = "离职";
+                                    spanCss = "m-badge--danger";
+                                    break;
+                                default:
+                                    break;
                             }
-                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + BaseUtils.statusText(value) + '</span>';
+                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + curStatusText + '</span>';
                             return spanHtml;
                         }
                     },
@@ -261,7 +228,6 @@ var SnippetMainPagestaff = function() {
                 limit: 20,
                 limits: [20,30,40,50]
             }, function(res, curr, count){
-                staffMainPageZtreeMaxHeight();
                 var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(staffMainPageModuleCode);
                 var status_table_index = $.inArray("3", curFunctionButtonGroup);
                 if (status_table_index != -1) {
@@ -274,89 +240,6 @@ var SnippetMainPagestaff = function() {
                 }
                 BaseUtils.checkIsLoginTimeOut(res.status);
             });
-            /*staffMainPageTable.render({
-                elem: '#staff_mainPage_grid',
-                url: serverUrl + 'v1/table/staff/grid',
-                where: {   //传递额外参数
-                    'pid' : staffMainPagePid,
-                    'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
-                },
-                title: '员工信息列表',
-                text: {
-                    none: '暂无相关数据'   // 空数据时的异常提示
-                },
-                cellMinWidth: 50, //全局定义常规单元格的最小宽度
-                height: 'full-152', //高度最大化减去差值
-                even: true,
-                initSort: {
-                    field: 'priority', //排序字段，对应 cols 设定的各字段名
-                    type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-                },
-                cols: [[
-                    {checkbox: true},
-                    {field:'id', title:'ID', unresize:true, hide:true },
-                    {field:'staffCode', title:'字典代码'},
-                    {field:'staffName', title:'字段名称'},
-                    {field:'priority', title:'优先级'},
-                    {field:'fullParentCode', title:'完整父级代码'},
-                    {field:'description', title:'描述'},
-                    {field:'status', title:'状态', align: 'center', unresize:true,
-                        templet : function (row) {
-                            var value = row.orgStatus;
-                            var spanCss = "m-badge--success";
-                            if (value == 1)  {
-                                spanCss = "m-badge--warning";
-                            }
-                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + BaseUtils.statusText(value) + '</span>';
-                            return spanHtml;
-                        }
-                    },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:200}
-                ]],
-                page: {
-                    theme: 'cadetblue',
-                    layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
-                    curr: 1 ,//设定初始在第 1 页
-                    groups: 10, //只显示 10 个连续页码
-                    first: true, //显示首页
-                    last: true //显示尾页
-                },
-                limit: 10,
-                limits: [10,20,30,50],
-
-                request: {
-                    pageName: 'pageNumber', //页码的参数名称，默认：page
-                    limitName: 'pageSize' //每页数据量的参数名，默认：limit
-                },
-                response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-                },
-                headers: BaseUtils.cloudHeaders(),
-                parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                    return {
-                        "code": res.status, //解析接口状态
-                        "msg": res.message, //解析提示文本
-                        "count": res.total, //解析数据长度
-                        "data": res.data //解析数据列表
-                    };
-                },
-                done: function (res, curr, count) {
-                    staffMainPageZtreeMaxHeight();
-                    var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(staffMainPageModuleCode);
-                    var status_table_index = $.inArray("3", curFunctionButtonGroup);
-                    if (status_table_index != -1) {
-                        $(".layui-unselect.layui-form-checkbox").show();
-                    } else {
-                        $(".layui-unselect.layui-form-checkbox").hide();
-                    }
-                    if (BaseUtils.checkLoginTimeoutStatus()) {
-                        return;
-                    }
-                    BaseUtils.checkIsLoginTimeOut(res.status);
-
-                }
-            });*/
 
             //监听行工具事件
             staffMainPageTable.on('tool(staff_mainPage_grid)', function(obj){
@@ -380,7 +263,6 @@ var SnippetMainPagestaff = function() {
             layuiForm.on('checkbox(lock)', function(obj){
                 var statusValue = 0;
                 // 选中返回 true  没有选中返回false
-                var isChecked = obj.elem.checked;
                 var lockChecked = $(obj.elem).attr("checked");
                 if (lockChecked == undefined || lockChecked == 'undefined' || typeof (lockChecked) == undefined) {
                     statusValue = 1;
@@ -411,12 +293,9 @@ var SnippetMainPagestaff = function() {
      * 刷新grid
      */
     var staffMainPageRefreshGrid = function () {
+        var searchSondition = $("#staff-query-form").serializeJSON();
         staffMainPageTable.reload('staff_mainPage_grid',{
-            where: {   //传递额外参数
-                'pid' : staffMainPagePid,
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
-            },
+            where: searchSondition,
             page: {
                  curr: 1 //重新从第 1 页开始
              }
@@ -424,13 +303,34 @@ var SnippetMainPagestaff = function() {
     };
 
     /**
-     * 刷新grid和tree
+     * 初始化 select 组件
      */
-    var staffMainPageRefreshGridAndTree = function () {
-        staffMainPageRefreshGrid();
-        //刷新树
-        staffMainPageRereshExpandNode(staffMainPagePid);
-    };
+    var initSelectpicker = function () {
+        // 职务 select
+        BaseUtils.dictDataSelect("staff_position", function (data) {
+            var $staffPosition = $("#staffPosition");
+            Object.keys(data).forEach(function(key){
+                $staffPosition.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+            });
+            //必须加，刷新select
+            $staffPosition .selectpicker('refresh');
+        });
+        // 省市区 select
+        BaseUtils.distDataSelect("510100", function (data) {
+            var $district = $("#district");
+            Object.keys(data).forEach(function(key){
+                $district.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+            });
+            //必须加，刷新select
+            $district .selectpicker('refresh');
+        });
+        // 城市绑定监听选择事件
+        $("#city").on('changed.bs.select',function(e){
+            console.log(e.target.value);
+        });
+
+
+    }
 
     /**
      * 初始化表单提交
@@ -439,28 +339,63 @@ var SnippetMainPagestaff = function() {
         $('#staff_mainPage_dataSubmit_form_submit').click(function(e) {
             e.preventDefault();
             BaseUtils.formInputTrim(staffMainPageSubmitFormId);
-            if ($("#staff_mainPage_dataSubmit_form_parent_name").val() == "") {
-                staffMainPagePid = 0;
-                staffMainPageParentName = "";
-            }
             staffMainPageSubmitForm.validate({
                 rules: {
-                    staffCode: {
+                    staffNumber: {
                         required: true,
-                        alnumCode:true,
-                        maxlength: 32
+                        alnum:true,
+                        maxlength: 20
                     },
                     staffName: {
+                        required: true,
+                        chcharacterNum:true,
+                        maxlength: 32
+                    },
+                    staffNickName: {
                         required: true,
                         alnumName:true,
                         maxlength: 32
                     },
-                    priority: {
-                        range: [0,999]
+                    mobilePhone: {
+                        required: true,
+                        isMobile:true
                     },
-                    description: {
-                        illegitmacy:true,
+                    staffIdentiyCard: {
+                        required: false,
+                        idCardNo:true
+                    },
+                    staffEmail: {
+                        required: true,
+                        email:true,
+                        maxlength: 60
+                    },
+                    entryDate: {
+                        required: true
+                    },
+                    staffQq: {
+                        required: false,
+                        isQq:true,
+                        maxlength: 13
+                    },
+                    staffWechat: {
+                        required: false,
+                        accountingNumber:true,
+                        maxlength: 20
+                    },
+                    staffWeiBo: {
+                        required: false,
+                        url:true,
+                        maxlength: 200
+                    },
+                    street: {
+                        chcharacterNum:true,
                         maxlength: 50
+                    },
+                    staffEquipment: {
+                        maxlength: 200
+                    },
+                    staffIntro: {
+                        maxlength: 350
                     }
                 },
                 errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
@@ -495,10 +430,6 @@ var SnippetMainPagestaff = function() {
                 return;
             }
             BaseUtils.modalBlock("#staff_mainPage_dataSubmit_form_modal");
-            $("#staff_mainPage_dataSubmit_form input[name='systemCode']").val(BaseUtils.systemCode);
-            $("#staff_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
-            $("#staff_mainPage_dataSubmit_form input[name='pid']").val(staffMainPagePid);
-
             $encryptPostAjax({
                 url:serverUrl + "v1/staff/s",
                 data:staffMainPageSubmitForm.serializeJSON(),
@@ -508,11 +439,11 @@ var SnippetMainPagestaff = function() {
                 if (response.success) {
                     // toastr.success(BaseUtils.saveSuccessMsg);
                     // 刷新表格
-                    staffMainPageRefreshGridAndTree();
+                    staffMainPageRefreshGrid();
                     // 关闭 dialog
                     staffMainPageFormModal.modal('hide');
                 } else if (response.status == 409) {
-                    staffMainPageRefreshGridAndTree();
+                    staffMainPageRefreshGrid();
                 }
             }, function (data) {
                 BaseUtils.modalUnblock("#staff_mainPage_dataSubmit_form_modal");
@@ -540,11 +471,11 @@ var SnippetMainPagestaff = function() {
         if (obj != null) {
             delData = {
                 'id' : obj.data.id,
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
+                'userId' : obj.data.userId
             }
         } else {
             var idsArray = [];
+            var userIdsArray = [];
             // 获取选中的数据对象
             var checkRows = staffMainPageTable.checkStatus('staff_mainPage_grid');
             //获取选中行的数据
@@ -552,13 +483,13 @@ var SnippetMainPagestaff = function() {
             if (checkData.length > 0) {
                 $.each(checkData, function(index,element){
                     idsArray.push(element.id);
+                    userIdsArray.push(element.userId);
                 });
             }
             ajaxDelUrl = serverUrl + "v1/staff/b/d";
             delData = {
                 'ids' : JSON.stringify(idsArray),
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
+                'otherIds': JSON.stringify(userIdsArray)
             }
         }
         if (delData != null) {
@@ -577,9 +508,8 @@ var SnippetMainPagestaff = function() {
                     if (response.success) {
                         if (obj != null) {
                             obj.del();
-                            staffMainPageRereshExpandNode(staffMainPagePid);
                         } else {
-                            staffMainPageRefreshGridAndTree();
+                            staffMainPageRefreshGrid();
                         }
                     }
                 }, function (data) {
@@ -602,16 +532,21 @@ var SnippetMainPagestaff = function() {
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
+            var userId = $(obj.elem.outerHTML).attr("userid");
+            var curDataParam = {
+                "id" : userId,
+                "dataVersion" : dataVersion
+            }
             putData = {
                 'id' : obj.value,
                 'status' : status,
-                'dataVersion':dataVersion,
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
+                'putParams' : JSON.stringify(curDataParam),
+                'otherIds':userId
             }
         } else {
             var idsArray = [];
             var putParams = [];
+            var userIdsArray = [];
             // 获取选中的数据对象
             var checkRows = staffMainPageTable.checkStatus('staff_mainPage_grid');
             //获取选中行的数据
@@ -619,20 +554,18 @@ var SnippetMainPagestaff = function() {
             if (checkData.length > 0) {
                 $.each(checkData, function(index,element){
                     var curDataParam = {
-                        "id":element.id,
-                        "dataVersion":element.dataVersion
+                        "id" : element.userId,
+                        "dataVersion" : element.dataVersion
                     }
                     putParams.push(curDataParam);
                     idsArray.push(element.id);
+                    userIdsArray.push(element.userId);
                 });
-
-                ajaxPutUrl = serverUrl + "v1/staff/b/p";
                 putData = {
                     'putParams' : JSON.stringify(idsArray),
                     'ids': JSON.stringify(idsArray),
                     'status' : status,
-                    'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
+                    'otherIds':JSON.stringify(userIdsArray)
                 }
             }
 
@@ -646,7 +579,7 @@ var SnippetMainPagestaff = function() {
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
                   if (response.success) {
-                    staffMainPageRefreshGridAndTree();
+                      staffMainPageRefreshGrid();
                   }  else if (response.status == 202) {
                     if (status == 1) {
                         obj.othis.removeClass("layui-form-checked");
@@ -694,9 +627,7 @@ var SnippetMainPagestaff = function() {
         }, function (response) {
             BaseUtils.htmPageUnblock();
             if (response.success) {
-                staffMainPagePid = 0;
-                staffMainPageZtreeNodeList = [];
-                staffMainPageRefreshGridAndTree();
+                staffMainPageRefreshGrid();
             }
         },function (response) {
             BaseUtils.htmPageUnblock();
@@ -791,14 +722,12 @@ var SnippetMainPagestaff = function() {
 
             window.onresize = function(){
                 staffMainPageTable.resize("staff_mainPage_grid");
-                staffMainPageZtreeMaxHeight();
             }
-
         }
     };
 }();
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetMainPagestaff.init();
+    SnippetMainPageStaff.init();
 });
