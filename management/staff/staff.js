@@ -329,6 +329,18 @@ var SnippetMainPageStaff = function() {
             console.log(e.target.value);
         });
 
+        $('#portrait-la-cloud-upload-btn').click(function(e) {
+            e.preventDefault();
+            layer.open({
+                type: 2,
+                title: '上传头像',
+                offset: '100px',
+                content:  ['portrait.html', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
+                area: ['1010px', '680px']
+            });
+            return false;
+        });
+
 
     }
 
@@ -684,6 +696,7 @@ var SnippetMainPageStaff = function() {
             staffMainPageInitDataGrid();
             staffMainPageInitModalDialog();
             staffMainPageFormSubmitHandle();
+            initSelectpicker();
             $('#staff_mainPage_delete_btn').click(function(e) {
                 e.preventDefault();
                 if (BaseUtils.checkLoginTimeoutStatus()) {

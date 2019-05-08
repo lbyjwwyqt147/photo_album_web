@@ -31,7 +31,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(BaseUtils.tipsFormat(response.message));
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    }
                 }
             },
             error: function (data) {
@@ -85,7 +87,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(BaseUtils.tipsFormat(response.message));
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    }
                 }
             },
             error: function (data) {
@@ -127,7 +131,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(response.message);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(response.message);
+                    }
                 }
             },
             error: function (data) {
@@ -185,7 +191,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(response.message);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(response.message);
+                    }
                 }
             },
             error: function (data) {
@@ -304,7 +312,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(response.message);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(response.message);
+                    }
                 }
             },
             error: function (data) {
@@ -360,7 +370,9 @@ jQuery(document).ready(function() {
                 } else if (response.status == 504) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
-                    toastr.error(response.message);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(response.message);
+                    }
                 }
 
             },
@@ -483,7 +495,9 @@ jQuery(document).ready(function() {
                         tableData = JSON.parse(decryptData);
                     }
                 } else {
-                    toastr.error(res.message);
+                    if ($.trim(res.message) != '') {
+                        toastr.error(res.message);
+                    }
                 }
 
                 return {
