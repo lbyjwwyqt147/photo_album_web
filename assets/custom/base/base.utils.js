@@ -355,6 +355,23 @@ var BaseUtils = {
     },
 
     /**
+     * 获取地址栏中的参数
+     * @param name
+     * @returns {string}
+     */
+    getUrlParams: function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        //获取url中"?"符后的字符串并正则匹配
+        var r = window.location.search.substr(1).match(reg);
+        var context = "";
+        if (r != null)
+            context = r[2];
+        reg = null;
+        r = null;
+        return context == null || context == "" || context == "undefined" ? "" : context;
+    },
+
+    /**
      *  时间戳格式化为日期 返回 2018-08-09 13:48:10
      *  @param time
      * @param timestamp yyyy-MM-dd HH:mm:ss

@@ -5,7 +5,7 @@ $(function () {
   var URL = window.URL || window.webkitURL;
   var $image = $('#head_portrait_image');
   var options = {
-    aspectRatio: 16 / 9,
+    aspectRatio: 4 / 3, //裁剪框比例  16 / 9     4 / 3    1 / 1
     preview: '.img-preview',
     crop: function (e) {
       console.log(Math.round(e.detail.x));
@@ -152,8 +152,11 @@ $(function () {
           $(this).data('option', -data.option);
           break;
 
-        case 'getCroppedCanvas':
+        case 'getCroppedCanvas':  //上传头像
           if (result) {
+            // 将图片转为 base64 数据
+           //   var imgBase = result.toDataURL('image/jpeg');
+           //  var iamgeData = {imgBase : imgBase};
             // Bootstrap's Modal
             $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
 
@@ -241,11 +244,98 @@ $(function () {
           $image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
           $inputImage.val('');
         } else {
-          window.alert('Please choose an image file.');
+          $("#no-select-image").show();
         }
       }
     });
   } else {
     $inputImage.prop('disabled', true).parent().addClass('disabled');
   }
+
+
+  //绑定上传事件
+  $('#portait_up-btn-ok').on('click',function(){
+    var img_src = $image.attr("src");
+    if(img_src == "" || img_src.indexOf("user/profile-photo.jpg") != -1){
+      $("#no-select-image").show();
+      return false;
+    }
+    var businessId = 0;
+    var businessType = 0;
+    var curUrl = location.search; //获取url中"?"符后的字串
+    if (curUrl.indexOf("?") != -1) {    //判断是否有参数
+      var param = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+      var params = param.split("&");   //用&进行分隔 （如果只有一个参数 直接用等号进分隔； 如果有多个参数 要用&号分隔 再用等号进行分隔）
+      var businessIdParams = params[0].split("=");
+      businessId = businessIdParams[1];
+      var businessTypeParams = params[1].split("=");
+      businessType = businessTypeParams[1];
+    }
+    $image.cropper('getCroppedCanvas').toBlob(function(blob){
+      var formData = new FormData();  //这里创建FormData()对象
+      formData.append('file', blob);  //给表单对象中添加一个name为file的文件  blod是这个插件选择文件后返回的文件对象
+      console.log(blob);
+      $.ajax({
+        url: BaseUtils.cloudServerAddress + "v1/file/upload/batch",  //这里我上传的是我自己开源的一个文件服务器  github地址:https://github.com/Admin1024Admin/FileServer.git
+        type: "POST",
+        headers: BaseUtils.cloudHeaders,
+        crossDomain: true,
+        cache: false,
+        timeout: 60000,
+        data: formData,
+        contentType: false,  //这里需要注意
+        processData: false,
+        success: function(data, textStatus){
+          console.log(data)
+          if(data.result=="ok"){
+            // 上传后的头像url
+            var portraitUrl = null;
+            // 更新头像url
+            var _url = BaseUtils.serverAddress;
+            switch (businessType) {
+              case 1:
+                // 员工头像处理
+                _url =  updatePortaitUrl + "staff/portrait/p"
+                break;
+              case 2:
+                // 顾客头像处理
+                _url =  updatePortaitUrl + ""
+                break;
+              default:
+                break;
+            }
+            //异步更新头像地址
+            $.ajax({
+              url: _url,
+              dataType: "json",
+              cache: false,
+              async: true,
+              type: "POST",
+              traditional:true,
+              data: {
+                id: businessId,
+                portrait: portraitUrl,
+                portraitId: portraitUrl,
+                _method :'PUT'
+              },
+              headers: BaseUtils.serverHeaders,
+              crossDomain: true,
+              timeout: 60000,
+              success: function (data) {
+
+              },
+              error: function (data) {
+                $("#up-error").show();
+              }
+            });
+          }
+        },
+        error: function(){
+          $("#up-error").show();
+        }
+      });
+    })
+  });
+
+
 });

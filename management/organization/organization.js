@@ -241,7 +241,7 @@ var SnippetMainPageOrganization = function() {
                     {field:'fullParentCode', title:'上级机构代码'},
                     {field:'seq', title:'优先级'},
                     {field:'description', title:'描述', hide:true},
-                    {field:'orgStatus', title:'状态', align: 'center', unresize:true,
+                    {field:'orgStatus', title:'状态', align: 'center', fixed: 'right', unresize:true,
                         templet : function (row) {
                             var value = row.orgStatus;
                             var spanCss = "m-badge--success";

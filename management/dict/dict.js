@@ -245,7 +245,7 @@ var SnippetMainPageDict = function() {
                     {field:'priority', title:'优先级'},
                     {field:'fullParentCode', title:'完整父级代码'},
                     {field:'description', title:'描述'},
-                    {field:'status', title:'状态', align: 'center', unresize:true,
+                    {field:'status', title:'状态', align: 'center', fixed: 'right', unresize:true,
                         templet : function (row) {
                             var value = row.status;
                             var spanCss = "m-badge--success";

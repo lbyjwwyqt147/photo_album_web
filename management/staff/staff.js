@@ -126,6 +126,12 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(save_btn_html);
 
 
+                var table_ejection_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 员工离职操作" lay-event="ejection">\n'
+                table_ejection_btn_html += '<i class="la la-user-times"></i>\n';
+                table_ejection_btn_html += '</a>\n';
+                tableToolbarHtml.append(table_ejection_btn_html);
+
+
                 var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改员工信息" lay-event="edit">\n'
                 edit_btn_html += '<i class="la la-edit"></i>\n';
                 edit_btn_html += '</a>\n';
@@ -147,6 +153,7 @@ var SnippetMainPageStaff = function() {
                 table_del_btn_html += '<i class="la la-trash-o"></i>\n';
                 table_del_btn_html += '</a>\n';
                 tableToolbarHtml.append(table_del_btn_html);
+
             }
             var sync_index = $.inArray("10", buttonGroup);
             if (sync_index != -1) {
@@ -189,7 +196,7 @@ var SnippetMainPageStaff = function() {
                         }
                         },
                     {field:'staffNumber', title:'工号'},
-                    {field:'staffName', title:'姓名'},
+                    {field:'staffName', title:'姓名', fixed: true},
                     {field:'staffNickName', title:'昵称'},
                     {field:'mobilePhone', title:'手机号'},
                     {field:'staffPositionText', title:'职务'},
@@ -202,7 +209,7 @@ var SnippetMainPageStaff = function() {
                             return value + "月";
                         }
                      },
-                    {field:'staffStatus', title:'状态', align: 'center', unresize:true,
+                    {field:'staffStatus', title:'状态', align: 'center',  fixed: 'right', unresize:true,
                         templet : function (row) {
                             var value = row.staffStatus;
                             var spanCss = "m-badge--success";
@@ -294,11 +301,12 @@ var SnippetMainPageStaff = function() {
      */
     var staffMainPageRefreshGrid = function () {
         var searchSondition = $("#staff-query-form").serializeJSON();
-        staffMainPageTable.reload('staff_mainPage_grid',{
+        staffMainPageTable.reload({
             where: searchSondition,
             page: {
                  curr: 1 //重新从第 1 页开始
-             }
+             },
+            headers: BaseUtils.serverHeaders
         });
     };
 
@@ -306,6 +314,17 @@ var SnippetMainPageStaff = function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            //入职日期控件
+            laydate.render({
+                elem: '#entryDate'
+            });
+            //出生日期控件
+            laydate.render({
+                elem: '#birthday'
+            });
+        });
         // 职务 select
         BaseUtils.dictDataSelect("staff_position", function (data) {
             var $staffPosition = $("#staffPosition");
@@ -335,8 +354,20 @@ var SnippetMainPageStaff = function() {
                 type: 2,
                 title: '上传头像',
                 offset: '100px',
-                content:  ['portrait.html', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
-                area: ['1010px', '680px']
+                resize: false,
+                content:  ['portrait.html?businessId=10&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
+                area: ['1010px', '600px'],
+                btn: ['跳过'],
+                yes: function(index, layero){  // 确定按钮回调方法
+                    // 刷新表格
+                    staffMainPageRefreshGrid();
+                    layer.close(index);
+                },
+                cancel: function(index, layero){  // 右上角关闭按钮触发的回调
+                    staffMainPageRefreshGrid();
+                    layer.close(index);
+                    return false;
+                }
             });
             return false;
         });
