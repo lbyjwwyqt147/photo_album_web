@@ -164,7 +164,14 @@ var SnippetMainPageStaff = function() {
                 sync_btn_html += '</li>\n';
                 gridHeadToolsHtml.append(sync_btn_html);
             }
+
+            var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
+            table_del_btn_html += '<i class="la la-eye"></i>\n';
+            table_del_btn_html += '</a>\n';
+            tableToolbarHtml.append(table_del_btn_html);
         }
+        // Tooltip
+        $('[data-toggle="tooltip"]').tooltip();
     };
 
     /**
@@ -301,12 +308,11 @@ var SnippetMainPageStaff = function() {
      */
     var staffMainPageRefreshGrid = function () {
         var searchSondition = $("#staff-query-form").serializeJSON();
-        staffMainPageTable.reload({
+        staffMainPageTable.reload('staff_mainPage_grid', {
             where: searchSondition,
             page: {
                  curr: 1 //重新从第 1 页开始
-             },
-            headers: BaseUtils.serverHeaders
+             }
         });
     };
 
@@ -356,7 +362,7 @@ var SnippetMainPageStaff = function() {
                 offset: '100px',
                 resize: false,
                 content:  ['portrait.html?businessId=10&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
-                area: ['1010px', '600px'],
+                area: ['1010px', '650px'],
                 btn: ['跳过'],
                 yes: function(index, layero){  // 确定按钮回调方法
                     // 刷新表格
@@ -474,7 +480,7 @@ var SnippetMainPageStaff = function() {
             }
             BaseUtils.modalBlock("#staff_mainPage_dataSubmit_form_modal");
             $encryptPostAjax({
-                url:serverUrl + "v1/staff/s",
+                url:serverUrl + "v1/intrude/staff/s",
                 data:staffMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
@@ -509,7 +515,7 @@ var SnippetMainPageStaff = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/staff/d";
+        var ajaxDelUrl = serverUrl + "v1/intrude/staff/d";
         var delData = null;
         if (obj != null) {
             delData = {
@@ -529,7 +535,7 @@ var SnippetMainPageStaff = function() {
                     userIdsArray.push(element.userId);
                 });
             }
-            ajaxDelUrl = serverUrl + "v1/staff/b/d";
+            ajaxDelUrl = serverUrl + "v1/intrude/staff/b/d";
             delData = {
                 'ids' : JSON.stringify(idsArray),
                 'otherIds': JSON.stringify(userIdsArray)
@@ -571,7 +577,7 @@ var SnippetMainPageStaff = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/staff/p";
+        var ajaxPutUrl = serverUrl + "v1/intrude/staff/p";
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
@@ -665,7 +671,7 @@ var SnippetMainPageStaff = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/staff/sync",
+            url: serverUrl + "v1/intrude/staff/sync",
             headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();

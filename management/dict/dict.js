@@ -500,7 +500,7 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
 
             $encryptPostAjax({
-                url:serverUrl + "v1/dict/s",
+                url:serverUrl + "v1/intrude/dict/s",
                 data:dictMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
@@ -535,7 +535,7 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/dict/d";
+        var ajaxDelUrl = serverUrl + "v1/intrude/dict/d";
         var delData = null;
         if (obj != null) {
             delData = {
@@ -554,7 +554,7 @@ var SnippetMainPageDict = function() {
                     idsArray.push(element.id);
                 });
             }
-            ajaxDelUrl = serverUrl + "v1/dict/b/d";
+            ajaxDelUrl = serverUrl + "v1/intrude/dict/b/d";
             delData = {
                 'ids' : JSON.stringify(idsArray),
                 'credential': BaseUtils.credential,
@@ -598,7 +598,7 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/dict/p";
+        var ajaxPutUrl = serverUrl + "v1/intrude/dict/p";
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
@@ -626,7 +626,7 @@ var SnippetMainPageDict = function() {
                     idsArray.push(element.id);
                 });
 
-                ajaxPutUrl = serverUrl + "v1/dict/b/p";
+                ajaxPutUrl = serverUrl + "v1/intrude/dict/b/p";
                 putData = {
                     'putParams' : JSON.stringify(idsArray),
                     'ids': JSON.stringify(idsArray),
@@ -689,7 +689,7 @@ var SnippetMainPageDict = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/dict/sync",
+            url: serverUrl + "v1/intrude/dict/sync",
             headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
