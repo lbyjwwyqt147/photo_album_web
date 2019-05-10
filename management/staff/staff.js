@@ -340,44 +340,38 @@ var SnippetMainPageStaff = function() {
             //必须加，刷新select
             $staffPosition .selectpicker('refresh');
         });
+        // 技能(特长)  multi select
+        BaseUtils.dictDataSelect("staff_skill", function (data) {
+            var $skill = $("#skill");
+            Object.keys(data).forEach(function(key){
+                $skill.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+            });
+            $skill.select2({
+                placeholder: "技能(特长)",
+            });
+        });
+
         // 省市区 select
         BaseUtils.distDataSelect("510100", function (data) {
-            var $district = $("#district");
+            var $city = $("#city");
             Object.keys(data).forEach(function(key){
-                $district.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                $city.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
             //必须加，刷新select
-            $district .selectpicker('refresh');
+            $city .selectpicker('refresh');
         });
         // 城市绑定监听选择事件
         $("#city").on('changed.bs.select',function(e){
             console.log(e.target.value);
-        });
-
-        $('#portrait-la-cloud-upload-btn').click(function(e) {
-            e.preventDefault();
-            layer.open({
-                type: 2,
-                title: '上传头像',
-                offset: '100px',
-                resize: false,
-                content:  ['portrait.html?businessId=10&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
-                area: ['1010px', '650px'],
-                btn: ['跳过'],
-                yes: function(index, layero){  // 确定按钮回调方法
-                    // 刷新表格
-                    staffMainPageRefreshGrid();
-                    layer.close(index);
-                },
-                cancel: function(index, layero){  // 右上角关闭按钮触发的回调
-                    staffMainPageRefreshGrid();
-                    layer.close(index);
-                    return false;
-                }
+            BaseUtils.distDataSelect(e.target.value, function (data) {
+                var $district = $("#district");
+                Object.keys(data).forEach(function(key){
+                    $district.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                });
+                //必须加，刷新select
+                $district .selectpicker('refresh');
             });
-            return false;
         });
-
 
     }
 
@@ -480,17 +474,36 @@ var SnippetMainPageStaff = function() {
             }
             BaseUtils.modalBlock("#staff_mainPage_dataSubmit_form_modal");
             $encryptPostAjax({
-                url:serverUrl + "v1/intrude/staff/s",
+                url:serverUrl + "v1/verify/staff/s",
                 data:staffMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
                 BaseUtils.modalUnblock("#staff_mainPage_dataSubmit_form_modal");
                 if (response.success) {
                     // toastr.success(BaseUtils.saveSuccessMsg);
-                    // 刷新表格
-                    staffMainPageRefreshGrid();
                     // 关闭 dialog
                     staffMainPageFormModal.modal('hide');
+                    if ( $("#staffPortraitId").val() == '') {
+                        layer.open({
+                            type: 2,
+                            title: '上传头像',
+                            offset: '90px',
+                            resize: false,
+                            content:  ['portrait.html?businessId='+ response.data +'&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
+                            area: ['1010px', '650px'],
+                            btn: ['跳过'],
+                            yes: function(index, layero){  // 确定按钮回调方法
+                                // 刷新表格
+                                staffMainPageRefreshGrid();
+                                layer.close(index);
+                            },
+                            cancel: function(index, layero){  // 右上角关闭按钮触发的回调
+                                staffMainPageRefreshGrid();
+                                layer.close(index);
+                                return false;
+                            }
+                        });
+                    }
                 } else if (response.status == 409) {
                     staffMainPageRefreshGrid();
                 }
@@ -515,7 +528,7 @@ var SnippetMainPageStaff = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/intrude/staff/d";
+        var ajaxDelUrl = serverUrl + "v1/verify/staff/d";
         var delData = null;
         if (obj != null) {
             delData = {
@@ -534,11 +547,11 @@ var SnippetMainPageStaff = function() {
                     idsArray.push(element.id);
                     userIdsArray.push(element.userId);
                 });
-            }
-            ajaxDelUrl = serverUrl + "v1/intrude/staff/b/d";
-            delData = {
-                'ids' : JSON.stringify(idsArray),
-                'otherIds': JSON.stringify(userIdsArray)
+                ajaxDelUrl = serverUrl + "v1/verify/staff/d/b";
+                delData = {
+                    'ids' : JSON.stringify(idsArray),
+                    'otherIds': JSON.stringify(userIdsArray)
+                }
             }
         }
         if (delData != null) {
@@ -577,7 +590,7 @@ var SnippetMainPageStaff = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/intrude/staff/p";
+        var ajaxPutUrl = serverUrl + "v1/verify/staff/p";
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
@@ -617,7 +630,6 @@ var SnippetMainPageStaff = function() {
                     'otherIds':JSON.stringify(userIdsArray)
                 }
             }
-
         }
         BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
@@ -671,7 +683,7 @@ var SnippetMainPageStaff = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/intrude/staff/sync",
+            url: serverUrl + "v1/verify/staff/sync",
             headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();

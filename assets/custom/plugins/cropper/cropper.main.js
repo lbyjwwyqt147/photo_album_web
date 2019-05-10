@@ -274,9 +274,26 @@ $(function () {
     $image.cropper('getCroppedCanvas').toBlob(function(blob){
       var formData = new FormData();  //这里创建FormData()对象
       formData.append('file', blob);  //给表单对象中添加一个name为file的文件  blod是这个插件选择文件后返回的文件对象
-      console.log(blob);
+      formData.append('systemCode', BaseUtils.systemCode);
+      var businessCode = "100";
+      // 更新头像url
+      var _url = BaseUtils.serverAddress;
+      switch (businessType) {
+        case 1:
+          // 员工头像处理
+          _url =  _url + "v1/verify/staff/s/portrait"
+          break;
+        case 2:
+          // 顾客头像处理
+          businessCode = "200";
+          _url =  _url + ""
+          break;
+        default:
+          break;
+      }
+      formData.append('businessCode', businessCode);
       $.ajax({
-        url: BaseUtils.cloudServerAddress + "v1/file/upload/batch",  //这里我上传的是我自己开源的一个文件服务器  github地址:https://github.com/Admin1024Admin/FileServer.git
+        url: BaseUtils.cloudServerAddress + "v1/verify/file/upload/batch",  //这里我上传的是我自己开源的一个文件服务器  github地址:https://github.com/Admin1024Admin/FileServer.git
         type: "POST",
         headers: BaseUtils.cloudHeaders,
         crossDomain: true,
@@ -290,20 +307,6 @@ $(function () {
           if(data.result=="ok"){
             // 上传后的头像url
             var portraitUrl = null;
-            // 更新头像url
-            var _url = BaseUtils.serverAddress;
-            switch (businessType) {
-              case 1:
-                // 员工头像处理
-                _url =  updatePortaitUrl + "staff/portrait/p"
-                break;
-              case 2:
-                // 顾客头像处理
-                _url =  updatePortaitUrl + ""
-                break;
-              default:
-                break;
-            }
             //异步更新头像地址
             $.ajax({
               url: _url,

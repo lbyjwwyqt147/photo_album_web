@@ -43,6 +43,18 @@
 
     /** 表单样式结束  */
 
+    .layui-layer-iframe .layui-layer-btn, .layui-layer-page .layui-layer-btn {
+        padding-top: 10px;
+        background-color: #eee;
+    }
+
+    .layui-layer-btn .layui-layer-btn0 {
+        color: #fff;
+        background-color: #0abb87;
+        border-color: #0abb87;
+        color: #ffffff;
+    }
+
 </style>
 
 
@@ -89,20 +101,6 @@
                             <!--begin::Form-->
                             <form class="m-form m-form--fit m-form--label-align-right" id="staff_mainPage_dataSubmit_form">
                                 <div class="m-portlet__body"style="padding-top: 10px;">
-                                    <div class="form-group m-form__group row">
-                                        <label class="col-lg-2 col-form-label"></label>
-                                        <div class="col-lg-4">
-                                            <span class="m-topbar__userpic">
-                                                 <img src="../../assets/custom/images/user/user_1.jpeg" height="100px" class="m--img-rounded m--marginless" alt="">
-                                           </span>
-                                            <a href="javascript:;" id="portrait-la-cloud-upload-btn" class="btn btn-outline-success m-btn m-btn--icon" style="margin-left: 30px;">
-															<span>
-																<i class="la la-cloud-upload"></i>
-																<span>上传头像</span>
-															</span>
-                                            </a>
-                                        </div>
-                                    </div>
                                     <div class="form-group m-form__group row">
                                         <label class="col-lg-2 col-form-label">工号<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-4">
@@ -157,9 +155,9 @@
 
                                             </select>
                                         </div>
-                                        <label class="col-lg-2 col-form-label">技能</label>
+                                        <label class="col-lg-2 col-form-label">技能(特长)</label>
                                         <div class="col-lg-4">
-                                            <select class="form-control m-bootstrap-select m_selectpicker" multiple name="skill" id="skill"  placeholder="技能" autocomplete="off">
+                                            <select class="form-control m-select2" multiple="multiple"  name="skill" id="skill"  placeholder="技能(特长)" autocomplete="off">
 
                                             </select>
                                         </div>
@@ -180,7 +178,7 @@
                                         <label class="col-lg-2 col-form-label">微博</label>
                                         <div class="col-lg-4">
                                             <div class="m-input-icon m-input-icon--right">
-                                                <input type="text" name="staffWeiBo" class="form-control m-input" placeholder="QQ号" autocomplete="off" >
+                                                <input type="text" name="staffWeiBo" class="form-control m-input" placeholder="微博" autocomplete="off" >
                                             </div>
                                         </div>
                                         <label class="col-lg-2 col-form-label">性别</label>
@@ -201,7 +199,16 @@
                                         <label class="col-lg-2 col-form-label">联系地址</label>
                                         <div class="col-lg-10">
                                             <div class="m-input-icon m-input-icon--right">
-                                                <input type="text" name="staffWeiBo" class="form-control m-input" placeholder="QQ号" autocomplete="off" >
+                                                <select class="form-control m-bootstrap-select m_selectpicker" name="province" id="province"  placeholder="省份" autocomplete="off">
+                                                    <option value="510000">四川省</option>
+                                                </select>
+                                                <select class="form-control m-bootstrap-select m_selectpicker" name="city" id="city"  placeholder="城市" autocomplete="off">
+
+                                                </select>
+                                                <select class="form-control m-bootstrap-select m_selectpicker" name="district" id="district"  placeholder="区" autocomplete="off">
+
+                                                </select>
+                                                <input type="text" name="street" class="form-control m-input" placeholder="详细地址" autocomplete="off" >
                                             </div>
                                         </div>
                                     </div>
@@ -217,7 +224,7 @@
                                         <label class="col-lg-2 col-form-label">个人简介</label>
                                         <div class="col-lg-10">
                                             <div class="m-input-icon m-input-icon--right">
-                                                <textarea style="resize:none" rows="5" class="form-control" id="staffIntro-text" name="staffIntro"  autocomplete="off"></textarea>
+                                                <textarea style="resize:none" rows="8" class="form-control" id="staffIntro-text" name="staffIntro"  autocomplete="off"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -229,6 +236,7 @@
                                         <input type="hidden" class="form-control  m-input" name="createTime" placeholder="createTime"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="staffPortraitId" id="staffPortraitId" placeholder="staffPortraitId"  autocomplete="off">
 
                                     </div>
                                 </div>

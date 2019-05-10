@@ -314,7 +314,7 @@ var BaseUtils = {
     dictDataSelect : function(dictCode, successCallback) {
         $.ajax({
             type: "get",
-            url: BaseUtils.cloudServerAddress + 'dict/combox',
+            url: BaseUtils.cloudServerAddress + 'v1/ignore/dict/combox',
             data:{
                 systemCode : BaseUtils.systemCode,
                 dictCode : dictCode
@@ -338,7 +338,7 @@ var BaseUtils = {
     distDataSelect : function(code, successCallback) {
         $.ajax({
             type: "get",
-            url: BaseUtils.cloudServerAddress + 'area/combox',
+            url: BaseUtils.cloudServerAddress + 'v1/ignore/area/combox',
             data:{
                 systemCode : BaseUtils.systemCode,
                 pid : code

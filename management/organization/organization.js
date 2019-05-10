@@ -408,7 +408,7 @@ var SnippetMainPageOrganization = function() {
             BaseUtils.modalBlock("#organization_mainPage_dataSubmit_form_modal");
             $("#organization_mainPage_dataSubmit_form input[name='parentId']").val(organizationMainPagePid);
             $encryptPostAjax({
-                url:serverUrl + "v1/intrude/organization/s",
+                url:serverUrl + "v1/verify/organization/s",
                 data:organizationMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.serverHeaders()
             }, function (response) {
@@ -441,7 +441,7 @@ var SnippetMainPageOrganization = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/intrude/organization/d";
+        var ajaxDelUrl = serverUrl + "v1/verify/organization/d";
         var delData = null;
         if (obj != null) {
             delData = {
@@ -459,12 +459,12 @@ var SnippetMainPageOrganization = function() {
                 $.each(checkData, function(index,element){
                     idsArray.push(element.id);
                 });
-            }
-            ajaxDelUrl = serverUrl + "v1/intrude/organization/b/d";
-            delData = {
-                'ids' : JSON.stringify(idsArray),
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
+                ajaxDelUrl = serverUrl + "v1/verify/organization/d/b";
+                delData = {
+                    'ids' : JSON.stringify(idsArray),
+                    'credential': BaseUtils.credential,
+                    'systemCode': BaseUtils.systemCode
+                }
             }
         }
         if (delData != null) {
@@ -504,7 +504,7 @@ var SnippetMainPageOrganization = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/intrude/organization/p";
+        var ajaxPutUrl = serverUrl + "v1/verify/organization/p";
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
@@ -529,7 +529,7 @@ var SnippetMainPageOrganization = function() {
                     putParams.push(curDataParam);
                     idsArray.push(element.id);
                 });
-                ajaxPutUrl = serverUrl + "v1/intrude/organization/b/p";
+                ajaxPutUrl = serverUrl + "v1/verify/organization/p/b";
                 putData = {
                     'ids' : JSON.stringify(idsArray),
                     'putParams' : JSON.stringify(idsArray),
@@ -588,7 +588,7 @@ var SnippetMainPageOrganization = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/intrude/organization/sync",
+            url: serverUrl + "v1/verify/organization/sync",
             headers: BaseUtils.serverHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();

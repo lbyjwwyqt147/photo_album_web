@@ -500,7 +500,7 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
 
             $encryptPostAjax({
-                url:serverUrl + "v1/intrude/dict/s",
+                url:serverUrl + "v1/verify/dict/s",
                 data:dictMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.cloudHeaders()
             }, function (response) {
@@ -535,7 +535,7 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/intrude/dict/d";
+        var ajaxDelUrl = serverUrl + "v1/verify/dict/d";
         var delData = null;
         if (obj != null) {
             delData = {
@@ -553,12 +553,12 @@ var SnippetMainPageDict = function() {
                 $.each(checkData, function(index,element){
                     idsArray.push(element.id);
                 });
-            }
-            ajaxDelUrl = serverUrl + "v1/intrude/dict/b/d";
-            delData = {
-                'ids' : JSON.stringify(idsArray),
-                'credential': BaseUtils.credential,
-                'systemCode': BaseUtils.systemCode
+                ajaxDelUrl = serverUrl + "v1/verify/dict/d/b";
+                delData = {
+                    'ids' : JSON.stringify(idsArray),
+                    'credential': BaseUtils.credential,
+                    'systemCode': BaseUtils.systemCode
+                }
             }
         }
         if (delData != null) {
@@ -598,7 +598,7 @@ var SnippetMainPageDict = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/intrude/dict/p";
+        var ajaxPutUrl = serverUrl + "v1/verify/dict/p";
         var putData = null;
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
@@ -626,7 +626,7 @@ var SnippetMainPageDict = function() {
                     idsArray.push(element.id);
                 });
 
-                ajaxPutUrl = serverUrl + "v1/intrude/dict/b/p";
+                ajaxPutUrl = serverUrl + "v1/verify/dict/p/b";
                 putData = {
                     'putParams' : JSON.stringify(idsArray),
                     'ids': JSON.stringify(idsArray),
@@ -635,7 +635,6 @@ var SnippetMainPageDict = function() {
                     'systemCode': BaseUtils.systemCode
                 }
             }
-
         }
         BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
@@ -689,7 +688,7 @@ var SnippetMainPageDict = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/intrude/dict/sync",
+            url: serverUrl + "v1/verify/dict/sync",
             headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
