@@ -33,12 +33,65 @@
 
         <style>
 
+            .m-widget1__title {
+                padding-bottom: 10px;
+            }
+
+            .m-badge.m-badge--success {
+                background-color: #34bfa3;
+                color: #ffffff;
+                margin-bottom: 5px;
+            }
+
             .m-btn--icon.m-btn--icon-only {
                 display: inline-block;
                 position: relative;
                 padding: 0 !important;
                 width: 26px;
                 height: 25px;
+            }
+
+            .form-group {
+                margin-bottom: 0px;
+            }
+
+            label.col-form-label {
+                padding-left: 15px;
+                padding-right: 5px;
+            }
+            .col-form-label {
+                padding: 1px;
+            }
+
+
+            .m-portlet .m-portlet__head {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: row;
+                flex-direction: row;
+                -webkit-box-align: stretch;
+                -ms-flex-align: stretch;
+                align-items: stretch;
+                -webkit-box-pack: justify;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                padding:10px 10px 10px 10px ;
+                height: 4em;
+                position: relative;
+            }
+
+            .m-portlet .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-icon {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                line-height: 0;
+                padding: 0 5px 0 0;
             }
 
         </style>
@@ -68,19 +121,19 @@
                                                 <h3 class="m-widget1__title" style="padding-bottom: 15px;">Orders</h3>
                                                 <span class="m-widget1__desc" style="padding-bottom: 15px;">System bugs and issues</span>
                                                 <div class="m-demo-icon__preview">
-                                                    <a href="javascript:void(0);" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip" title="121212" >
+                                                    <a href="javascript:void(0);" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip" title="121212" >
                                                         <i class="la la-mobile-phone"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
+                                                    <a href="javascript:void(0);" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
                                                         <i class="la la-qq"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
+                                                    <a href="javascript:void(0);" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
                                                         <i class="la la-weixin"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
+                                                    <a href="javascript:void(0);" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
                                                         <i class="la la-weibo"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
+                                                    <a href="javascript:void(0);" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="tooltip">
                                                         <i class="la la-envelope"></i>
                                                     </a>
                                                 </div>
@@ -90,22 +143,25 @@
                                     <div class="m-widget1__item">
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
-                                                <h3 class="m-widget1__title">Orders</h3>
+                                                <h3 class="m-widget1__title">关于我</h3>
                                                 <span class="m-widget1__desc">Weekly Customer Orders</span>
-                                            </div>
-                                            <div class="col m--align-right">
-                                                <span class="m-widget1__number m--font-danger">+1,800</span>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+                                                <span class="m-widget1__desc">胡歌喜欢摄影，也喜欢写字，他视角独特，充满着奇思妙想。他有着极丰富的情感，和对生活的热情，他能点燃观众心中爱的火焰；胡歌积极、乐观、坚强，他脚踏实地地做好每一件事，真诚地对待身边每一个人</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="m-widget1__item">
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
-                                                <h3 class="m-widget1__title">Issue Reports</h3>
-                                                <span class="m-widget1__desc">System bugs and issues</span>
-                                            </div>
-                                            <div class="col m--align-right">
-                                                <span class="m-widget1__number m--font-success">-27,49%</span>
+                                                <h3 class="m-widget1__title">技能</h3>
+
+                                                <div class="m-demo__preview m-demo__preview--btn">
+                                                    <span class="m-badge m-badge--success m-badge--wide">pending</span>
+                                                    <span class="m-badge m-badge--success m-badge--wide">pending</span>
+                                                    <span class="m-badge m-badge--success m-badge--wide">pending</span>
+                                                    <span class="m-badge m-badge--success m-badge--wide">pending</span>
+                                                    <span class="m-badge m-badge--success m-badge--wide">pending</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -113,62 +169,99 @@
                                 <!--end:: left -->
                             </div>
                             <div class="col-xl-4">
+                                <!--begin:: middle-->
+                                <div class="m-widget1">
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">基本信息</h3>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-form-label m-widget1__desc">Full Name:</label>
+                                                    <span class="col-form-label m-widget1__desc" >System bugs and issues</span>
 
-                                <!--begin:: Widgets/Daily Sales-->
-                                <div class="m-widget14">
-                                    <div class="m-widget14__header m--margin-bottom-30">
-                                        <h3 class="m-widget14__title">
-                                            Daily Sales
-                                        </h3>
-                                        <span class="m-widget14__desc">
-													Check out each collumn for more details
-												</span>
-                                    </div>
-                                    <div class="m-widget14__chart" style="height:120px;"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                        <canvas id="m_chart_daily_sales" width="471" height="120" class="chartjs-render-monitor" style="display: block; width: 471px; height: 120px;"></canvas>
-                                    </div>
-                                </div>
+                                                    <label class="col-form-label m-widget1__desc">Contact Number:</label>
+                                                    <span class="col-form-label m-widget1__desc" >System bugs and issues</span>
 
-                                <!--end:: Widgets/Daily Sales-->
-                            </div>
-                            <div class="col-xl-4">
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-form-label m-widget1__desc">Full Name:</label>
+                                                    <span class="col-form-label m-widget1__desc">System bugs and issues</span>
+                                                    <label class="col-form-label m-widget1__desc">Contact Number:</label>
+                                                    <span class="col-form-label m-widget1__desc" >System bugs and issues</span>
+                                                </div>
 
-                                <!--begin:: Widgets/Profit Share-->
-                                <div class="m-widget14">
-                                    <div class="m-widget14__header">
-                                        <h3 class="m-widget14__title">
-                                            Profit Share
-                                        </h3>
-                                        <span class="m-widget14__desc">
-													Profit Share between customers
-												</span>
-                                    </div>
-                                    <div class="row  align-items-center">
-                                        <div class="col">
-                                            <div id="m_chart_profit_share" class="m-widget14__chart" style="height: 160px">
-                                                <div class="m-widget14__stat">45</div>
-                                                <svg xmlns:ct="http://gionkunz.github.com/chartist-js/ct" width="100%" height="100%" class="ct-chart-donut" style="width: 100%; height: 100%;"><g class="ct-series custom"><path d="M170.702,108.314A66.5,66.5,0,0,0,110.531,13.5" class="ct-slice-donut" ct:value="32" ct:meta="{&amp;quot;data&amp;quot;:{&amp;quot;color&amp;quot;:&amp;quot;#716aca&amp;quot;}}" style="stroke-width: 17px;" stroke-dasharray="133.70706176757812px 133.70706176757812px" stroke-dashoffset="-133.70706176757812px" stroke="#716aca"><animate attributeName="stroke-dashoffset" id="anim0" dur="1000ms" from="-133.70706176757812px" to="0px" fill="freeze" stroke="#716aca" calcMode="spline" keySplines="0.23 1 0.32 1" keyTimes="0;1"></animate></path></g><g class="ct-series custom"><path d="M59.292,122.389A66.5,66.5,0,0,0,170.801,108.104" class="ct-slice-donut" ct:value="32" ct:meta="{&amp;quot;data&amp;quot;:{&amp;quot;color&amp;quot;:&amp;quot;#00c5dc&amp;quot;}}" style="stroke-width: 17px;" stroke-dasharray="133.94058227539062px 133.94058227539062px" stroke-dashoffset="-133.94058227539062px" stroke="#00c5dc"><animate attributeName="stroke-dashoffset" id="anim1" dur="1000ms" from="-133.94058227539062px" to="0px" fill="freeze" stroke="#00c5dc" begin="anim0.end" calcMode="spline" keySplines="0.23 1 0.32 1" keyTimes="0;1"></animate></path></g><g class="ct-series custom"><path d="M110.531,13.5A66.5,66.5,0,0,0,59.44,122.567" class="ct-slice-donut" ct:value="36" ct:meta="{&amp;quot;data&amp;quot;:{&amp;quot;color&amp;quot;:&amp;quot;#ffb822&amp;quot;}}" style="stroke-width: 17px;" stroke-dasharray="150.6541748046875px 150.6541748046875px" stroke-dashoffset="-150.6541748046875px" stroke="#ffb822"><animate attributeName="stroke-dashoffset" id="anim2" dur="1000ms" from="-150.6541748046875px" to="0px" fill="freeze" stroke="#ffb822" begin="anim1.end" calcMode="spline" keySplines="0.23 1 0.32 1" keyTimes="0;1"></animate></path></g></svg></div>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="m-widget14__legends">
-                                                <div class="m-widget14__legend">
-                                                    <span class="m-widget14__legend-bullet m--bg-accent"></span>
-                                                    <span class="m-widget14__legend-text">37% Sport Tickets</span>
-                                                </div>
-                                                <div class="m-widget14__legend">
-                                                    <span class="m-widget14__legend-bullet m--bg-warning"></span>
-                                                    <span class="m-widget14__legend-text">47% Business Events</span>
-                                                </div>
-                                                <div class="m-widget14__legend">
-                                                    <span class="m-widget14__legend-bullet m--bg-brand"></span>
-                                                    <span class="m-widget14__legend-text">19% Others</span>
-                                                </div>
+                                    </div>
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding">
+                                            <div class="col" >
+                                                <h3 class="m-widget1__title" style="padding-bottom: 15px;">联系方式</h3>
+                                                <span class="m-widget1__desc" style="padding-bottom: 15px;">System bugs and issues</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">装备器材</h3>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+                                                <span class="m-widget1__desc">胡歌喜欢摄影，也喜欢写字，他视角独特，充满着奇思妙想。他有着极丰富的情感，和对生活的热情，他能点燃观众心中爱的火焰；胡歌积极、乐观、坚强，他脚踏实地地做好每一件事，真诚地对待身边每一个人</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">个人简介</h3>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+                                                <span class="m-widget1__desc">胡歌喜欢摄影，也喜欢写字，他视角独特，充满着奇思妙想。他有着极丰富的情感，和对生活的热情，他能点燃观众心中爱的火焰；胡歌积极、乐观、坚强，他脚踏实地地做好每一件事，真诚地对待身边每一个人</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!--end:: middle-->
+                            </div>
+                            <div class="col-xl-6">
+                                <!--begin:: right -->
+                                <div class="m-widget1">
+                                    <div class="m-portlet m-portlet--full-height">
+                                        <div class="m-portlet__head">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+												<span class="m-portlet__head-icon">
+													<i class="la la-image"></i>
+												</span>
+                                                    <h3 class="m-portlet__head-text">
+                                                        画廊
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            <!--begin::Section-->
+                                            <div class="m-section">
 
-                                <!--end:: Widgets/Profit Share-->
+
+                                            </div>
+                                            <!--end::Section-->
+                                        </div>
+                                    </div>
+
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">画廊</h3>
+                                                <span class="m-widget1__desc">Weekly Customer Orders</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--end:: right -->
                             </div>
                         </div>
                     </div>
