@@ -665,5 +665,34 @@ var BaseUtils = {
             "sign":sign
         };
         return headers;
+    },
+
+    /**
+     * 根据身份证获取出生日期 和性别
+     * @param userCard
+     */
+    birthdayCard : function (userCard){
+        if (isIdCardNo(userCard))  {
+            var birthday = "";
+            var sex = "";
+            //获取出生日期 
+            birthday = userCard.substring(6, 10) + "-" + userCard.substring(10, 12) + "-" + userCard.substring(12, 14);
+            //获取性别 
+            if (parseInt(userCard.substr(16, 1)) % 2 == 1) {
+                // 男
+                sex = '0'
+            } else {
+                // 女
+                sex = '1';
+            }
+            var obj = {
+                birthday : birthday,
+                sex : sex
+            }
+            return obj;
+        } else {
+            return null;
+        }
     }
+
 };

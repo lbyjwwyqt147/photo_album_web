@@ -482,6 +482,10 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     vertical-align: middle;
 }
 
+.has-danger .input-group-text, .has-danger .form-control {
+    border-color: #f4516c;
+}
+
 .modal .modal-content .modal-header {
     padding: 18px 18px 18px 10px;
 }

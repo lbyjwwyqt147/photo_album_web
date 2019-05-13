@@ -320,8 +320,9 @@ var SnippetMainPageStaff = function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
+        var laydate
         layui.use('laydate', function() {
-            var laydate = layui.laydate;
+            laydate = layui.laydate;
             //入职日期控件
             laydate.render({
                 elem: '#entryDate'
@@ -350,7 +351,7 @@ var SnippetMainPageStaff = function() {
                 placeholder: "技能(特长)",
             });
         });
-
+        $("#province") .selectpicker();
         // 省市区 select
         BaseUtils.distDataSelect("510100", function (data) {
             var $city = $("#city");
@@ -371,6 +372,24 @@ var SnippetMainPageStaff = function() {
                 //必须加，刷新select
                 $district .selectpicker('refresh');
             });
+        });
+
+        $("#staffIdentiyCard").blur(function() {
+            var staffIdentiyCard = $("#staffIdentiyCard").val();
+            if ($.trim(staffIdentiyCard) != "") {
+                var curCardObj = BaseUtils.birthdayCard(staffIdentiyCard);
+                if (curCardObj != null) {
+                    //初始赋值
+                    laydate.render({
+                        elem: '#birthday',
+                        value: curCardObj.birthday,
+                        isInitValue: true
+                    });
+                    $("input[type=radio][name=staffSex][value='" + curCardObj.sex + "'").attr("checked",'checked');
+                } else {
+                    $("#staffIdentiyCard").val('');
+                }
+            }
         });
 
     }
