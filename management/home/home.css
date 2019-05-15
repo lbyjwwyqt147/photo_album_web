@@ -552,6 +552,13 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 }
 
 
+.select2.select2-container.select2-container--default {
+    width: 100%!important;
+}
+.dropdown.bootstrap-select.form-control.m-bootstrap-select.m_ col-sm-2 {
+    padding-right:0px!important;
+}
+
 
 
 /** modal 样式  结束   */

@@ -317,7 +317,7 @@ var BaseUtils = {
             url: BaseUtils.cloudServerAddress + 'v1/ignore/dict/combox',
             data:{
                 systemCode : BaseUtils.systemCode,
-                dictCode : dictCode
+                parentCode : dictCode
             },
             async:false,
             dataType: "json",
@@ -340,7 +340,6 @@ var BaseUtils = {
             type: "get",
             url: BaseUtils.cloudServerAddress + 'v1/ignore/area/combox',
             data:{
-                systemCode : BaseUtils.systemCode,
                 pid : code
             },
             async:false,

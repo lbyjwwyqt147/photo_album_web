@@ -345,15 +345,35 @@ var SnippetMainPageStaff = function() {
         BaseUtils.dictDataSelect("staff_skill", function (data) {
             var $skill = $("#skill");
             Object.keys(data).forEach(function(key){
-                $skill.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                var curId = data[key].id;
+                if (curId == 0 || curId == 1)  {
+                    $skill.append("<option value=" + curId + " selected>" + data[key].text + "</option>");
+                } else {
+                    $skill.append("<option value=" + curId + ">" + data[key].text + "</option>");
+                }
             });
             $skill.select2({
                 placeholder: "技能(特长)",
             });
+
         });
+        // 职务选择事件绑定
+        $("#staff_position").on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+            console.log(e);
+            console.log(e.target.value);
+            var curSelectedValue = e.target.value;
+            if (curSelectedValue == 1 || curSelectedValue == 2)  {
+                $("#skill").val("0").select2();
+                $("#skill").val("1").select2();
+            } else if (curSelectedValue == 3) {
+                $("#skill").val("2").select2();
+            }
+        })
+
         $("#province") .selectpicker();
         // 省市区 select
-        BaseUtils.distDataSelect("510100", function (data) {
+        BaseUtils.distDataSelect("510000", function (data) {
             var $city = $("#city");
             Object.keys(data).forEach(function(key){
                 $city.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
@@ -361,13 +381,23 @@ var SnippetMainPageStaff = function() {
             //必须加，刷新select
             $city .selectpicker('refresh');
         });
+        BaseUtils.distDataSelect("510100", function (data) {
+            var $district = $("#district");
+            Object.keys(data).forEach(function(key){
+                var curId = data[key].id;
+                $district.append("<option value=" + curId + ">" + data[key].text + "</option>");
+            });
+            //必须加，刷新select
+            $district .selectpicker('refresh');
+        });
         // 城市绑定监听选择事件
         $("#city").on('changed.bs.select',function(e){
             console.log(e.target.value);
             BaseUtils.distDataSelect(e.target.value, function (data) {
                 var $district = $("#district");
                 Object.keys(data).forEach(function(key){
-                    $district.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                    var curId = data[key].id;
+                    $district.append("<option value=" + curId + ">" + data[key].text + "</option>");
                 });
                 //必须加，刷新select
                 $district .selectpicker('refresh');
