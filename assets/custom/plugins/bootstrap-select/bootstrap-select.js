@@ -5,7 +5,9 @@ var BootstrapSelect = function () {
     //== Private functions
     var demos = function () {
         // minimum setup
-        $('.m_selectpicker').selectpicker();
+        $('.m_selectpicker').selectpicker({
+            noneSelectedText : '请选择'//默认显示内容
+        });
     }
 
     return {
