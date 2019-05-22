@@ -352,6 +352,9 @@ var SnippetMainPageStaff = function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
+        $('.m_selectpicker').selectpicker({
+            noneSelectedText : '请选择'//默认显示内容
+        });
         var laydate
         layui.use('laydate', function() {
             laydate = layui.laydate;
@@ -402,8 +405,6 @@ var SnippetMainPageStaff = function() {
                 $("#skill").val("2").select2();
             }
         })
-
-        $("#province") .selectpicker();
         // 省市区 select
         BaseUtils.distDataSelect("510000", function (data) {
             var $city = $("#city");

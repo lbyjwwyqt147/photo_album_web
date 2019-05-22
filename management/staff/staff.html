@@ -19,7 +19,7 @@
     /**  modal 样式  开始   */
 
     .modal-lg {
-        max-width: 60%;
+        max-width: 50%;
     }
 
     /**  modal 样式  结束   */
@@ -102,7 +102,7 @@
                         <div class="modal-body">
                             <!--begin::Form-->
                             <form class="m-form m-form--fit m-form--label-align-right" id="staff_mainPage_dataSubmit_form">
-                                <div class="m-portlet__body"style="padding-top: 10px;">
+                                <div class="m-portlet__body"style="padding-top: 10px;padding-bottom: 0px;">
                                     <div class="form-group m-form__group row">
                                         <label class="col-lg-2 col-form-label">工号<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-4">
@@ -128,25 +128,34 @@
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
-                                        <label class="col-lg-2 col-form-label">入职日期<span class="has-danger-error">*</span></label>
-                                        <div class="col-lg-4">
-                                            <input type="text" class="layui-input" name="entryDate" id="entryDate" placeholder="入职日期" autocomplete="off">
-                                        </div>
                                         <label class="col-lg-2 col-form-label">电子邮箱<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-4">
                                             <input type="text" name="staffEmail" class="form-control m-input" placeholder="电子邮箱" autocomplete="off" >
                                         </div>
+                                        <label class="col-lg-2 col-form-label">入职日期<span class="has-danger-error">*</span></label>
+                                        <div class="col-lg-4">
+                                            <input type="text" class="layui-input" name="entryDate" id="entryDate" placeholder="入职日期" autocomplete="off">
+                                        </div>
                                     </div>
                                     <div class="form-group m-form__group row">
-                                        <label class="col-lg-2 col-form-label">身份证号</label>
+                                        <label class="col-lg-2 col-form-label">所属部门</label>
                                         <div class="col-lg-4">
                                             <div class="m-input-icon m-input-icon--right">
-                                                <input type="text" name="staffIdentiyCard" id="staffIdentiyCard" class="form-control m-input" placeholder="身份证号" autocomplete="off" >
+                                                <input type="text" name="staffOrgName" id="staffOrgName" class="form-control m-input" placeholder="所属部门" autocomplete="off" >
+                                                <input type="text" name="staffOrgId" id="staffOrgId" class="form-control m-input" placeholder="所属部门" autocomplete="off" style="display: none" >
+                                                <input type="text" name="staffFullParent" id="staff_full_parent" class="form-control m-input" placeholder="所属部门父id" autocomplete="off" style="display: none" >
+                                                <input type="text" name="staffOrgNumber" id="staff_org_number" class="form-control m-input" placeholder="所属部门编号" autocomplete="off" style="display: none" >
                                             </div>
                                         </div>
-                                        <label class="col-lg-2 col-form-label">出生日期</label>
+                                        <label class="col-lg-2 col-form-label">试用状态</label>
                                         <div class="col-lg-4">
-                                            <input type="text" class="layui-input" name="birthday" id="birthday" placeholder="出生日期" autocomplete="off" >
+                                            <select class="form-control m-bootstrap-select m_selectpicker" name="probationStatus" id="probationStatus"  placeholder="试用状态" autocomplete="off">
+                                                <option value="1">试用期</option>
+                                                <option value="2" selected>已转正</option>
+                                            </select>
+                                        </div>
+                                        <div id="orgTreeContent" style="display:none; position: absolute;  z-index: 51;">
+                                            <ul id="staffOrgTree" class="ztree" style="margin-top:0; "></ul>
                                         </div>
                                     </div>
 
@@ -162,6 +171,18 @@
                                             <select class="form-control m-select2" multiple="multiple"  name="skill" id="skill"  placeholder="技能(特长)" autocomplete="off">
 
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label class="col-lg-2 col-form-label">身份证号</label>
+                                        <div class="col-lg-4">
+                                            <div class="m-input-icon m-input-icon--right">
+                                                <input type="text" name="staffIdentiyCard" id="staffIdentiyCard" class="form-control m-input" placeholder="身份证号" autocomplete="off" >
+                                            </div>
+                                        </div>
+                                        <label class="col-lg-2 col-form-label">出生日期</label>
+                                        <div class="col-lg-4">
+                                            <input type="text" class="layui-input" name="birthday" id="birthday" placeholder="出生日期" autocomplete="off" >
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
@@ -201,7 +222,7 @@
                                         <label class="col-lg-2 col-form-label">联系地址</label>
                                         <div class="col-lg-4">
                                             <div class="m-radio-inline">
-                                                <select class="form-control m-bootstrap-select m_selectpicker col-sm-4"  name="province" id="province"  placeholder="省份" autocomplete="off">
+                                                <select class="form-control m-bootstrap-select m_selectpicker col-sm-3"  name="province" id="province"  placeholder="省份" autocomplete="off">
                                                     <option value="510000">四川省</option>
                                                 </select>
                                                 <select class="form-control m-bootstrap-select m_selectpicker col-sm-4" data-live-search="true"  name="city" id="city"  placeholder="城市" autocomplete="off">
@@ -210,23 +231,14 @@
                                                 <select class="form-control m-bootstrap-select m_selectpicker col-sm-4" data-live-search="true" name="district" id="district"  placeholder="区" autocomplete="off">
 
                                                 </select>
-                                                <input type="text" name="street" class="form-control m-input col-sm-4" placeholder="详细地址" autocomplete="off" >
 
                                             </div>
                                         </div>
-                                       <label class="col-lg-2 col-form-label">所属部门</label>
+                                       <label class="col-lg-2 col-form-label">街道地址</label>
                                         <div class="col-lg-4">
-                                            <div class="m-input-icon m-input-icon--right">
-                                                <input type="text" name="staffOrgName" id="staffOrgName" class="form-control m-input" placeholder="所属部门" autocomplete="off" >
-                                                <input type="text" name="staffOrgId" id="staffOrgId" class="form-control m-input" placeholder="所属部门" autocomplete="off" style="display: none" >
-                                                <input type="text" name="staffFullParent" id="staff_full_parent" class="form-control m-input" placeholder="所属部门父id" autocomplete="off" style="display: none" >
-                                                <input type="text" name="staffOrgNumber" id="staff_org_number" class="form-control m-input" placeholder="所属部门编号" autocomplete="off" style="display: none" >
+                                            <input type="text" name="street" class="form-control m-input" placeholder="xx街道 xx号 xx小区" autocomplete="off" >
+                                        </div>
 
-                                            </div>
-                                        </div>
-                                        <div id="orgTreeContent" style="display:none; position: absolute;  z-index: 51;">
-                                            <ul id="staffOrgTree" class="ztree" style="margin-top:0; "></ul>
-                                        </div>
                                     </div>
                                     <div class="form-group m-form__group row">
                                         <label class="col-lg-2 col-form-label">器材装备</label>
