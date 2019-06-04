@@ -2,6 +2,31 @@
     'use strict';
     //全局定义webuploader对象，引入webuploader
     var WebUploader = null;
+    var curUploader = null;
+
+    // 图片容器
+    var $queue = null;
+    // 状态栏，包括进度和控制按钮
+    var $statusBar = null;
+    // 文件总体选择信息。
+    var $info = null;
+    // 上传按钮
+    var $upload = null;
+    // 没选择文件之前的内容。
+    var $placeHolder = null;
+    var $progress = null;
+    // 添加的文件数量
+    var fileCount = 0;
+    // 添加的文件总大小
+    var fileSize = 0;
+    // 可能有pedding, ready, uploading, confirm, done.
+    var state = 'pedding';
+    // 所有文件的进度信息，key为file id
+    var percentages = {};
+    // 继续添加按钮 id
+    var $continueToAddBtn = null;
+    var $galname = "";
+    var is_moveing = false;
 
     // 判断浏览器是否支持图片的base64
     var isSupportBase64 = function() {
@@ -45,6 +70,7 @@
         this.state = 'pedding';
         // 所有文件的进度信息，key为file id
         this.percentages = {};
+        this.$continueToAddBtn = null;
         WebUploader = window.WebUploader;
     }
 
@@ -68,17 +94,18 @@
         this.patchOpction = this.opction["patchOpction"];
         this.$wrap = this.opction["warp"];
         // 图片容器
-        this.$queue = $('<ul class="filelist"></ul>')
+        $queue = $('<ul class="filelist"></ul>')
             .appendTo( this.$wrap.find('.queueList'));
         // 状态栏，包括进度和控制按钮
-        this.$statusBar = this.$wrap.find('.statusBar');
+        $statusBar = this.$wrap.find('.statusBar');
         // 文件总体选择信息。
-        this.$info = this.$statusBar.find('.info');
+        $info = $statusBar.find('.info');
         // 上传按钮
-        this.$upload = this.$wrap.find('.uploadBtn');
+        $upload = this.$wrap.find('.uploadBtn');
         // 没选择文件之前的内容。
-        this.$placeHolder = this.$wrap.find('.placeholder');
-        this.$progress = this.$statusBar.find( '.progress').hide();
+        $placeHolder = this.$wrap.find('.placeholder');
+        $progress = $statusBar.find( '.progress').hide();
+        $continueToAddBtn = this.opction["continueToAddBtn"];
         //路径的必传选项
         if (!this.swf_path) {
             throw new Error('webuploader 组件的swf路径为空，请设置路径');
@@ -247,6 +274,8 @@
             //服务器地址
             server: this.server_path,
         });
+
+
         // 阻止此事件可以拒绝某些类型的文件拖入进来。目前只有 chrome 提供这样的 API，且只能通过 mime-type 验证。
         // 拖拽时不接受 js, txt 文件。
         this.uploader.on('dndAccept',  function( items ) {
@@ -273,15 +302,12 @@
 
         //当文件被加入队列以后触发。
         this.uploader.on('fileQueued', this.opction["fileQueued"] || function (file) {
-            this.fileCount++;
-            this.fileSize += file.size;
-            if ( this.fileCount === 1 ) {
-                this.$placeHolder.addClass( 'element-invisible' );
-                this.$statusBar.show();
+            fileCount++;
+            fileSize += file.size;
+            if ( fileCount === 1 ) {
+                $placeHolder.addClass( 'element-invisible' );
+                $statusBar.show();
             }
-            console.log(this);
-            console.log(this.$progress);
-            console.log(this.uploader);
             var curOptions = {
                 thumbnailWidth : this.options.thumb.width,
                 thumbnailHeight : this.options.thumb.width
@@ -294,29 +320,15 @@
 
         //当一批文件添加进队列以后触发。
         this.uploader.on('filesQueued', this.opction["filesQueued"] || function (file) {
-            this.fileCount++;
-            this.fileSize += file.size;
-            if ( this.fileCount === 1 ) {
-                this.$placeHolder.addClass( 'element-invisible' );
-                this.$statusBar.show();
-            }
-            console.log(this.opction);
-            var curOptions = {
-                thumbnailWidth : this.options.thumb.width,
-                thumbnailHeight : this.options.thumb.width
-            }
-            addFile( file,  curOptions);
-            setState( 'ready' );
-            updateTotalProgress();
             console.log('filesQueued',file);
         });
 
         //当文件被移除队列后触发。
         this.uploader.on('fileDequeued', this.opction["fileDequeued"] || function (file) {
-            this.fileCount--;
-            this. fileSize -= file.size;
+            fileCount--;
+            fileSize -= file.size;
 
-            if ( !this.fileCount ) {
+            if ( !fileCount ) {
                 setState( 'pedding' );
             }
 
@@ -369,6 +381,12 @@
             percentage {Number}上传进度
         */
         this.uploader.on('uploadProgress', this.opction["uploadProgress"] || function (file, percentage) {
+            var $li = $('#'+file.id),
+                $percent = $li.find('.progress span');
+
+            $percent.css( 'width', percentage * 100 + '%' );
+            percentages[ file.id ][ 1 ] = percentage;
+            updateTotalProgress();
             console.log('uploadProgress',file, percentage);
         });
 
@@ -405,6 +423,19 @@
             console.log("error",type);
         });
 
+        // 添加“添加文件”的按钮，
+        this.uploader.addButton({
+            id: $continueToAddBtn,
+            label: '继续添加'
+        });
+
+        this.uploader.on('ready', function() {
+            curUploader = this;
+            $upload.addClass( 'state-' + state );
+            updateTotalProgress();
+        });
+
+
         this.uploader.on("all", function (type) {
             var stats;
             switch( type ) {
@@ -423,40 +454,52 @@
             }
             console.log("all",type);
         });
-        this.$upload.on('click', function() {
+        $upload.on('click', function() {
             if ( $(this).hasClass( 'disabled' ) ) {
                 return false;
             }
 
             if ( state === 'ready' ) {
-                uploader.upload();
+                curUploader.upload();
             } else if ( state === 'paused' ) {
-                uploader.upload();
+                curUploader.upload();
             } else if ( state === 'uploading' ) {
-                uploader.stop();
+                curUploader.stop();
             }
         });
 
-        this.$info.on( 'click', '.retry', function() {
-            uploader.retry();
+        $info.on( 'click', '.retry', function() {
+            curUploader.retry();
         } );
 
-        this.$info.on( 'click', '.ignore', function() {
-            alert( 'todo' );
+        $info.on( 'click', '.ignore', function() {
+            console.log("忽略上传失败文件.")
         } );
 
-
-
-       // this.$upload.addClass( 'state-' + this.state );
-       // updateTotalProgress();
         return this.uploader;
     };
+
+    /**
+     *
+     * @param obj 传入需要验证的对象
+     * @returns {boolean}
+     */
+    function isArray(obj) {
+        return Object.prototype.toString.call(obj) == "[object Array]";
+    }
 
     /**
      * 当有文件添加进来时执行，负责view的创建
      * @param file
      */
-    function addFile( file , options) {
+    function addFile( files , options) {
+        var file = null;
+        console.log(files);
+        if (isArray(files)) {
+            file  = files[0];
+        } else {
+            file = files;
+        }
         var $li = $( '<li id="' + file.id + '">' +
             '<p class="title">' + file.name + '</p>' +
             '<p class="imgWrap"></p>'+
@@ -495,10 +538,7 @@
         } else {
             // @todo lazyload
             $wrap.text( '预览中' );
-            console.log(options);
-            console.log(options.$uploader);
-            console.log(this.uploader);
-            this.uploader.makeThumb( file, function( error, src ) {
+            curUploader.makeThumb( file, function( error, src ) {
                 var img;
 
                 if ( error ) {
@@ -526,7 +566,7 @@
                 }
             }, options.thumbnailWidth, options.thumbnailHeight );
 
-            this.percentages[ file.id ] = [ file.size, 0 ];
+            percentages[ file.id ] = [ file.size, 0 ];
             file.rotation = 0;
         }
 
@@ -542,13 +582,13 @@
             if ( cur === 'error' || cur === 'invalid' ) {
                 console.log( file.statusText );
                 showError( file.statusText );
-                this.percentages[ file.id ][ 1 ] = 1;
+                percentages[ file.id ][ 1 ] = 1;
             } else if ( cur === 'interrupt' ) {
                 showError( 'interrupt' );
             } else if ( cur === 'queued' ) {
                 $info.remove();
                 $prgress.css('display', 'block');
-                this.percentages[ file.id ][ 1 ] = 0;
+                percentages[ file.id ][ 1 ] = 0;
             } else if ( cur === 'progress' ) {
                 $info.remove();
                 $prgress.css('display', 'block');
@@ -574,7 +614,7 @@
 
             switch ( index ) {
                 case 0:
-                    this.uploader.removeFile( file );
+                    curUploader.removeFile( file );
                     return;
 
                 case 1:
@@ -586,61 +626,65 @@
                     break;
             }
         });
-        $li.appendTo(options.queue );
+        $li.appendTo($queue);
     }
 
 
-    function setState( val, options ) {
+    /**
+     * 设置文件状态
+     * @param val
+     */
+    function setState(val) {
         var file, stats;
 
         if ( val ===  state) {
             return;
         }
 
-        this.$upload.removeClass( 'state-' + this.state );
-        this.$upload.addClass( 'state-' + val );
-        this.state = val;
+        $upload.removeClass( 'state-' + state );
+        $upload.addClass( 'state-' + val );
+        state = val;
 
-        switch ( this.state ) {
+        switch ( state ) {
             case 'pedding':
-                this.$placeHolder.removeClass( 'element-invisible' );
-                this.$queue.hide();
-                this.$statusBar.addClass( 'element-invisible' );
-                this.uploader.refresh();
+                $placeHolder.removeClass( 'element-invisible' );
+                $queue.hide();
+                $statusBar.addClass( 'element-invisible' );
+                curUploader.refresh();
                 break;
 
             case 'ready':
-                this.$placeHolder.addClass( 'element-invisible' );
+                $placeHolder.addClass( 'element-invisible' );
                 $( '#filePicker2' ).removeClass( 'element-invisible');
-                this.$queue.show();
-                this.$statusBar.removeClass('element-invisible');
-                this.uploader.refresh();
+                $queue.show();
+                $statusBar.removeClass('element-invisible');
+                curUploader.refresh();
                 break;
 
             case 'uploading':
                 $( '#filePicker2' ).addClass( 'element-invisible' );
-                this.$progress.show();
-                this.$upload.text( '暂停上传' );
+                $progress.show();
+                $upload.text( '暂停上传' );
                 break;
 
             case 'paused':
-                this.$progress.show();
-                this.$upload.text( '继续上传' );
+                $progress.show();
+                $upload.text( '继续上传' );
                 break;
 
             case 'confirm':
-                this.$progress.hide();
+                $progress.hide();
                 $( '#filePicker2' ).removeClass( 'element-invisible' );
-                this.$upload.text( '开始上传' );
+                $upload.text( '开始上传' );
 
-                stats = this.uploader.getStats();
+                stats = curUploader.getStats();
                 if ( stats.successNum && !stats.uploadFailNum ) {
                     setState( 'finish' );
                     return;
                 }
                 break;
             case 'finish':
-                stats = this.uploader.getStats();
+                stats = curUploader.getStats();
                 if ( stats.successNum ) {
                     alert( '上传成功' );
                 } else {
@@ -650,41 +694,48 @@
                 }
                 break;
         }
-        updateStatus(options);
+        updateStatus();
     }
 
-    function updateStatus(options) {
+    /**
+     *  更新文件状态
+     * @param options
+     */
+    function updateStatus() {
         var text = '', stats;
-        if ( this.state === 'ready' ) {
-            text = '选中' + this.fileCount + '张图片，共' +
-                WebUploader.formatSize( this.fileSize ) + '。';
-        } else if (  this.state === 'confirm' ) {
-            stats = uploader.getStats();
+        if ( state === 'ready' ) {
+            text = '选中' + fileCount + '张图片，共' +
+                WebUploader.formatSize( fileSize ) + '。 <span style=\"color: red\">(如需调整顺序,请通过拖拽图片调整)</span>';
+        } else if (  state === 'confirm' ) {
+            stats = curUploader.getStats();
             if ( stats.uploadFailNum ) {
-                text = '已成功上传' + stats.successNum+ '张照片至XX相册，'+
+                text = '已成功上传' + stats.successNum + '张照片至' + $galname + '相册，'+
                     stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
             }
 
         } else {
-            stats = this.uploader.getStats();
-            text = '共' + this.fileCount + '张（' +
-                WebUploader.formatSize( this.fileSize )  +
+            stats = curUploader.getStats();
+            text = '共' + fileCount + '张（' +
+                WebUploader.formatSize( fileSize )  +
                 '），已上传' + stats.successNum + '张';
 
             if ( stats.uploadFailNum ) {
                 text += '，失败' + stats.uploadFailNum + '张';
             }
         }
-        this.$info.html( text );
+        $info.html( text );
     }
 
+    /**
+     *  更新进度条
+     */
     function updateTotalProgress() {
         var loaded = 0,
             total = 0,
-            spans = this.$progress .children(),
+            spans = $progress .children(),
             percent;
 
-        $.each( this.percentages, function( k, v ) {
+        $.each(percentages, function( k, v ) {
             total += v[ 0 ];
             loaded += v[ 0 ] * v[ 1 ];
         } );
@@ -700,10 +751,42 @@
     // 负责view的销毁
     function removeFile( file ) {
         var $li = $('#'+file.id);
-
-        delete this.percentages[ file.id ];
+        delete percentages[ file.id ];
         updateTotalProgress();
         $li.off().find('.file-panel').off().end().remove();
+    }
+
+    /**
+     * 图片拖动方法
+     */
+    function setDragEvent() {
+        $(this).on('drop', function (e) {
+            var $from = $(origin).parents('li');
+            var $to = $(e.target).parents('li');
+            var origin_pos = $from.position();
+            var target_pos = $to.position();
+            var from_sort = $from.attr('data-sort');
+            var to_sort = $to.attr('data-sort');
+            //图片移动效果
+            $from.addClass('move').animate(target_pos, "fast", function () {
+                $(this).removeClass('move');
+            }).attr('data-sort', to_sort);
+            $to.addClass('move').animate(origin_pos, 'fast', function () {
+                $(this).removeClass('move');
+            }).attr('data-sort', from_sort);
+        }).on('dragstart', function (e) {
+            if (is_moveing) {
+                return false;
+            }
+            is_moveing = true;
+            e.originalEvent.dataTransfer.effectAllowd = 'move';
+            origin = this;
+        }).on('dragover', function (e) {
+            if (e.preventDefault)
+                e.preventDefault();
+            is_moveing = false;
+            e.originalEvent.dataTransfer.dropEffect = 'move';
+        });
     }
 
     /**
