@@ -99,12 +99,24 @@ var SnippetMainPageStaff = function() {
        return BaseUtils.ztree.getZtreeHighlightFontCss(treeId, treeNode)
     };
 
+    /**
+     * 下拉树点击之前
+     * @param treeId
+     * @param treeNode
+     * @returns {*|boolean}
+     */
     function beforeClick(treeId, treeNode) {
         var check = (treeNode && !treeNode.isParent);
         if (!check) alert("Do not select province...");
         return check;
     }
 
+    /**
+     * 下拉树节点点击事件
+     * @param treeId
+     * @param treeNode
+     * @returns {*|boolean}
+     */
     function onClick(e, treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("staffOrgTree"),
             nodes = zTree.getSelectedNodes(),
@@ -118,17 +130,26 @@ var SnippetMainPageStaff = function() {
         staffOrgObj.attr("value", v);
     }
 
+    /**
+     * 显示下拉树
+     */
     function showMenu() {
         var staffOrgObj = $("#staffOrgName");
         var staffOrgOffset = $("#staffOrgName").offset();
-        $("#orgTreeContent").css({left:staffOrgOffset.left - staffOrgObj.outerWidth() - 24 + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
+        $("#orgTreeContent").css({left: staffOrgObj.outerWidth() - $(".col-lg-2").width() + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
 
         $("body").bind("mousedown", onBodyDown);
     }
+
+    /**
+     * 隐藏下拉树
+     */
     function hideMenu() {
         $("#orgTreeContent").fadeOut("fast");
         $("body").unbind("mousedown", onBodyDown);
     }
+
+
     function onBodyDown(event) {
         if (!(event.target.id == "menuBtn" || event.target.id == "orgTreeContent" || $(event.target).parents("#orgTreeContent").length>0)) {
             hideMenu();
@@ -428,6 +449,7 @@ var SnippetMainPageStaff = function() {
             console.log(e.target.value);
             BaseUtils.distDataSelect(e.target.value, function (data) {
                 var $district = $("#district");
+                $district.html("");
                 Object.keys(data).forEach(function(key){
                     var curId = data[key].id;
                     $district.append("<option value=" + curId + ">" + data[key].text + "</option>");
@@ -509,7 +531,7 @@ var SnippetMainPageStaff = function() {
                     },
                     staffWechat: {
                         required: false,
-                        accountingNumber:true,
+                        alnum:true,
                         maxlength: 20
                     },
                     staffWeiBo: {
