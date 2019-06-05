@@ -494,7 +494,6 @@
      */
     function addFile( files , options) {
         var file = null;
-        console.log(files);
         if (isArray(files)) {
             file  = files[0];
         } else {
@@ -655,14 +654,14 @@
 
             case 'ready':
                 $placeHolder.addClass( 'element-invisible' );
-                $( '#filePicker2' ).removeClass( 'element-invisible');
+                $( $continueToAddBtn ).removeClass( 'element-invisible');
                 $queue.show();
                 $statusBar.removeClass('element-invisible');
                 curUploader.refresh();
                 break;
 
             case 'uploading':
-                $( '#filePicker2' ).addClass( 'element-invisible' );
+                $( $continueToAddBtn ).addClass( 'element-invisible' );
                 $progress.show();
                 $upload.text( '暂停上传' );
                 break;
@@ -674,7 +673,7 @@
 
             case 'confirm':
                 $progress.hide();
-                $( '#filePicker2' ).removeClass( 'element-invisible' );
+                $( $continueToAddBtn ).removeClass( 'element-invisible' );
                 $upload.text( '开始上传' );
 
                 stats = curUploader.getStats();
@@ -754,39 +753,6 @@
         delete percentages[ file.id ];
         updateTotalProgress();
         $li.off().find('.file-panel').off().end().remove();
-    }
-
-    /**
-     * 图片拖动方法
-     */
-    function setDragEvent() {
-        $(this).on('drop', function (e) {
-            var $from = $(origin).parents('li');
-            var $to = $(e.target).parents('li');
-            var origin_pos = $from.position();
-            var target_pos = $to.position();
-            var from_sort = $from.attr('data-sort');
-            var to_sort = $to.attr('data-sort');
-            //图片移动效果
-            $from.addClass('move').animate(target_pos, "fast", function () {
-                $(this).removeClass('move');
-            }).attr('data-sort', to_sort);
-            $to.addClass('move').animate(origin_pos, 'fast', function () {
-                $(this).removeClass('move');
-            }).attr('data-sort', from_sort);
-        }).on('dragstart', function (e) {
-            if (is_moveing) {
-                return false;
-            }
-            is_moveing = true;
-            e.originalEvent.dataTransfer.effectAllowd = 'move';
-            origin = this;
-        }).on('dragover', function (e) {
-            if (e.preventDefault)
-                e.preventDefault();
-            is_moveing = false;
-            e.originalEvent.dataTransfer.dropEffect = 'move';
-        });
     }
 
     /**
