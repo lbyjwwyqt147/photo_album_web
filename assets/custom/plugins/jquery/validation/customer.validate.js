@@ -113,7 +113,7 @@ jQuery.validator.addMethod("isQq", function (value, element) {
 /**
  * 匹配域名
  */
-jQuery.validator.addMethod("isQq", function (value, element) {
+jQuery.validator.addMethod("domain", function (value, element) {
     var domain = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\/.?/;
     return this.optional(element) || domain.test(value);
 }, "域名格式错误");
