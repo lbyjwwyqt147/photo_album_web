@@ -440,7 +440,7 @@ var SnippetAlbum = function() {
 
         // 上传控件
         albumImageUploader = WebuploaderUtil({
-            uploader : '#uploader',
+            uploader : '.uploader_wrap',
             filePicker : '#filePicker',
             queueList : '.queueList',
             butnText : "请选择图片",
@@ -452,7 +452,7 @@ var SnippetAlbum = function() {
                 uploaderId: 1,
                 uploaderName: '张三'
             },
-            filePicker2 : "#filePicker2",
+            filePicker2 : ".uploader_filePicker2",
             uploadBtn : '.uploadBtn',
             flag : false,
             name: $("#albumName").val()

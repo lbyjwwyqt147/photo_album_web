@@ -1,7 +1,7 @@
 (function( $ ){
     // 当domReady的时候开始初始化
     $(function() {
-        var $wrap = $('#uploader'),
+        var $wrap = $('.uploader_wrap'),
 
             // 图片容器
             $queue = $( '<ul class="filelist"></ul>' )
@@ -146,8 +146,8 @@
             formData: {
                 uid: 123
             },
-            dnd: '#uploader .queueList',
-            paste: '#uploader',
+            dnd: '.uploader_wrap .queueList',
+            paste: '.uploader_wrap',
             swf: './Uploader.swf',
             chunked: false,
             chunkSize: 512 * 1024,
@@ -202,7 +202,7 @@
 
         // 添加“添加文件”的按钮，
         uploader.addButton({
-            id: '#filePicker2',
+            id: '.uploader_filePicker2',
             label: '继续添加'
         });
 
@@ -446,14 +446,14 @@
 
                 case 'ready':
                     $placeHolder.addClass( 'element-invisible' );
-                    $( '#filePicker2' ).removeClass( 'element-invisible');
+                    $( '.uploader_filePicker2' ).removeClass( 'element-invisible');
                     $queue.show();
                     $statusBar.removeClass('element-invisible');
                     uploader.refresh();
                     break;
 
                 case 'uploading':
-                    $( '#filePicker2' ).addClass( 'element-invisible' );
+                    $( '.uploader_filePicker2' ).addClass( 'element-invisible' );
                     $progress.show();
                     $upload.text( '暂停上传' );
                     break;
@@ -465,7 +465,7 @@
 
                 case 'confirm':
                     $progress.hide();
-                    $( '#filePicker2' ).removeClass( 'element-invisible' );
+                    $( '.uploader_filePicker2' ).removeClass( 'element-invisible' );
                     $upload.text( '开始上传' );
 
                     stats = uploader.getStats();

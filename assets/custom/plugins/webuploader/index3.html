@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>WebUploader演示</title>
-    <link rel="stylesheet" type="text/css" href="./webuploader.css" />
-    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link rel="stylesheet" type="text/css" href="css/webuploader.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
 
 </head>
 <body>
-<div id="uploader">
+<div id="uploader" class="uploader_wrap">
     <div class="queueList">
         <div id="dndArea" class="placeholder">
             <div id="filePicker"></div>
@@ -21,11 +21,11 @@
             <span class="percentage"></span>
         </div><div class="info"></div>
         <div class="btns">
-            <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+            <div id="filePicker2" class="uploader_filePicker2"></div><div class="uploadBtn">开始上传</div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="./jquery.js"></script>
+<script src="../jquery/jquery-3.3.1.min.js" type="text/javascript" ></script>
 <script type="text/javascript" src="./webuploader.min.js"></script>
 <script type="text/javascript" src="./images-extend-webuploader.js"></script>
 
@@ -35,9 +35,9 @@
         thumbHeight: 220, //缩略图高度，可省略，默认为110
         wrapId: 'uploader', //必填
         selectFileId:'filePicker',
-        continueSelectFileId:'#filePicker2',
+        continueSelectFileId:'.uploader_filePicker2',
         selectFileMultiple : true, // 多选
-        fileNumLimit:5,
+        fileNumLimit:10,
         fileSizeLimit:1024*1024*25,
         fileSingleSizeLimit:1024*1024*5,
         //处理客户端新文件上传时，需要调用后台处理的地址, 必填
@@ -57,10 +57,10 @@
 <script type="text/javascript">
     //初始化文件上传控件
     uploaderObjThree = WUF.init({
-        dnd: '#uploader .queueList',
+        dnd: '.uploader_wrap .queueList',
         selectFileId:'filePicker',
-        continueToAddBtn:'#filePicker2',
-        warp: $("#uploader"),
+        continueToAddBtn:'.uploader_filePicker2',
+        warp: $(".uploader_wrap"),
         selectFileMultiple:true,
         threads:1,
         disableGlobalDnd: true,

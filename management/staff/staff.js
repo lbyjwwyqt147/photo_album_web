@@ -160,8 +160,6 @@ var SnippetMainPageStaff = function() {
      * 初始化 功能按钮
      */
     var staffMainPageInitFunctionButtonGroup = function () {
-        //初始化 优先级 控件
-        BootstrapTouchspin.initByteTouchSpin("#staff_mainPage_dataSubmit_form_staff_seq");
         var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(staffMainPageModuleCode);
         if (functionButtonGroup != null) {
             var gridHeadToolsHtml = $("#staff-mainPage-grid-head-tools");

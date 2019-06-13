@@ -217,7 +217,6 @@
                     $from.addClass('move').animate(target_pos,"fast", function(){
                         $(this).removeClass('move');
                     }).attr('data-sort', to_sort);
-
                     $to.addClass('move').animate(origin_pos,'fast', function(){
                         $(this).removeClass('move');
                     }).attr('data-sort', from_sort);
@@ -289,17 +288,18 @@
              */
             function addFile( file ){
                 var index = $queue.find('li').length;
-                var imgLeft = index * (thumbnailWidth+10);
-                var imgTop = 0;
-                var wrapHeight = thumbnailHeight+20;
+                var imgLeft = index * (thumbnailWidth + 15);
+                var imgTop = 10;
+                var wrapHeight = thumbnailHeight + 20;
                 var wrapWidth = $queue.width() + 20 + 10;
                 if( imgLeft >= wrapWidth){
-                    imgTop = parseInt(imgLeft/wrapWidth) * (thumbnailHeight+10);
+                    imgTop = parseInt(imgLeft/wrapWidth) * (thumbnailHeight + 30);
+                    console.log(imgTop);
                     wrapHeight = imgTop + wrapHeight;
-                    imgLeft = (index % (parseInt(wrapWidth/(thumbnailWidth+10)) ) ) * (thumbnailWidth+10);
+                    imgLeft = (index % (parseInt(wrapWidth/(thumbnailWidth + 15)) +1 ) ) * (thumbnailWidth + 15);
                 }
                 $queue.height(wrapHeight);
-                var $li = $('<li data-key="'+file.key+'"  data-src="'+file.src+'" data-sort="'+index+'" draggable="true" id="' + file.id + '" style="position:absolute;margin:0;cursor:move;width:'+thumbnailWidth+'px;height:'+thumbnailHeight+'px;left:'+imgLeft+'px;top:'+imgTop+'">' +
+                var $li = $('<li data-key="'+file.key+'"  data-src="'+file.src+'" data-sort="'+index+'" draggable="true" id="' + file.id + '" style="position:absolute;margin:0;cursor:move;width:'+thumbnailWidth+'px;height:'+thumbnailHeight+'px;left:'+imgLeft+'px;top:'+imgTop+'px">' +
                     '<p class="title">' + file.name + '</p>' +
                     '<p class="imgWrap"></p>' +
                     '<p class="progress"><span></span></p>' + '</li>'
@@ -715,9 +715,14 @@
                 data.sort = $('#'+data.id).attr('data-sort');
             });
 
+            function sortNumber(a, b){
+                return a - b;
+            }
+
             $upload.on('click', function(){
-                uploader.sort(function(obj1, obj2){
-                    return $('#'+obj1.id).attr('data-sort') > $('#'+obj2.id) ? -1: 1;
+                //修改上传的顺序
+                uploader.sort(function (obj1, obj2) {
+                    return sortNumber($('#' + obj1.id).attr('data-sort'),$('#' + obj2.id).attr('data-sort'));
                 });
                 if( $(this).hasClass('disabled')){
                     return false;
@@ -738,7 +743,7 @@
                 uploader.retry();
             });
 
-            //忽略
+            //忽略上传失败文件
             $info.on('click', '.ignore', function(){
                 // 获取上传失败的文件
                 var files = uploader.getFiles('error');
@@ -755,6 +760,15 @@
 
             return uploader;
 
+        },
+        reset: function(options) {
+            // 获取上传失败的文件
+            var files = options.getFiles;
+            for (var i = 0; i < files.length; i++) {
+                // 直接删除上传失败的文件
+                options.removeFile(files[i]);
+            }
+            options.refresh();
         }
     };
 

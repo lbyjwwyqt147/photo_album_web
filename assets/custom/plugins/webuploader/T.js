@@ -1,7 +1,7 @@
 jQuery(function() {
     var $ = jQuery,    // just in case. Make sure it's not an other libaray.
 
-        $wrap = $('#uploader'),
+        $wrap = $('.uploader_wrap'),
 
         // 图片容器
         $queue = $('<ul class="filelist"></ul>')
@@ -66,7 +66,7 @@ jQuery(function() {
             id: '#filePicker',
             label: '点击选择图片'
         },
-        dnd: '#uploader .queueList',
+        dnd: '.uploader_wrap .queueList',
         paste: document.body,
 
         accept: {
@@ -90,7 +90,7 @@ jQuery(function() {
 
     // 添加“添加文件”的按钮，
     uploader.addButton({
-        id: '#filePicker2',
+        id: '.uploader_filePicker2',
         label: '继续添加'
     });
 
@@ -310,7 +310,7 @@ jQuery(function() {
 
             case 'ready':
                 $placeHolder.addClass( 'element-invisible' );
-                $( '#filePicker2' ).removeClass( 'element-invisible');
+                $( '.uploader_filePicker2' ).removeClass( 'element-invisible');
                 $queue.parent().addClass('filled');
                 $queue.show();
                 $statusBar.removeClass('element-invisible');
@@ -318,7 +318,7 @@ jQuery(function() {
                 break;
 
             case 'uploading':
-                $( '#filePicker2' ).addClass( 'element-invisible' );
+                $( '.uploader_filePicker2' ).addClass( 'element-invisible' );
                 $progress.show();
                 $upload.text( '暂停上传' );
                 break;

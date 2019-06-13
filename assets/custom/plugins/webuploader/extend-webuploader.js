@@ -176,7 +176,7 @@ jQuery(function(){
             imgLeft = (index % (parseInt(wrapWidth/(thumbnailWidth+10)) ) ) * (thumbnailWidth+10);
         }
         $queue.height(wrapHeight);
-        var $li = $('<li data-key="'+file.key+'"  data-src="'+file.src+'" data-sort="'+index+'" draggable="true" id="' + file.id + '" style="position:absolute;margin:0;cursor:move;width:'+thumbnailWidth+'px;height:'+thumbnailHeight+'px;left:'+imgLeft+'px;top:'+imgTop+'">' +
+        var $li = $('<li data-key="'+file.key+'"  data-src="'+file.src+'" data-sort="'+index+'" draggable="true" id="' + file.id + '" style="position:absolute;margin:0;cursor:move;width:'+thumbnailWidth+'px;height:'+thumbnailHeight+'px;left:'+imgLeft+'px;top:'+imgTop+'px">' +
                 '<p class="title">' + file.name + '</p>' +
                 '<p class="imgWrap"></p>' + 
                 '<p class="progress"><span></span></p>' + '</li>'
@@ -378,7 +378,7 @@ jQuery(function(){
                 break;
             case 'ready':
                 $placeHolder.addClass('element-invisible');
-                $('#filePicker2').removeClass('element-invisible');
+                $('.uploader_filePicker2').removeClass('element-invisible');
                 $queue.parent().addClass('filled');
                 $queue.show();
                 $statusBar.removeClass('element-invisible');
@@ -438,7 +438,7 @@ jQuery(function(){
     }
 
     uploader.addButton({
-        id: '#filePicker2',
+        id: '.uploader_filePicker2',
         label: '继续添加',
     });
 
