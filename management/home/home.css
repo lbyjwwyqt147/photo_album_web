@@ -392,8 +392,9 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 
 
 /**  tab 样式 开始  */
+
 .layui-tab-card>.layui-tab-title {
-    background-color: #EAEAEF;
+    background-color: #f2f2f2;
 }
 .layui-tab-title .layui-this {
     color: cadetblue;
@@ -406,11 +407,16 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     background-color: #FFFFFF;
 }
 .layui-tab-card {
-    border-top: none;
+    /*border-top: none;*/
     border-left: none;
     box-shadow:none;
 }
 
+.layadmin-pagetabs {
+    background-color: #f2f2f2;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+}
 /*.layui-tab.layui-tab-card ul li {
     border-right:1px solid lightgrey;
 }*/
@@ -451,14 +457,14 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 
 /** table 标题栏 背景颜色  */
 .layui-table thead tr th{
-    background-color:rgba(234,234,239,0.6);
+    background-color:#f2f2f2;
     color:#666
 }
 
 
 /** table 更改隔行换色样式 */
 .layui-table[lay-even] tr:nth-child(even){
-    background-color:rgba(234,234,239,0.5);
+    background-color:#f2f2f2;
     color:#666
 }
 
@@ -568,6 +574,8 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     padding-right:0px!important;
 }
 
-
+.col-form-label {
+    padding-right: 6px;
+}
 
 /** modal 样式  结束   */

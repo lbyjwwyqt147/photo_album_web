@@ -136,7 +136,7 @@ var SnippetMainPageStaff = function() {
     function showMenu() {
         var staffOrgObj = $("#staffOrgName");
         var staffOrgOffset = $("#staffOrgName").offset();
-        $("#orgTreeContent").css({left: staffOrgObj.outerWidth() - $(".col-lg-2").width() + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
+        $("#orgTreeContent").css({left: staffOrgObj.outerWidth() - $(".col-lg-2").width()+9 + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
 
         $("body").bind("mousedown", onBodyDown);
     }
@@ -238,7 +238,7 @@ var SnippetMainPageStaff = function() {
                 where: {   //传递额外参数
 
                 },
-                headers: BaseUtils.cloudHeaders(),
+                headers: BaseUtils.serverHeaders(),
                 title: '员工信息列表',
                 initSort: {
                     field: 'entryDate', //排序字段，对应 cols 设定的各字段名
@@ -389,11 +389,15 @@ var SnippetMainPageStaff = function() {
         // 职务 select
         BaseUtils.dictDataSelect("staff_position", function (data) {
             var $staffPosition = $("#staffPosition");
+            var $queryStaffPosition = $("#query_staffPosition");
+            $queryStaffPosition.append("<option value=''>--请选择--</option>");
             Object.keys(data).forEach(function(key){
                 $staffPosition.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                $queryStaffPosition.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
             //必须加，刷新select
             $staffPosition .selectpicker('refresh');
+            $queryStaffPosition.selectpicker('refresh');
         });
         // 技能(特长)  multi select
         BaseUtils.dictDataSelect("staff_skill", function (data) {
@@ -423,7 +427,7 @@ var SnippetMainPageStaff = function() {
             } else if (curSelectedValue == 3) {
                 $("#skill").val("2").select2();
             }
-        })
+        });
         // 省市区 select
         BaseUtils.distDataSelect("510000", function (data) {
             var $city = $("#city");
@@ -583,7 +587,7 @@ var SnippetMainPageStaff = function() {
             $encryptPostAjax({
                 url:serverUrl + "v1/verify/staff/s",
                 data:staffMainPageSubmitForm.serializeJSON(),
-                headers: BaseUtils.cloudHeaders()
+                headers: BaseUtils.serverHeaders()
             }, function (response) {
                 BaseUtils.modalUnblock("#staff_mainPage_dataSubmit_form_modal");
                 if (response.success) {
@@ -672,7 +676,7 @@ var SnippetMainPageStaff = function() {
                 $encrypDeleteAjax({
                     url:ajaxDelUrl,
                     data: delData,
-                    headers: BaseUtils.cloudHeaders()
+                    headers: BaseUtils.serverHeaders()
                 }, function (response) {
                     if (response.success) {
                         if (obj != null) {
@@ -744,7 +748,7 @@ var SnippetMainPageStaff = function() {
             $encrypPutAjax({
                 url: ajaxPutUrl,
                 data: putData,
-                headers: BaseUtils.cloudHeaders()
+                headers: BaseUtils.serverHeaders()
             }, function (response) {
                   if (response.success) {
                       staffMainPageRefreshGrid();
@@ -791,7 +795,7 @@ var SnippetMainPageStaff = function() {
         BaseUtils.pageMsgBlock();
         $postAjax({
             url: serverUrl + "v1/verify/staff/sync",
-            headers: BaseUtils.cloudHeaders()
+            headers: BaseUtils.serverHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
             if (response.success) {

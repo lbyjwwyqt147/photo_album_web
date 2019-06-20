@@ -545,7 +545,17 @@ var SnippetMainPageFahrenheit = function() {
                 }
                 fahrenheitMainPageMark = 1;
                 // 显示 dialog
-                fahrenheitMainPageFormModal.modal('show');
+               // fahrenheitMainPageFormModal.modal('show');
+                var perContent = layer.open({
+                    type: 2,
+                    title: '图册',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['100%', '100%'],
+                    content: '../../management/photo/album/fahrenheit/uploading.html?dataId=1&albumClassify=1'
+                });
+                layer.full(perContent);
                 return false;
             });
 
