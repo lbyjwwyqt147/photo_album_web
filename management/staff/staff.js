@@ -550,6 +550,9 @@ var SnippetMainPageStaff = function() {
                     },
                     staffIntro: {
                         maxlength: 350
+                    },
+                    birthday : {
+                        required: true,
                     }
                 },
                 errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
@@ -583,8 +586,11 @@ var SnippetMainPageStaff = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
+            if ($("#staff-id").val() == null || $("#staff-id").val() == "") {
+                $("#staffCategory").val(1);
+            }
             BaseUtils.modalBlock("#staff_mainPage_dataSubmit_form_modal");
-            $encryptPostAjax({
+            $postAjax({
                 url:serverUrl + "v1/verify/staff/s",
                 data:staffMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.serverHeaders()
