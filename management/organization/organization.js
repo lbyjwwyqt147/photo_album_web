@@ -119,7 +119,7 @@ var SnippetMainPageOrganization = function() {
         }
         var zTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
         var keyType = "name";
-       organizationMainPageZtreeNodeList = zTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
+        organizationMainPageZtreeNodeList = zTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
         organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList, true);
     };
 
@@ -211,6 +211,8 @@ var SnippetMainPageOrganization = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
         }
+        // Tooltip
+        $('[data-toggle="m-tooltip"]').tooltip();
     };
 
     /**

@@ -1,21 +1,21 @@
 <link rel="stylesheet" href="../../assets/custom/plugins/zTree/css/bootstrapStyle/bootstrapStyle.css" type="text/css">
 
 <style>
-    .m-portlet {
+    #dict-page-frame .m-portlet {
         margin-bottom: 0rem;
     }
-    .m-widget1 {
+    #dict-page-frame .m-widget1 {
         padding:0px;
     }
-    .m-portlet .m-portlet__head {
+    #dict-page-frame .m-portlet .m-portlet__head {
         border-bottom: 0px solid #ebedf2;
     }
-    .row.m-row--col-separator-xl > div {
+    #dict-page-frame .row.m-row--col-separator-xl > div {
         border-bottom: 0;
         border-right: 0px solid #ebedf2;
     }
 
-    .ztree {
+    #dict-page-frame .ztree {
         margin: 0;
         padding: 5px 5px 5px 21px;
         color: #333;
@@ -23,18 +23,18 @@
 
     /** tree 滚动条样式 开始 */
 
-    .m-scroller::-webkit-scrollbar {/*滚动条整体样式*/
+    #dict-page-frame .m-scroller::-webkit-scrollbar {/*滚动条整体样式*/
         width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
         height: 4px;
         cursor: pointer;
     }
-    .m-scroller::-webkit-scrollbar-thumb {/*滚动条里面线条*/
+    #dict-page-frame .m-scroller::-webkit-scrollbar-thumb {/*滚动条里面线条*/
         border-radius: 5px;
         -webkit-box-shadow: inset 0 0 5px rgba(234, 234, 239, 1);
         background: rgba(234, 234, 239, 1);
         cursor: pointer;
     }
-    .m-scroller::-webkit-scrollbar-track { /*滚动条里面轨道线条背景*/
+    #dict-page-frame .m-scroller::-webkit-scrollbar-track { /*滚动条里面轨道线条背景*/
         -webkit-box-shadow: inset 0 0 5px rgba(234, 234, 239, 0.3);
         border-radius: 0;
         background: rgba(234, 234, 239, 0.3);
@@ -52,7 +52,7 @@
 </style>
 
 
-<div class="row">
+<div class="row" id="dict-page-frame">
     <div class="col-xl-12">
         <div class="m-portlet">
             <div class="m-portlet__body  m-portlet__body--no-padding">
@@ -60,7 +60,7 @@
                     <div class="col-xl-2">
                         <!--begin:: ztree -->
                         <div class="m-widget1" >
-                            <div class="input-group" style="padding-left: 16px">
+                            <div class="input-group" style="margin-left: 17px; margin-top: 5px; ">
                                 <input type="text" class="form-control form-control-danger" id="dict-mainPage-nodeName-search" placeholder="输入名称搜索" autocomplete="off" style="height: 41px;">
                                 <div class="input-group-append" style="cursor: pointer" id="dict_mainPage_searchNode_btn">
                             <span class="input-group-text" >
@@ -68,7 +68,7 @@
                             </span>
                                 </div>
                             </div>
-                            <ul id="dict_mainPage_tree" class="ztree m-scroller" style="overflow:auto;min-height: 300px;" ></ul>
+                            <ul id="dict_mainPage_tree" class="ztree m-scroller" style="overflow:auto;min-height: 400px;" ></ul>
                         </div>
 
                         <!--end:: ztree -->
@@ -77,7 +77,7 @@
 
                         <!--begin:: grid -->
                         <div class="m-widget1">
-                            <div class="m-portlet__head" style="height: 41px;">
+                            <div class="m-portlet__head" style="height: 41px; margin-bottom: 6px;">
                                 <div class="m-portlet__head-caption">
 
                                 </div>

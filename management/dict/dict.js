@@ -213,6 +213,8 @@ var SnippetMainPageDict = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
         }
+        // Tooltip
+        $('[data-toggle="m-tooltip"]').tooltip();
     };
 
     /**

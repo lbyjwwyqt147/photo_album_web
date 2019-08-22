@@ -32,6 +32,9 @@ var SnippetMainPageStaff = function() {
             var staffOrgObj = $("#staffOrgName");
             staffOrgObj.attr("value", treeNode.name);
             $("#staffOrgId").attr("value", treeNode.id);
+            var otherAttributes = treeNode.otherAttributes;
+            $("#staff_full_parent").attr("value", otherAttributes.fullParent);
+            $("#staff_org_number").attr("value", otherAttributes.orgNumber);
         },
         onAsyncSuccess:function(event, treeId, msg){ //异步加载完成后执行
             if ("undefined" == $("#staffOrgTree_1_a").attr("title")) {
@@ -222,7 +225,7 @@ var SnippetMainPageStaff = function() {
             tableToolbarHtml.append(table_del_btn_html);
         }
         // Tooltip
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="m-tooltip"]').tooltip();
     };
 
     /**
@@ -236,7 +239,7 @@ var SnippetMainPageStaff = function() {
                 url: serverUrl + 'v1/table/staff/g',
                 method:"get",
                 where: {   //传递额外参数
-
+                    staffStatus : 0
                 },
                 headers: BaseUtils.serverHeaders(),
                 title: '员工信息列表',
@@ -247,13 +250,17 @@ var SnippetMainPageStaff = function() {
                 cols: [[
                     {checkbox: true},
                     {field:'id', title:'ID', unresize:true, hide:true },
-                    {field:'staffPortraitTiny', title:'头像', unresize:true,
+                    {field:'staffNumber', title:'工号'},
+                    {field:'staffPortrait', title:'头像', unresize:true,  align: 'center', width:60,
                         templet : function (row) {
-                            var spanHtml = '<img style="display: inline-block; width: 50%; height: 100%;" src="' + value + '">';
+                            var value = row.staffPortrait;
+                            if (value == null || value == '' ) {
+                                value = "../../assets/custom/images/user/user_0.png";
+                            }
+                            var spanHtml = '<img style="display: inline-block; width: 100%; height: 100%;" src="' + value + '">';
                             return spanHtml;
                         }
-                        },
-                    {field:'staffNumber', title:'工号'},
+                    },
                     {field:'staffName', title:'姓名', fixed: true},
                     {field:'staffNickName', title:'昵称'},
                     {field:'mobilePhone', title:'手机号'},
@@ -264,6 +271,7 @@ var SnippetMainPageStaff = function() {
                     {field:'orgName', title:'组织机构'},
                     {field:'duration', title:'在职年限', sort:true, unresize:true,
                         templet : function (row) {
+                            var value = row.duration;
                             return value + "月";
                         }
                      },
@@ -288,7 +296,7 @@ var SnippetMainPageStaff = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:200}
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:230}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -358,13 +366,22 @@ var SnippetMainPageStaff = function() {
      * 刷新grid
      */
     var staffMainPageRefreshGrid = function () {
-        var searchSondition = $("#staff-query-form").serializeJSON();
+        var searchSondition = $("#staff-page-grid-query-form").serializeJSON();
         staffMainPageTable.reload('staff_mainPage_grid', {
             where: searchSondition,
             page: {
                  curr: 1 //重新从第 1 页开始
              }
         });
+    };
+
+    /**
+     * 重置查询条件
+     */
+    var staffMainPageRefreshGridQueryCondition = function () {
+        $("#staff-page-grid-query-form")[0].reset();
+        $("#query_staffPosition").selectpicker('refresh');
+        $("#query-staffStatus").selectpicker('refresh');
     };
 
     /**
@@ -600,25 +617,36 @@ var SnippetMainPageStaff = function() {
                     // toastr.success(BaseUtils.saveSuccessMsg);
                     // 关闭 dialog
                     staffMainPageFormModal.modal('hide');
+
+
                     if ( $("#staffPortraitId").val() == '') {
-                        layer.open({
-                            type: 2,
-                            title: '上传头像',
-                            offset: '90px',
-                            resize: false,
-                            content:  ['portrait.html?businessId='+ response.data +'&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
-                            area: ['1010px', '650px'],
-                            btn: ['跳过'],
-                            yes: function(index, layero){  // 确定按钮回调方法
-                                // 刷新表格
-                                staffMainPageRefreshGrid();
-                                layer.close(index);
-                            },
-                            cancel: function(index, layero){  // 右上角关闭按钮触发的回调
-                                staffMainPageRefreshGrid();
-                                layer.close(index);
-                                return false;
-                            }
+                        //询问框
+                        layer.confirm('是否需要上传'+ $("#staff-name").val() +'的照片信息?', {
+                            shade: [0.3, 'rgb(230, 230, 230)'],
+                            btn: ['确定','取消'] //按钮
+                        }, function(index, layero){   //按钮【按钮一】的回调
+                            layer.close(index);
+                            layer.open({
+                                type: 2,
+                                title: '上传头像',
+                                offset: '90px',
+                                resize: false,
+                                content:  ['portrait.html?businessId='+ response.data +'&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
+                                area: ['1010px', '650px'],
+                                btn: ['跳过'],
+                                yes: function(index, layero){  // 确定按钮回调方法
+                                    // 刷新表格
+                                    staffMainPageRefreshGrid();
+                                    layer.close(index);
+                                },
+                                cancel: function(index, layero){  // 右上角关闭按钮触发的回调
+                                    staffMainPageRefreshGrid();
+                                    layer.close(index);
+                                    return false;
+                                }
+                            });
+                        }, function () {  //按钮【按钮二】的回调
+
                         });
                     }
                 } else if (response.status == 409) {
@@ -858,6 +886,9 @@ var SnippetMainPageStaff = function() {
                     var staffOrgObj = $("#staffOrgName");
                     staffOrgObj.attr("value", selectedNode.name);
                     $("#staffOrgId").attr("value", selectedNode.id);
+                    var otherAttributes = selectedNode.otherAttributes;
+                    $("#staff_full_parent").attr("value", otherAttributes.fullParent);
+                    $("#staff_org_number").attr("value", otherAttributes.orgNumber);
                 }
 
             }
@@ -917,6 +948,21 @@ var SnippetMainPageStaff = function() {
                     return;
                 }
                 staffMainPageSyncData();
+                return false;
+            });
+
+            $('#staff-page-grid-query-btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                staffMainPageRefreshGrid();
+                return false;
+            });
+
+            $('#staff-page-grid-query-rotate-btn').click(function(e) {
+                e.preventDefault();
+                staffMainPageRefreshGridQueryCondition();
                 return false;
             });
 

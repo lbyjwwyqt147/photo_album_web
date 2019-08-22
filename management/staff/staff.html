@@ -3,26 +3,26 @@
 
 <style>
 
-    .m-portlet {
+   #staff-page-frame .m-portlet {
         -webkit-box-shadow: none;
         box-shadow: none;
         background-color: #ffffff;
         margin-bottom: 0rem;
     }
-    .m-widget1 {
+    #staff-page-frame .m-widget1 {
         padding:0px;
     }
-    .m-portlet .m-portlet__head {
+    #staff-page-frame .m-portlet .m-portlet__head {
         border-bottom: 0px solid #ebedf2;
     }
-    .row.m-row--col-separator-xl > div {
+    #staff-page-frame .row.m-row--col-separator-xl > div {
         border-bottom: 0;
         border-right: 0px solid #ebedf2;
     }
 
     /**  modal 样式  开始   */
 
-    .modal-lg {
+    #staff-page-frame .modal-lg {
         max-width: 50%;
     }
 
@@ -30,12 +30,12 @@
 
     /** 表单样式  开始  */
 
-    .m-form.m-form--group-seperator-dashed .m-form__group, .m-form.m-form--group-seperator .m-form__group {
+    #staff-page-frame .m-form.m-form--group-seperator-dashed .m-form__group, .m-form.m-form--group-seperator .m-form__group {
         padding-top: 20px;
         padding-bottom: 20px;
     }
 
-    .row {
+    #staff-page-frame .row {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -51,19 +51,19 @@
 
     /** 表单样式结束  */
 
-    .layui-layer-iframe .layui-layer-btn, .layui-layer-page .layui-layer-btn {
+    #staff-page-frame .layui-layer-iframe .layui-layer-btn, .layui-layer-page .layui-layer-btn {
         padding-top: 10px;
         background-color: #eee;
     }
 
-    .layui-layer-btn .layui-layer-btn0 {
+    #staff-page-frame .layui-layer-btn .layui-layer-btn0 {
         color: #fff;
         background-color: #0abb87;
         border-color: #0abb87;
         color: #ffffff;
     }
 
-    ul.ztree {margin-top: 10px;padding-left: 0px; border: 1px solid #ebedf2;background: #fff;width:100%; min-height: 200px;overflow:auto;}
+    #staffOrgTree ul.ztree {margin-top: 5px;padding-left: 0px; border: 1px solid #ebedf2;background: #fff;width:100%; min-height: 200px;overflow:auto;}
 
     #staff-page-grid-query-form  .col-lg-1 {
         -webkit-box-flex: 0;
@@ -77,10 +77,16 @@
         padding-right: 10px;
     }
 
+    /** Bootstrap Tooltip 样式  开始  */
+
+
+
+    /** Bootstrap Tooltip 样式  结束  */
+
 </style>
 
 
-<div class="row">
+<div class="row" id="staff-page-frame">
     <div class="col-xl-12">
         <div class="m-portlet">
             <div class="m-portlet__body  m-portlet__body--no-padding">
@@ -97,11 +103,11 @@
                                             <div class="form-group m-form__group row" style="padding-top: 5px; padding-bottom: 5px;">
                                                 <label class="col-lg-1 col-form-label">姓名:</label>
                                                 <div class="col-lg-2">
-                                                    <input type="text" class="form-control m-input" placeholder="姓名">
+                                                    <input type="text" class="form-control m-input" name="staffName" placeholder="姓名">
                                                 </div>
                                                 <label class="col-lg-1 col-form-label">手机号:</label>
                                                 <div class="col-lg-2">
-                                                    <input type="text" class="form-control m-input" placeholder="手机号">
+                                                    <input type="text" class="form-control m-input" name="mobilePhone" placeholder="手机号">
                                                 </div>
                                                 <label class="col-lg-1 col-form-label" >职务:</label>
                                                 <div class="col-lg-2" >
@@ -119,12 +125,18 @@
                                                 </div>-->
                                                 <label class="col-lg-1 col-form-label" >状态:</label>
                                                 <div class="col-lg-2"  id="staff-status">
-                                                    <select class="form-control m-bootstrap-select m_selectpicker" name="staffStatus"   placeholder="状态" autocomplete="off">
-                                                        <option value="1">在职</option>
+                                                    <select class="form-control m-bootstrap-select m_selectpicker" name="staffStatus" id="query-staffStatus"   placeholder="状态" autocomplete="off">
+                                                        <option value="0">在职</option>
+                                                        <option value="1">禁用</option>
                                                         <option value="2">离职</option>
                                                     </select>
-                                                    <a href="#" class="btn btn-secondary m-btn m-btn--icon m-btn--icon-only" title="搜索">
+                                                </div>
+                                                <div style="padding-top: 5px; ">
+                                                    <a href="#"  id="staff-page-grid-query-btn" class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" data-toggle="m-tooltip" title="搜索数据">
                                                         <i class="la la-search"></i>
+                                                    </a>
+                                                    <a href="#" id="staff-page-grid-query-rotate-btn" class="btn btn-accent m-btn m-btn--icon btn-sm m-btn--icon-only" data-toggle="m-tooltip" title="清除条件">
+                                                        <i class="la la-rotate-left"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -177,7 +189,7 @@
                                     <div class="form-group m-form__group row">
                                         <label class="col-lg-2 col-form-label">姓名:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-4">
-                                            <input type="text" name="staffName" class="form-control m-input" placeholder="姓名" autocomplete="off" >
+                                            <input type="text" name="staffName" id="staff-name" class="form-control m-input" placeholder="姓名" autocomplete="off" >
                                         </div>
                                         <label class="col-lg-2 col-form-label">手机号:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-4">
