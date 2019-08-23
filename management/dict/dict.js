@@ -21,7 +21,7 @@ var SnippetMainPageDict = function() {
     var dictMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential,
+        "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential + "&lessee=" + BaseUtils.getLesseeId(),
         "headers":BaseUtils.cloudHeaders()
     });
     dictMainPageZtreeSetting.view = {
@@ -97,7 +97,8 @@ var SnippetMainPageDict = function() {
             data: {
                 id:id,
                 systemCode:BaseUtils.systemCode,
-                credential:BaseUtils.credential
+                credential:BaseUtils.credential,
+                lessee: BaseUtils.getLesseeId()
             },
             headers: BaseUtils.cloudHeaders()
         }, function (data) {
@@ -231,10 +232,12 @@ var SnippetMainPageDict = function() {
                 where: {   //传递额外参数
                     'pid' : dictMainPagePid,
                     'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
+                    'systemCode': BaseUtils.systemCode,
+                    'lessee': BaseUtils.getLesseeId()
                 },
                 headers: BaseUtils.cloudHeaders(),
                 title: '数据字典列表',
+                height: 'full-150',
                 initSort: {
                     field: 'priority', //排序字段，对应 cols 设定的各字段名
                     type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
@@ -276,89 +279,6 @@ var SnippetMainPageDict = function() {
                 }
                 BaseUtils.checkIsLoginTimeOut(res.status);
             });
-            /*dictMainPageTable.render({
-                elem: '#dict_mainPage_grid',
-                url: serverUrl + 'v1/table/dict/grid',
-                where: {   //传递额外参数
-                    'pid' : dictMainPagePid,
-                    'credential': BaseUtils.credential,
-                    'systemCode': BaseUtils.systemCode
-                },
-                title: '数据字典列表',
-                text: {
-                    none: '暂无相关数据'   // 空数据时的异常提示
-                },
-                cellMinWidth: 50, //全局定义常规单元格的最小宽度
-                height: 'full-152', //高度最大化减去差值
-                even: true,
-                initSort: {
-                    field: 'priority', //排序字段，对应 cols 设定的各字段名
-                    type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-                },
-                cols: [[
-                    {checkbox: true},
-                    {field:'id', title:'ID', unresize:true, hide:true },
-                    {field:'dictCode', title:'字典代码'},
-                    {field:'dictName', title:'字段名称'},
-                    {field:'priority', title:'优先级'},
-                    {field:'fullParentCode', title:'完整父级代码'},
-                    {field:'description', title:'描述'},
-                    {field:'status', title:'状态', align: 'center', unresize:true,
-                        templet : function (row) {
-                            var value = row.orgStatus;
-                            var spanCss = "m-badge--success";
-                            if (value == 1)  {
-                                spanCss = "m-badge--warning";
-                            }
-                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + BaseUtils.statusText(value) + '</span>';
-                            return spanHtml;
-                        }
-                    },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#dict_mainPage_table_toolbar', align: 'center', width:200}
-                ]],
-                page: {
-                    theme: 'cadetblue',
-                    layout:[ 'prev', 'page', 'next', 'count', 'limit', 'skip', 'refresh'],
-                    curr: 1 ,//设定初始在第 1 页
-                    groups: 10, //只显示 10 个连续页码
-                    first: true, //显示首页
-                    last: true //显示尾页
-                },
-                limit: 10,
-                limits: [10,20,30,50],
-
-                request: {
-                    pageName: 'pageNumber', //页码的参数名称，默认：page
-                    limitName: 'pageSize' //每页数据量的参数名，默认：limit
-                },
-                response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-                },
-                headers: BaseUtils.cloudHeaders(),
-                parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                    return {
-                        "code": res.status, //解析接口状态
-                        "msg": res.message, //解析提示文本
-                        "count": res.total, //解析数据长度
-                        "data": res.data //解析数据列表
-                    };
-                },
-                done: function (res, curr, count) {
-                    dictMainPageZtreeMaxHeight();
-                    var curFunctionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(dictMainPageModuleCode);
-                    var status_table_index = $.inArray("3", curFunctionButtonGroup);
-                    if (status_table_index != -1) {
-                        $(".layui-unselect.layui-form-checkbox").show();
-                    } else {
-                        $(".layui-unselect.layui-form-checkbox").hide();
-                    }
-                    if (BaseUtils.checkLoginTimeoutStatus()) {
-                        return;
-                    }
-                    BaseUtils.checkIsLoginTimeOut(res.status);
-
-                }
-            });*/
 
             //监听行工具事件
             dictMainPageTable.on('tool(dict_mainPage_grid)', function(obj){
@@ -500,7 +420,7 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='systemCode']").val(BaseUtils.systemCode);
             $("#dict_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
-
+            $("#dict_mainPage_dataSubmit_form input[name='lessee']").val(BaseUtils.getLesseeId());
             $encryptPostAjax({
                 url:serverUrl + "v1/verify/dict/s",
                 data:dictMainPageSubmitForm.serializeJSON(),
@@ -690,7 +610,7 @@ var SnippetMainPageDict = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/verify/dict/sync",
+            url: serverUrl + "v1/verify/dict/sync?lessee="+ BaseUtils.getLesseeId(),
             headers: BaseUtils.cloudHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();

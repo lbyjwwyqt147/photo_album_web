@@ -462,7 +462,7 @@ jQuery(document).ready(function() {
                 none: '暂无相关数据'   // 空数据时的异常提示
             },
             cellMinWidth: 50, //全局定义常规单元格的最小宽度
-            height: params.height == null ? 'full-152' : params.height, //高度最大化减去差值
+            height: params.height == null ? 'full-164' : params.height, //高度最大化减去差值
             even: true,
             initSort: params.initSort,
             cols: params.cols,

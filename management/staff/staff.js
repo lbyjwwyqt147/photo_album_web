@@ -139,7 +139,7 @@ var SnippetMainPageStaff = function() {
     function showMenu() {
         var staffOrgObj = $("#staffOrgName");
         var staffOrgOffset = $("#staffOrgName").offset();
-        $("#orgTreeContent").css({left: staffOrgObj.outerWidth() - $(".col-lg-2").width()+9 + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
+        $("#orgTreeContent").css({left: staffOrgObj.outerWidth() - $(".col-lg-2").width()+30 + "px", top:staffOrgOffset.top - staffOrgObj.outerHeight() - 1 + "px", width:staffOrgObj.outerWidth() + "px"}).slideDown("fast");
 
         $("body").bind("mousedown", onBodyDown);
     }
@@ -251,7 +251,8 @@ var SnippetMainPageStaff = function() {
                     {checkbox: true},
                     {field:'id', title:'ID', unresize:true, hide:true },
                     {field:'staffNumber', title:'工号'},
-                    {field:'staffPortrait', title:'头像', unresize:true,  align: 'center', width:60,
+                    {field:'staffName', title:'姓名'},
+                    {field:'staffPortrait', title:'照片', unresize:true,  align: 'center', width:60,
                         templet : function (row) {
                             var value = row.staffPortrait;
                             if (value == null || value == '' ) {
@@ -261,14 +262,13 @@ var SnippetMainPageStaff = function() {
                             return spanHtml;
                         }
                     },
-                    {field:'staffName', title:'姓名', fixed: true},
                     {field:'staffNickName', title:'昵称'},
                     {field:'mobilePhone', title:'手机号'},
                     {field:'staffPositionText', title:'职务'},
                     {field:'entryDate', title:'入职日期', sort:true},
                     {field:'staffSex', title:'性别'},
                     {field:'staffEmail', title:'电子邮箱'},
-                    {field:'orgName', title:'组织机构'},
+                    {field:'staffOrgName', title:'组织机构'},
                     {field:'duration', title:'在职年限', sort:true, unresize:true,
                         templet : function (row) {
                             var value = row.duration;
@@ -296,7 +296,7 @@ var SnippetMainPageStaff = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:230}
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:220}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -628,7 +628,7 @@ var SnippetMainPageStaff = function() {
                             layer.close(index);
                             layer.open({
                                 type: 2,
-                                title: '上传头像',
+                                title: '上传照片',
                                 offset: '90px',
                                 resize: false,
                                 content:  ['portrait.html?businessId='+ response.data +'&businessType=1', 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:

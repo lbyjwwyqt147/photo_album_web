@@ -230,6 +230,7 @@ var SnippetMainPageOrganization = function() {
                 },
                 headers: BaseUtils.serverHeaders(),
                 title: '组织机构列表',
+                height: 'full-150',
                 initSort: {
                     field: 'seq', //排序字段，对应 cols 设定的各字段名
                     type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序

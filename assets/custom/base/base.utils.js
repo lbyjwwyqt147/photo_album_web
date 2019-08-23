@@ -169,7 +169,12 @@ var BaseUtils = {
         toastr.warning(BaseUtils.loginTimeOutMsg);
     },
 
-
+    /**
+     * 获取当前租户id
+     */
+    getLesseeId : function() {
+        return 1;
+    },
 
     /**
      * 设置 cookie 信息
