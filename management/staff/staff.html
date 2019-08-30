@@ -111,7 +111,7 @@
                                                 </div>
                                                 <label class="col-lg-1 col-form-label" >职务:</label>
                                                 <div class="col-lg-2" >
-                                                    <select class="form-control m-bootstrap-select m_selectpicker" name="staffPosition" id="query_staffPosition"  placeholder="职务" autocomplete="off">
+                                                    <select class="form-control m-bootstrap-select m_selectpicker" name="staffPosition" id="query_staffPosition"  placeholder="职务" autocomplete="off" >
 
                                                     </select>
                                                 </div>
@@ -233,13 +233,13 @@
                                     <div class="form-group m-form__group row">
                                         <label class="col-lg-2 col-form-label">职务:</label>
                                         <div class="col-lg-4">
-                                            <select class="form-control m-bootstrap-select m_selectpicker" name="staffPosition" id="staffPosition"  placeholder="职务" autocomplete="off">
+                                            <select class="form-control m-bootstrap-select m_selectpicker" name="staffPosition" id="staffPosition"  placeholder="职务" autocomplete="off" >
 
                                             </select>
                                         </div>
                                         <label class="col-lg-2 col-form-label">技能(特长):</label>
                                         <div class="col-lg-4 col-md-9 col-sm-12">
-                                            <select class="form-control m-select2" multiple="multiple"  name="skill" id="skill"  placeholder="技能(特长)" autocomplete="off">
+                                            <select class="form-control m-select2" multiple="multiple"   id="skill"  placeholder="技能(特长)" autocomplete="off">
 
                                             </select>
                                         </div>
@@ -279,11 +279,11 @@
                                         <div class="col-lg-4">
                                             <div class="m-radio-inline">
                                                 <label class="m-radio m-radio--solid">
-                                                    <input type="radio" name="staffSex" checked value="0"> 男
+                                                    <input type="radio" name="tempStaffSex" checked value="0"> 男
                                                     <span></span>
                                                 </label>
                                                 <label class="m-radio m-radio--solid">
-                                                    <input type="radio" name="staffSex" value="1"> 女
+                                                    <input type="radio" name="tempStaffSex" value="1"> 女
                                                     <span></span>
                                                 </label>
                                             </div>
@@ -338,7 +338,10 @@
                                         <input type="hidden" class="form-control  m-input" name="staffPortraitId" id="staffPortraitId" placeholder="staffPortraitId"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="staffCategory" id="staffCategory" placeholder="staffCategory"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="lessee" placeholder="lessee"  autocomplete="off">
-                                    </div>
+                                        <input type="hidden" class="form-control  m-input" name="userId" placeholder="userId"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="staffAccountsId" placeholder="staffAccountsId"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="staffSex" id="staff-sex" placeholder="staffSex"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="skill" id="staff-skill" placeholder="staffSex"  autocomplete="off">
                                 </div>
                             </form>
                             <!--end::Form-->
@@ -364,17 +367,17 @@
                 </div>
             </div>
             <!-- end:: Modal -->
+
         </div>
 
     </div>
 </div>
 
 <script type="text/html" id="staff_mainPage_table_toolbar">
-    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" dataversion="{{d.dataVersion}}" userid="{{d.userId}}" lay-filter="lock" {{ d.status == 1 ? 'checked' : '' }}>
+    <input type="checkbox" name="lock" title="禁用" value="{{d.id}}" dataversion="{{d.dataVersion}}" userid="{{d.userId}}" lay-filter="lock" {{ d.staffStatus == 1 ? 'checked' : '' }}>
 </script>
 
 <script type="text/javascript" src="../../assets/custom/plugins/zTree/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="../../assets/custom/plugins/cropper/cropper.min.js"></script>
-<script type="text/javascript" src="../../assets/custom/plugins/cropper/cropper.main.js"></script>
 
 <script src="../../management/staff/staff.js" type="text/javascript"></script>

@@ -180,10 +180,10 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(save_btn_html);
 
 
-                var table_ejection_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 员工离职操作" lay-event="ejection">\n'
+                /*var table_ejection_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 员工离职操作" lay-event="ejection">\n'
                 table_ejection_btn_html += '<i class="la la-user-times"></i>\n';
                 table_ejection_btn_html += '</a>\n';
-                tableToolbarHtml.append(table_ejection_btn_html);
+                tableToolbarHtml.append(table_ejection_btn_html);*/
 
 
                 var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改员工信息" lay-event="edit">\n'
@@ -266,15 +266,23 @@ var SnippetMainPageStaff = function() {
                     {field:'mobilePhone', title:'手机号'},
                     {field:'staffPositionText', title:'职务'},
                     {field:'entryDate', title:'入职日期', sort:true},
-                    {field:'staffSex', title:'性别'},
+                    {field:'staffSex', title:'性别',
+                        templet : function (row) {
+                            var value = row.staffSex;
+                            var curSexText = "男";
+                            switch (value) {
+                                case 1:
+                                    curSexText = "女";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return curSexText;
+                        }
+                    },
                     {field:'staffEmail', title:'电子邮箱'},
                     {field:'staffOrgName', title:'组织机构'},
-                    {field:'duration', title:'在职年限', sort:true, unresize:true,
-                        templet : function (row) {
-                            var value = row.duration;
-                            return value + "月";
-                        }
-                     },
+                    {field:'workingYears', title:'在职年限', sort:true, unresize:true},
                     {field:'staffStatus', title:'状态', align: 'center',  fixed: 'right', unresize:true,
                         templet : function (row) {
                             var value = row.staffStatus;
@@ -296,7 +304,7 @@ var SnippetMainPageStaff = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:220}
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#staff_mainPage_table_toolbar', align: 'center', width:210}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -326,9 +334,19 @@ var SnippetMainPageStaff = function() {
                         return;
                     }
                     staffMainPageSubmitForm.setForm(obj.data);
+                    initSelected(obj.data);
                     staffMainPageMark = 2;
                     // 显示 dialog
                     staffMainPageFormModal.modal('show');
+                } else if (obj.event === 'ejection')  {
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                } else if (obj.event === 'look')  {
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                    lookStaffParticulars(obj);
                 }
             });
 
@@ -356,6 +374,7 @@ var SnippetMainPageStaff = function() {
             staffMainPageTable.on('rowDouble(staff_mainPage_grid)', function(obj){
                 staffMainPageMark = 3;
                 staffMainPageSubmitForm.setForm(obj.data);
+                initSelected(obj.data);
                 BaseUtils.readonlyForm(staffMainPageSubmitFormId);
                 staffMainPageFormModal.modal('show');
             });
@@ -384,6 +403,7 @@ var SnippetMainPageStaff = function() {
         $("#query-staffStatus").selectpicker('refresh');
     };
 
+
     /**
      * 初始化 select 组件
      */
@@ -402,7 +422,12 @@ var SnippetMainPageStaff = function() {
             laydate.render({
                 elem: '#birthday'
             });
+            //离职日期控件
+            laydate.render({
+                elem: '#dimissionDate'
+            });
         });
+        $('#dimissionReason').selectpicker('refresh');
         // 职务 select
         BaseUtils.dictDataSelect("staff_position", function (data) {
             var $staffPosition = $("#staffPosition");
@@ -415,6 +440,9 @@ var SnippetMainPageStaff = function() {
             //必须加，刷新select
             $staffPosition .selectpicker('refresh');
             $queryStaffPosition.selectpicker('refresh');
+            $queryStaffPosition.change(function () {
+               queryStaffPositionSelectOnchang();
+            });
         });
         // 技能(特长)  multi select
         BaseUtils.dictDataSelect("staff_skill", function (data) {
@@ -430,13 +458,10 @@ var SnippetMainPageStaff = function() {
             $skill.select2({
                 placeholder: "技能(特长)",
             });
-
         });
         // 职务选择事件绑定
         $("#staff_position").on("changed.bs.select",function(e){
             // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
-            console.log(e);
-            console.log(e.target.value);
             var curSelectedValue = e.target.value;
             if (curSelectedValue == 1 || curSelectedValue == 2)  {
                 $("#skill").val("0").select2();
@@ -465,7 +490,6 @@ var SnippetMainPageStaff = function() {
         });
         // 城市绑定监听选择事件
         $("#city").on('changed.bs.select',function(e){
-            console.log(e.target.value);
             BaseUtils.distDataSelect(e.target.value, function (data) {
                 var $district = $("#district");
                 $district.html("");
@@ -500,7 +524,57 @@ var SnippetMainPageStaff = function() {
             showMenu();
             return false;
         });
+        $("#query-staffStatus").change(function () {
+            queryStaffStatusSelectOnchang();
+        });
 
+    }
+
+    /**
+     *  查询条件 职务选择事件
+     * @param obj
+     */
+    var queryStaffPositionSelectOnchang = function (obj) {
+        staffMainPageRefreshGrid();
+    }
+
+    /**
+     *  查询条件 状态选择事件
+     * @param obj
+     */
+    var queryStaffStatusSelectOnchang = function (obj) {
+        staffMainPageRefreshGrid();
+    }
+
+
+    /**
+     * select 控件回显值
+     */
+    var initSelected = function (obj) {
+        $('#probationStatus').selectpicker('val', obj.probationStatus);
+        $('#staffPosition').selectpicker('val', obj.staffPosition);
+        $('#province').selectpicker('val', obj.province);
+        $('#city').selectpicker('val', obj.city);
+        $('#district').selectpicker('val', obj.district);
+        $('#dimissionReason').selectpicker('val', obj.dimissionReason);
+        $("#skill").val(obj.skill.split(",")).trigger("change");
+        $("input:radio[value='"+obj.staffSex+"']").attr('checked','true');
+    };
+
+    /**
+     * 查看员工详情信息
+     * @param obj
+     */
+    var  lookStaffParticulars = function (obj) {
+        layer.open({
+            type: 2,
+            title: '员工个人信息',
+            offset: 'auto',
+            resize: false,
+            shadeClose : true,
+            content:  ['../../management/staff/particulars.html?businessId='+ obj.data.id, 'no'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content:
+            area: ['95%', '90%']
+        });
     }
 
     /**
@@ -509,7 +583,9 @@ var SnippetMainPageStaff = function() {
     var staffMainPageFormSubmitHandle = function() {
         $('#staff_mainPage_dataSubmit_form_submit').click(function(e) {
             e.preventDefault();
+            var curSex = $("input:radio[name=\"tempStaffSex\"]:checked").val();
             BaseUtils.formInputTrim(staffMainPageSubmitFormId);
+            $("#staff-sex").val(curSex);
             staffMainPageSubmitForm.validate({
                 rules: {
                     staffNumber: {
@@ -603,6 +679,8 @@ var SnippetMainPageStaff = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
+            var skillOptions = $("#skill").select2("val");
+            $("#staff-skill").val(skillOptions.join(','));
             if ($("#staff-id").val() == null || $("#staff-id").val() == "") {
                 $("#staffCategory").val(1);
             }
@@ -617,7 +695,6 @@ var SnippetMainPageStaff = function() {
                     // toastr.success(BaseUtils.saveSuccessMsg);
                     // 关闭 dialog
                     staffMainPageFormModal.modal('hide');
-
 
                     if ( $("#staffPortraitId").val() == '') {
                         //询问框
@@ -646,7 +723,7 @@ var SnippetMainPageStaff = function() {
                                 }
                             });
                         }, function () {  //按钮【按钮二】的回调
-
+                            staffMainPageRefreshGrid();
                         });
                     }
                 } else if (response.status == 409) {
@@ -664,6 +741,7 @@ var SnippetMainPageStaff = function() {
      */
     var staffMainPageCleanForm = function () {
         BaseUtils.cleanFormData(staffMainPageSubmitForm);
+        $("input:radio[value='0']").attr('checked','true');
     };
 
     /**
@@ -707,7 +785,7 @@ var SnippetMainPageStaff = function() {
             }, function(index, layero){   //按钮【按钮一】的回调
                 layer.close(index);
                 BaseUtils.pageMsgBlock();
-                $encrypDeleteAjax({
+                $deleteAjax({
                     url:ajaxDelUrl,
                     data: delData,
                     headers: BaseUtils.serverHeaders()
@@ -737,6 +815,9 @@ var SnippetMainPageStaff = function() {
         }
         var ajaxPutUrl = serverUrl + "v1/verify/staff/p";
         var putData = null;
+        var userIdsArray = [];
+        var idsArray = [];
+        var putParams = [];
         if (obj != null) {
             var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
             var userId = $(obj.elem.outerHTML).attr("userid");
@@ -744,16 +825,10 @@ var SnippetMainPageStaff = function() {
                 "id" : userId,
                 "dataVersion" : dataVersion
             }
-            putData = {
-                'id' : obj.value,
-                'status' : status,
-                'putParams' : JSON.stringify(curDataParam),
-                'otherIds':userId
-            }
+            putParams.push(curDataParam);
+            userIdsArray.push(userId);
+            idsArray.push(obj.value)
         } else {
-            var idsArray = [];
-            var putParams = [];
-            var userIdsArray = [];
             // 获取选中的数据对象
             var checkRows = staffMainPageTable.checkStatus('staff_mainPage_grid');
             //获取选中行的数据
@@ -768,18 +843,18 @@ var SnippetMainPageStaff = function() {
                     idsArray.push(element.id);
                     userIdsArray.push(element.userId);
                 });
-                putData = {
-                    'putParams' : JSON.stringify(idsArray),
-                    'ids': JSON.stringify(idsArray),
-                    'status' : status,
-                    'otherIds':JSON.stringify(userIdsArray)
-                }
             }
+        }
+        putData = {
+            'ids': JSON.stringify(idsArray),
+            'status' : status,
+            'putParams' : JSON.stringify(putParams),
+            'otherIds':JSON.stringify(userIdsArray)
         }
         BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
             BaseUtils.pageMsgBlock();
-            $encrypPutAjax({
+            $putAjax({
                 url: ajaxPutUrl,
                 data: putData,
                 headers: BaseUtils.serverHeaders()
@@ -841,10 +916,11 @@ var SnippetMainPageStaff = function() {
     };
 
 
-
     var staffMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#staff_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
+            $("input[name=tempStaffSex]:eq(0)").attr("value",'0');
+            $("input[name=tempStaffSex]:eq(1)").attr("value",'1');
             var modalDialogTitle = "新增员工信息";
             var orgzTree = $.fn.zTree.getZTreeObj("staffOrgTree");
             // 取消当前所有被选中节点的选中状态
@@ -882,7 +958,6 @@ var SnippetMainPageStaff = function() {
                 var selectedNodes = orgzTree.getSelectedNodes();
                 if (selectedNodes.length > 0) {
                     var selectedNode = selectedNodes[0];
-                    console.log(selectedNode);
                     var staffOrgObj = $("#staffOrgName");
                     staffOrgObj.attr("value", selectedNode.name);
                     $("#staffOrgId").attr("value", selectedNode.id);
@@ -903,6 +978,7 @@ var SnippetMainPageStaff = function() {
             $(".modal-backdrop").remove();
             BaseUtils.modalUnblock("#staff_mainPage_dataSubmit_form_modal");
         });
+
     };
 
     //== Public Functions

@@ -2,6 +2,7 @@ $.fn.setForm = function(jsonValue){
     var obj = this;
     $.each(jsonValue,function(name,ival){
         var $oinput = obj.find("input[name="+name+"]");
+        var $textarea = obj.find("textarea[name="+name+"]");
         if($oinput.attr("type")=="checkbox"){
             if(ival !== null){
                 var checkboxObj = $("[name="+name+"]");
@@ -28,5 +29,7 @@ $.fn.setForm = function(jsonValue){
         } else{
             $oinput.attr("value",ival);
         }
+        $textarea.attr("value",ival);
+        $textarea.val(ival);
     })
 }

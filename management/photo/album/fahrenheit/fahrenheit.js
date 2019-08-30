@@ -553,7 +553,7 @@ var SnippetMainPageFahrenheit = function() {
                     shade: false,
                     maxmin: true, //开启最大化最小化按钮
                     area: ['100%', '100%'],
-                    content: '../../management/photo/album/fahrenheit/uploading.html?dataId=1&albumClassify=1'
+                    content: '../../management/photo/album/photo-uploading.html?dataId=1&albumClassify=1'
                 });
                 layer.full(perContent);
                 return false;

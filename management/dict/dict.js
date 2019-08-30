@@ -420,7 +420,8 @@ var SnippetMainPageDict = function() {
             $("#dict_mainPage_dataSubmit_form input[name='systemCode']").val(BaseUtils.systemCode);
             $("#dict_mainPage_dataSubmit_form input[name='credential']").val(BaseUtils.credential);
             $("#dict_mainPage_dataSubmit_form input[name='pid']").val(dictMainPagePid);
-            $("#dict_mainPage_dataSubmit_form input[name='lessee']").val(BaseUtils.getLesseeId());
+            $("#dict_mainPage_dataSubmit_form input[name='lessee']").val(BaseUtils.lessee);
+            $("#lessee-id").val(BaseUtils.lessee);
             $encryptPostAjax({
                 url:serverUrl + "v1/verify/dict/s",
                 data:dictMainPageSubmitForm.serializeJSON(),

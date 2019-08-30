@@ -27,6 +27,7 @@ var BaseUtils = {
     "cloudAppKey": "c80e645007264e2684b393533ef7e832",
     "appKey": "0020a9ebfc7b4667b0617488d96c788b",
     "appId": "1550817774159",
+    "lessee": 1,
 
 
     /**
@@ -359,6 +360,27 @@ var BaseUtils = {
     },
 
     /**
+     * ajax 获取 员工 select 下拉框值
+     * @param params 参数
+     * @param successCallback  成功后回调函数
+     */
+    staffDataSelect : function(params, successCallback) {
+        $.ajax({
+            type: "get",
+            url: BaseUtils.serverAddress + 'v1/table/staff/select',
+            data:params,
+            async:false,
+            dataType: "json",
+            headers: BaseUtils.cloudHeaders,
+            success: function(data){
+                if (data != null) {
+                    successCallback(data);
+                }
+            }
+        });
+    },
+
+    /**
      * 获取地址栏中的参数
      * @param name
      * @returns {string}
@@ -496,9 +518,17 @@ var BaseUtils = {
         $.each(textarea, function (i, v) {
             $(v).removeAttr("value");
         });
+        var select = form.find("select");
+        $.each(select, function (i, v) {
+            $(v).parent(".bootstrap-select").removeAttr("disabled");
+            $(v).removeAttr("disabled");
+            $(v).selectpicker('refresh');
+        });
+
         var formControlFeedback = $(".error.form-control-feedback");
         formControlFeedback.parent("div").parent("div").removeClass("has-danger");
         formControlFeedback.remove();
+
     },
 
     /**
@@ -513,6 +543,10 @@ var BaseUtils = {
         $(form + " textarea").each(function () {
             $(this).addClass("m-input--solid");
             $(this).attr("readonly", "readonly");
+        });
+        $(form + " select").each(function () {
+            $(this).parent(".bootstrap-select").attr("disabled", "true");
+            $(this).attr("disabled", "true");
         });
     },
 
