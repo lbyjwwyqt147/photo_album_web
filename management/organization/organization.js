@@ -13,6 +13,7 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageParentName = "";
     var organizationMainPageZtreeNodeList = [];
     var organizationMainPageModuleCode = '1011';
+    var organizationPageLeffTree;
 
     /**
      * ztree 基础属性
@@ -56,6 +57,7 @@ var SnippetMainPageOrganization = function() {
      */
     var organizationMainPageInitTree = function() {
         $.fn.zTree.init($("#organization_mainPage_tree"), organizationMainPageZtreeSetting);
+        organizationPageLeffTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
     };
 
     /**
@@ -68,12 +70,12 @@ var SnippetMainPageOrganization = function() {
             organizationMainPageRereshTree();
             return;
         }
-        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
-        var nodes = zTreeObj.getNodesByParam("id", id, null);
+        organizationPageLeffTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        var nodes = organizationPageLeffTree.getNodesByParam("id", id, null);
         if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
             organizationMainPageRereshTreeNode(id);
         }
-        BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
+        BaseUtils.ztree.rereshExpandNode(organizationPageLeffTree, id);
     }
 
 
@@ -82,8 +84,8 @@ var SnippetMainPageOrganization = function() {
      * @param id
      */
     function organizationMainPageRereshTree(){
-        var zTreeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
-        zTreeObj.destroy();
+        organizationPageLeffTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        organizationPageLeffTree.destroy();
         organizationMainPageInitTree();
     };
 
@@ -99,10 +101,10 @@ var SnippetMainPageOrganization = function() {
             },
             headers: BaseUtils.serverHeaders()
         }, function (data) {
-            var treeObj = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+            organizationPageLeffTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
             //获取指定父节点
-            var parentZNode = treeObj.getNodeByParam("id", organizationMainPagePid, null);
-            treeObj.addNodes(parentZNode,data, false);
+            var parentZNode = organizationPageLeffTree.getNodeByParam("id", organizationMainPagePid, null);
+            organizationPageLeffTree.addNodes(parentZNode,data, false);
         }, function (response) {
 
         });
@@ -117,9 +119,9 @@ var SnippetMainPageOrganization = function() {
         if (searchZtreeValue == "") {
             return;
         }
-        var zTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        organizationPageLeffTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
         var keyType = "name";
-        organizationMainPageZtreeNodeList = zTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
+        organizationMainPageZtreeNodeList = organizationPageLeffTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
         organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList, true);
     };
 
@@ -129,12 +131,19 @@ var SnippetMainPageOrganization = function() {
      * @param highlight
      */
     function organizationMainPageZtreeUpdateNodes(organizationMainPageZtreeNodeList, highlight) {
-        var zTree = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
+        var curOrgParentNodes = [];
         for (var i = 0, l = organizationMainPageZtreeNodeList.length; i < l; i++) {
-            organizationMainPageZtreeNodeList[i].highlight = highlight;
+            var  curNode = organizationMainPageZtreeNodeList[i];
+            curNode.highlight = highlight;
+            // 获取父节点
+            var pNode = curNode.getParentNode();
+            if (pNode != null && curOrgParentNodes.indexOf(pNode.id) == -1) {
+                curOrgParentNodes.push(pNode.id);
+                organizationPageLeffTree.expandNode(pNode);
+            }
             //定位到节点并展开
-            zTree.expandNode(organizationMainPageZtreeNodeList[i]);
-            zTree.updateNode(organizationMainPageZtreeNodeList[i]);
+            organizationPageLeffTree.expandNode(curNode);
+            organizationPageLeffTree.updateNode(curNode);
         }
     };
 
@@ -610,8 +619,7 @@ var SnippetMainPageOrganization = function() {
     var organizationMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#organization_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
-            var zTreeOjb = $.fn.zTree.getZTreeObj("organization_mainPage_tree");
-            var selectedNodes = zTreeOjb.getSelectedNodes();
+            var selectedNodes = organizationPageLeffTree.getSelectedNodes();
             if (selectedNodes.length > 0) {
                 var selectedNode = selectedNodes[0];
                 organizationMainPageParentName = selectedNode.name;
@@ -644,6 +652,12 @@ var SnippetMainPageOrganization = function() {
             }
             var modalDialog = $(this);
             modalDialog.find('.modal-title').text(modalDialogTitle);
+            // 居中显示
+            $(this).css('display', 'block');
+            var modalHeight = $(window).height() / 2 - $('#organization_mainPage_dataSubmit_form_modal .modal-dialog').height() / 2;
+            $(this).find('.modal-dialog').css({
+                'margin-top': modalHeight - 120
+            });
         });
 
         // 当调用 hide 实例方法时触发。

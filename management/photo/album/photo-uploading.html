@@ -7,6 +7,7 @@
     <link href="../../../assets/theme/default/vendors/base/style.bundle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../assets/custom/plugins/webuploader/css/webuploader.css" />
     <link rel="stylesheet" type="text/css" href="../../../assets/custom/plugins/webuploader/css/style.css" />
+    <link href="../../../assets/custom/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"  media="all" >
     <link href="../../../management/home/home.css" rel="stylesheet"  type="text/css">
     <style>
 
@@ -60,6 +61,16 @@
             position: relative;
         }
 
+        .uploader_wrap .filelist li p.progress {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            overflow: hidden;
+            z-index: 50;
+        }
+
         /** 上传控件样式 结束  */
     </style>
 </head>
@@ -77,6 +88,7 @@
                                     <div id="dndArea" class="placeholder">
                                         <div id="uploading-filePicker"></div>
                                         <p>或将照片拖到这里，单次最多可选30张（如需调整顺序,请通过拖拽图片调整）</p>
+                                        <p class="has-danger-error" id="image-has-danger" style="display: none">你未上传图片,请选择要上传的图片</p>
                                     </div>
                                 </div>
                                 <div class="statusBar" style="display:none;">
@@ -99,7 +111,7 @@
                                     <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">主题:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="albumName" placeholder="主题"    autocomplete="off">
+                                            <input type="text" class="form-control m-input" name="albumName" id="album-name" placeholder="主题"    autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
@@ -187,40 +199,51 @@
                                     <div class="form-group m-form__group row">
                                         <label class="col-form-label col-lg-3 col-sm-12">描述:</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="albumDescription" placeholder="描述信息" autocomplete="off">
+                                            <textarea style="resize:none" rows="2" class="form-control" name="albumDescription" placeholder="描述信息" autocomplete="off"> </textarea>
                                         </div>
                                     </div>
                                     <div style="display: none">
                                         <input type="hidden" class="form-control  m-input" name="id" placeholder="id" autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="albumStatus" placeholder="status" value="0" autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="albumStatus" id="album-status" placeholder="status" value="0" autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="createTime" placeholder="createTime"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="albumTitle" id="album_title" placeholder="albumTitle"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="albumAnaphasisAuthor" id="album-anaphasi-author" autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="albumDresser" id="album-dresser" autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="albumPhotographyAuthor" id="album-photography-author" autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="albumClassify" id="albumClassify" placeholder="albumClassify"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="pictures" id="photo-file-list" placeholder="file-list"  autocomplete="off">
+
                                     </div>
 
                                     <div class="modal-footer">
-                                        <a href="javascript:;" class="btn btn-primary m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_preview">
+                                        <div>
+                                            <a href="javascript:;" class="btn btn-primary m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_preview">
                                             <span>
                                                 <i class="la la-eye"></i>
                                                 <span>预览</span>
                                             </span>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-info m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_submit">
+                                            </a>
+                                            <a href="javascript:;" class="btn btn-info m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_submit">
                                             <span>
                                                 <i class="la la-check"></i>
                                                 <span>保存</span>
                                             </span>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-success m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_publish">
+                                            </a>
+                                            <a href="javascript:;" class="btn btn-success m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_publish">
                                             <span>
                                                 <i class="la la-hand-o-right"></i>
                                                 <span>发布</span>
                                             </span>
-                                        </a>
+                                            </a>
+                                            <a href="javascript:;" class="btn btn-secondary m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_close">
+                                            <span>
+                                                <i class="la la-close"></i>
+                                                <span>关闭</span>
+                                            </span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

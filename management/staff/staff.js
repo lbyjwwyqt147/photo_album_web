@@ -460,14 +460,13 @@ var SnippetMainPageStaff = function() {
             });
         });
         // 职务选择事件绑定
-        $("#staff_position").on("changed.bs.select",function(e){
+        $("#staffPosition").on("changed.bs.select",function(e){
             // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
             var curSelectedValue = e.target.value;
             if (curSelectedValue == 1 || curSelectedValue == 2)  {
-                $("#skill").val("0").select2();
-                $("#skill").val("1").select2();
+                $('#skill').val([0,1]).trigger("change");
             } else if (curSelectedValue == 3) {
-                $("#skill").val("2").select2();
+                $('#skill').val([2]).trigger("change");
             }
         });
         // 省市区 select
@@ -513,7 +512,7 @@ var SnippetMainPageStaff = function() {
                         value: curCardObj.birthday,
                         isInitValue: true
                     });
-                    $("input[type=radio][name=staffSex][value='" + curCardObj.sex + "'").attr("checked",'checked');
+                    $("input:radio[name=\"tempStaffSex\"][value='"+curCardObj.sex+"']").click();
                 } else {
                     $("#staffIdentiyCard").val('');
                 }
@@ -558,7 +557,9 @@ var SnippetMainPageStaff = function() {
         $('#district').selectpicker('val', obj.district);
         $('#dimissionReason').selectpicker('val', obj.dimissionReason);
         $("#skill").val(obj.skill.split(",")).trigger("change");
-        $("input:radio[value='"+obj.staffSex+"']").attr('checked','true');
+        $("input:radio[name=\"tempStaffSex\"][value='"+obj.staffSex+"']").click();
+        $("#staffIntro-text").val(BaseUtils.toTextarea(obj.staffIntro));
+        $("#staffEquipment-text").val(BaseUtils.toTextarea( obj.staffEquipment));
     };
 
     /**
@@ -584,6 +585,8 @@ var SnippetMainPageStaff = function() {
         $('#staff_mainPage_dataSubmit_form_submit').click(function(e) {
             e.preventDefault();
             var curSex = $("input:radio[name=\"tempStaffSex\"]:checked").val();
+            $("#staffIntro-text").val(BaseUtils.textareaTo( $("#staffIntro-text").val()));
+            $("#staffEquipment-text").val(BaseUtils.textareaTo( $("#staffEquipment-text").val()));
             BaseUtils.formInputTrim(staffMainPageSubmitFormId);
             $("#staff-sex").val(curSex);
             staffMainPageSubmitForm.validate({
@@ -741,7 +744,6 @@ var SnippetMainPageStaff = function() {
      */
     var staffMainPageCleanForm = function () {
         BaseUtils.cleanFormData(staffMainPageSubmitForm);
-        $("input:radio[value='0']").attr('checked','true');
     };
 
     /**
@@ -919,8 +921,6 @@ var SnippetMainPageStaff = function() {
     var staffMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#staff_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
-            $("input[name=tempStaffSex]:eq(0)").attr("value",'0');
-            $("input[name=tempStaffSex]:eq(1)").attr("value",'1');
             var modalDialogTitle = "新增员工信息";
             var orgzTree = $.fn.zTree.getZTreeObj("staffOrgTree");
             // 取消当前所有被选中节点的选中状态
@@ -933,6 +933,8 @@ var SnippetMainPageStaff = function() {
                 if (ztreeNodes.length > 0) {
                     ztreeNode = ztreeNodes[0]; //注：只有当树的根节点只有一个时，才可以这样取，否则会获取到多个节点
                 }
+                $('#skill').val([0,1]).trigger("change");
+                $("input:radio[name=\"tempStaffSex\"][value='0']").click();
             }
             if (staffMainPageMark == 2) {
                 ztreeNode = orgzTree.getNodeByParam("id",$("#staffOrgId").val());
@@ -969,6 +971,12 @@ var SnippetMainPageStaff = function() {
             }
             var modalDialog = $(this);
             modalDialog.find('.modal-title').text(modalDialogTitle);
+            // 居中显示
+            $(this).css('display', 'block');
+            var modalHeight = $(window).height() / 2 - $('#staff_mainPage_dataSubmit_form_modal .modal-dialog').height() / 2;
+            $(this).find('.modal-dialog').css({
+                'margin-top': modalHeight
+            });
         });
 
         // 当调用 hide 实例方法时触发。

@@ -96,96 +96,96 @@
                 </div>
             </div>
 
+            <div id="organization_mainPage-modal-content">
+                <!-- begin:: Modal -->
+                <div class="modal fade" id="organization_mainPage_dataSubmit_form_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" >
+                                <h6 class="modal-title">title</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!--begin::Form-->
+                                <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="organization_mainPage_dataSubmit_form">
+                                    <div class="m-portlet__body">
+                                        <div class="form-group m-form__group row ">
+                                            <label class="col-form-label col-lg-3 col-sm-12">上级机构</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input  class="form-control m-input m-input--solid" id="organization_mainPage_dataSubmit_form_parent_name" name="organizationParentName" placeholder="一级机构" readonly autocomplete="off" >
+                                                <span aria-hidden="true" class="glyphicon glyphicon-remove form-control-feedback" data-pure-clear-button="event" style="cursor: pointer; pointer-events: auto;" data-container="body" data-toggle="m-tooltip" data-placement="bottom" title="清除内容后将默认为一级机构"><i class="la la-close"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row ">
+                                            <label class="col-form-label col-lg-3 col-sm-12">机构代码:<span class="has-danger-error">*</span></label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input type="text" class="form-control m-input" name="orgNumber" id="organization_mainPage_dataSubmit_form_org_number"  placeholder="只能输入数字、字母、下划线" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-form-label col-lg-3 col-sm-12">机构名称:<span class="has-danger-error">*</span></label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input type="text" class="form-control m-input" name="orgName" placeholder="只能输入汉字、数字、字母、下划线" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row" id="org-fullName-form-div" style="display: none">
+                                            <label class="col-form-label col-lg-3 col-sm-12">机构全名称:</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input type="text" class="form-control m-input" name="fullName" placeholder="机构全名称" autocomplete="off">
+                                            </div>
+                                        </div>
 
-            <!-- begin:: Modal -->
-            <div class="modal fade" id="organization_mainPage_dataSubmit_form_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" >
-                            <h6 class="modal-title">title</h6>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <!--begin::Form-->
-                            <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="organization_mainPage_dataSubmit_form">
-                                <div class="m-portlet__body">
-                                    <div class="form-group m-form__group row ">
-                                        <label class="col-form-label col-lg-3 col-sm-12">上级机构</label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input  class="form-control m-input m-input--solid" id="organization_mainPage_dataSubmit_form_parent_name" name="organizationParentName" placeholder="一级机构" readonly autocomplete="off" >
-                                            <span aria-hidden="true" class="glyphicon glyphicon-remove form-control-feedback" data-pure-clear-button="event" style="cursor: pointer; pointer-events: auto;" data-container="body" data-toggle="m-tooltip" data-placement="bottom" title="清除内容后将默认为一级机构"><i class="la la-close"></i></span>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-form-label col-lg-3 col-sm-12">优先级:</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input type="text" class="form-control bootstrap-touchspin-vertical-btn" id="organization_mainPage_dataSubmit_form_org_seq"  name="seq" placeholder="默认10 数值越小越靠前展示" autocomplete="off" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-form-label col-lg-3 col-sm-12">描述:</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                <input type="text" class="form-control m-input" name="description" placeholder="描述信息" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div style="display: none">
+                                            <input type="hidden" class="form-control  m-input" name="id" placeholder="id" autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="orgStatus" placeholder="status" value="0" autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="parentId" placeholder="pid" value="0" autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="createTime" placeholder="createTime"  autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="fullParent" placeholder="fullParent"  autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="fullParentCode" placeholder="fullParentCode"  autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
+                                            <input type="hidden" class="form-control  m-input" name="lessee" placeholder="lessee"  autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group m-form__group row ">
-                                        <label class="col-form-label col-lg-3 col-sm-12">机构代码:<span class="has-danger-error">*</span></label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="orgNumber" id="organization_mainPage_dataSubmit_form_org_number"  placeholder="只能输入数字、字母、下划线" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label class="col-form-label col-lg-3 col-sm-12">机构名称:<span class="has-danger-error">*</span></label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="orgName" placeholder="只能输入汉字、数字、字母、下划线" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row" id="org-fullName-form-div" style="display: none">
-                                        <label class="col-form-label col-lg-3 col-sm-12">机构全名称:</label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="fullName" placeholder="机构全名称" autocomplete="off">
-                                        </div>
-                                    </div>
+                                </form>
+                                <!--end::Form-->
+                            </div>
+                            <div class="modal-footer">
 
-                                    <div class="form-group m-form__group row">
-                                        <label class="col-form-label col-lg-3 col-sm-12">优先级:</label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control bootstrap-touchspin-vertical-btn" id="organization_mainPage_dataSubmit_form_org_seq"  name="seq" placeholder="默认10 数值越小越靠前展示" autocomplete="off" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label class="col-form-label col-lg-3 col-sm-12">描述:</label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <input type="text" class="form-control m-input" name="description" placeholder="描述信息" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div style="display: none">
-                                        <input type="hidden" class="form-control  m-input" name="id" placeholder="id" autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="orgStatus" placeholder="status" value="0" autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="parentId" placeholder="pid" value="0" autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="createTime" placeholder="createTime"  autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="createUserId" placeholder="createUserId"  autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="fullParent" placeholder="fullParent"  autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="fullParentCode" placeholder="fullParentCode"  autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="dataVersion" placeholder="dataVersion"  autocomplete="off">
-                                        <input type="hidden" class="form-control  m-input" name="lessee" placeholder="lessee"  autocomplete="off">
-                                    </div>
-                                </div>
-                            </form>
-                            <!--end::Form-->
-                        </div>
-                        <div class="modal-footer">
-
-                            <a href="javascript:;" class="btn btn-secondary m-btn m-btn--icon" data-dismiss="modal">
+                                <a href="javascript:;" class="btn btn-secondary m-btn m-btn--icon" data-dismiss="modal">
                                 <span>
                                     <i class="la la-close"></i>
                                     <span>关闭</span>
                                 </span>
-                            </a>
+                                </a>
 
-                            <a href="javascript:;" class="btn btn-success m-btn m-btn--icon" id="organization_mainPage_dataSubmit_form_submit">
+                                <a href="javascript:;" class="btn btn-success m-btn m-btn--icon" id="organization_mainPage_dataSubmit_form_submit">
                                 <span>
                                     <i class="la la-check"></i>
                                     <span>保存</span>
                                 </span>
-                            </a>
+                                </a>
 
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- end:: Modal -->
             </div>
-            <!-- end:: Modal -->
-
         </div>
 
     </div>

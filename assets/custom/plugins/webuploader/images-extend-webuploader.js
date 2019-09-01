@@ -34,7 +34,7 @@
             //swf的地址
             var swf_path = "./Uploader.swf";
             // 上传后台服务地址
-            var server_path = 'http://127.0.0.1:18080/api/v1/file/upload/batch';
+            var server_path = 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch';
             //相册名称
             var $galname = "";
             var supportTransition = (function(){
@@ -178,7 +178,7 @@
 
                 //文件上传请求的参数表，每次发送都会发送此对象中的参数。
                 formData: options.formData || {},
-
+                headers : options.headers || {},
                 //是否已二进制的流的方式发送文件，这样整个上传内容php://input都为文件内容， 其他参数在$_GET数组中。
                 sendAsBinary: options.sendAsBinary || false,
 
@@ -288,15 +288,21 @@
              */
             function addFile( file ){
                 var index = $queue.find('li').length;
-                var imgLeft = index * (thumbnailWidth + 15);
-                var imgTop = 10;
+                var calculateWidth = thumbnailWidth + 8
+                var imgLeft = index * calculateWidth;
+                var imgTop = 13;
                 var wrapHeight = thumbnailHeight + 20;
                 var wrapWidth = $queue.width() + 20 + 10;
                 if( imgLeft >= wrapWidth){
-                    imgTop = parseInt(imgLeft/wrapWidth) * (thumbnailHeight + 30);
-                    console.log(imgTop);
+                    imgTop = (parseInt(imgLeft/wrapWidth) * wrapHeight) + 10;
                     wrapHeight = imgTop + wrapHeight;
-                    imgLeft = (index % (parseInt(wrapWidth/(thumbnailWidth + 15)) +1 ) ) * (thumbnailWidth + 15);
+                    imgLeft = (index % (parseInt(wrapWidth/calculateWidth)) ) * calculateWidth;
+                   if (imgLeft == 0) {
+                       imgLeft = 2
+                    }
+                }
+                if (imgLeft == 0) {
+                    imgLeft = 2
                 }
                 $queue.height(wrapHeight);
                 var $li = $('<li data-key="'+file.key+'"  data-src="'+file.src+'" data-sort="'+index+'" draggable="true" id="' + file.id + '" style="position:absolute;margin:0;cursor:move;width:'+thumbnailWidth+'px;height:'+thumbnailHeight+'px;left:'+imgLeft+'px;top:'+imgTop+'px">' +
@@ -498,7 +504,7 @@
                     stats = uploader.getStats();
                     if( stats.uploadFailNum ){
                         text = '已成功上传' + stats.successNum + '张照片至' + $galname + '相册，'+
-                            stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>';
+                            stats.uploadFailNum + '张照片上传失败，<a class="retry" style="color: #2ca189 !important;" href="#">重新上传</a>失败图片或<a class="ignore" style="color: #f4516c !important;" href="#">忽略</a>';
                     }
                 } else {
                     stats = uploader.getStats();
@@ -677,9 +683,21 @@
                 file {File}File对象
                 response {Object}服务端返回的数据
             */
-            uploader.on('uploadSuccess', function(file){
+            uploader.on('uploadSuccess', function(file, response){
                 $('#' + file.id ).find('p.state').text('已上传');
             });
+
+            /** 当某个文件上传到服务端响应后，会派送此事件来询问服务端响应是否有效。如果此事件handler返回值为false, 则此文件将派送server类型的uploadError事件。
+             * object {Object}
+             * response {Object}服务端的返回数据，json格式，如果服务端不是json格式，从response中取数据，自行解析。
+             */
+            uploader.on('uploadAccept', function(object, response){
+                if (!response.success || response.status != 200) {
+                    // 通过return false来告诉组件，此文件上传有错。
+                    return false;
+                }
+            });
+
 
             /* 当文件上传出错时触发。
                file {File}File对象
@@ -711,8 +729,9 @@
                 data {Object}默认的上传参数，可以扩展此对象来控制上传参数。
                 headers {Object}可以扩展此对象来控制上传头部。
             */
-            uploader.on('uploadBeforeSend', function(block, data){
+            uploader.on('uploadBeforeSend', function(block, data, headers){
                 data.sort = $('#'+data.id).attr('data-sort');
+                headers =$.extend({},  BaseUtils.cloudHeaders() );
             });
 
             function sortNumber(a, b){
@@ -728,10 +747,11 @@
                     return false;
                 }
                 if( state == 'ready'){
-                    if(uploader.getFiles().length < 1)
+                    if(uploader.getFiles().length < 1) {
                         updateServerFiles();
-                    else
+                    } else {
                         uploader.upload();
+                    }
                 } else if(state == 'paused'){
                     uploader.upload();
                 } else if( state == 'uploading'){

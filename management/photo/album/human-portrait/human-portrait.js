@@ -102,6 +102,7 @@ var SnippetMainPageHumanPortrait = function() {
             });
             $albumStyle.select2({
                 placeholder: "风格",
+                allowClear: true
             });
         });
 
@@ -305,6 +306,13 @@ var SnippetMainPageHumanPortrait = function() {
                     return;
                 }
                 humanPortraitMainPageMark = 1;
+               // console.log($(window).height());
+               // console.log($(window).width());
+                var layerArea = ['100%', '100%'];
+                /*if ($(window).width() > 1920 && $(window).height() > 937) {
+                    layerArea = ['2000px', '950px']
+                }*/
+
                 // 显示 dialog
                // human_portraitMainPageFormModal.modal('show');
                 var perContent = layer.open({
@@ -313,9 +321,10 @@ var SnippetMainPageHumanPortrait = function() {
                     shadeClose: true,
                     shade: false,
                     maxmin: true, //开启最大化最小化按钮
-                    area: ['100%', '100%'],
+                    area: layerArea,
                     content: '../../management/photo/album/photo-uploading.html?dataId=1&albumClassify=1'
                 });
+                // 窗口全屏打开
                 layer.full(perContent);
                 return false;
             });

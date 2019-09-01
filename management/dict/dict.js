@@ -13,6 +13,7 @@ var SnippetMainPageDict = function() {
     var dictMainPageParentName = "";
     var dictMainPageZtreeNodeList = [];
     var dictMainPageModuleCode = '1010';
+    var dictPageLeffTree;
 
     /**
      * ztree 基础属性
@@ -21,7 +22,7 @@ var SnippetMainPageDict = function() {
     var dictMainPageZtreeSetting = BaseUtils.ztree.settingZtreeProperty({
         "selectedMulti":false,
         "enable":false,
-        "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential + "&lessee=" + BaseUtils.getLesseeId(),
+        "url":serverUrl + "v1/tree/dict/all/z?systemCode=" + BaseUtils.systemCode + "&credential=" +  BaseUtils.credential + "&lessee=" + BaseUtils.lessee,
         "headers":BaseUtils.cloudHeaders()
     });
     dictMainPageZtreeSetting.view = {
@@ -56,6 +57,7 @@ var SnippetMainPageDict = function() {
      */
     var dictMainPageInitTree = function() {
         $.fn.zTree.init($("#dict_mainPage_tree"), dictMainPageZtreeSetting);
+        dictPageLeffTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
     };
 
     /**
@@ -68,12 +70,12 @@ var SnippetMainPageDict = function() {
             dictMainPageRereshTree();
             return;
         }
-       var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
-       var nodes = zTreeObj.getNodesByParam("id", id, null);
+        dictPageLeffTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        var nodes = dictPageLeffTree.getNodesByParam("id", id, null);
        if (nodes[0].children == null || nodes[0].children == undefined || nodes[0].children.length == 0) {
            dictMainPageRereshTreeNode(id);
        }
-       BaseUtils.ztree.rereshExpandNode(zTreeObj, id);
+       BaseUtils.ztree.rereshExpandNode(dictPageLeffTree, id);
     }
 
 
@@ -82,8 +84,8 @@ var SnippetMainPageDict = function() {
      * @param id
      */
     function dictMainPageRereshTree(){
-        var zTreeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
-        zTreeObj.destroy();
+        dictPageLeffTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        dictPageLeffTree.destroy();
         dictMainPageInitTree();
     };
 
@@ -102,10 +104,10 @@ var SnippetMainPageDict = function() {
             },
             headers: BaseUtils.cloudHeaders()
         }, function (data) {
-            var treeObj = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
             //获取指定父节点
-            var parentZNode = treeObj.getNodeByParam("id", dictMainPagePid, null);
-            treeObj.addNodes(parentZNode,data, false);
+            dictPageLeffTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+            var parentZNode = dictPageLeffTree.getNodeByParam("id", dictMainPagePid, null);
+            dictPageLeffTree.addNodes(parentZNode,data, false);
         }, function (response) {
 
         });
@@ -120,9 +122,9 @@ var SnippetMainPageDict = function() {
         if (searchZtreeValue == "") {
             return;
         }
-        var zTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
         var keyType = "name";
-       dictMainPageZtreeNodeList = zTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
+        dictPageLeffTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        dictMainPageZtreeNodeList = dictPageLeffTree.getNodesByParamFuzzy(keyType, searchZtreeValue);
         dictMainPageZtreeUpdateNodes(dictMainPageZtreeNodeList, true);
     };
 
@@ -132,12 +134,19 @@ var SnippetMainPageDict = function() {
      * @param highlight
      */
     function dictMainPageZtreeUpdateNodes(dictMainPageZtreeNodeList, highlight) {
-        var zTree = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
+        var curDictParentNodes = [];
         for (var i = 0, l = dictMainPageZtreeNodeList.length; i < l; i++) {
-            dictMainPageZtreeNodeList[i].highlight = highlight;
+            var  curNode = dictMainPageZtreeNodeList[i];
+            curNode.highlight = highlight;
+            // 获取父节点
+            var pNode = curNode.getParentNode();
+            if (pNode != null && curDictParentNodes.indexOf(pNode.id) == -1) {
+                curDictParentNodes.push(pNode.id);
+                dictPageLeffTree.expandNode(pNode);
+            }
             //定位到节点并展开
-            zTree.expandNode(dictMainPageZtreeNodeList[i]);
-            zTree.updateNode(dictMainPageZtreeNodeList[i]);
+            dictPageLeffTree.expandNode(curNode);
+            dictPageLeffTree.updateNode(curNode);
         }
     };
 
@@ -630,8 +639,7 @@ var SnippetMainPageDict = function() {
     var dictMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#dict_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
-            var zTreeOjb = $.fn.zTree.getZTreeObj("dict_mainPage_tree");
-            var selectedNodes = zTreeOjb.getSelectedNodes();
+            var selectedNodes = dictPageLeffTree.getSelectedNodes();
             if (selectedNodes.length > 0) {
                 var selectedNode = selectedNodes[0];
                 dictMainPageParentName = selectedNode.name;
@@ -662,6 +670,12 @@ var SnippetMainPageDict = function() {
             }
             var modalDialog = $(this);
             modalDialog.find('.modal-title').text(modalDialogTitle);
+            // 剧中显示
+            $(this).css('display', 'block');
+            var modalHeight = $(window).height() / 2 - $('#dict_mainPage_dataSubmit_form_modal .modal-dialog').height() / 2;
+            $(this).find('.modal-dialog').css({
+                'margin-top': modalHeight - 120
+            });
         });
 
         // 当调用 hide 实例方法时触发。

@@ -126,6 +126,18 @@ var BaseUtils = {
     },
 
     /**
+     * 得到当前页面按钮组
+     * @param moduleCode
+     */
+    getCurrentUser:function(){
+        var curUser = {
+            'id' : 1,
+            'name' : '管理员'
+        }
+        return curUser;
+    },
+
+    /**
      * 检测登录是否超时
      * @returns {boolean}
      */
@@ -373,8 +385,8 @@ var BaseUtils = {
             dataType: "json",
             headers: BaseUtils.cloudHeaders,
             success: function(data){
-                if (data != null) {
-                    successCallback(data);
+                if (data.data != null) {
+                    successCallback(data.data);
                 }
             }
         });
@@ -510,9 +522,21 @@ var BaseUtils = {
      */
     cleanFormData: function (form) {
         form.resetForm();
+        form[0].reset();
         var input = form.find("input");
         $.each(input, function (i, v) {
-            $(v).removeAttr("value");
+            var curReset = true;
+            if ($(v).attr("type") == "radio" ) {
+              curReset = false;
+                $(v).removeAttr('checked');
+            }
+            if ($(v).attr("type") == "checkbox" ) {
+                curReset = false;
+                $(v).removeAttr('checked');
+            }
+            if (curReset) {
+                $(v).removeAttr("value");
+            }
         });
         var textarea = form.find("textarea");
         $.each(textarea, function (i, v) {
