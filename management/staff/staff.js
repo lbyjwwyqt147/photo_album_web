@@ -853,7 +853,6 @@ var SnippetMainPageStaff = function() {
             'putParams' : JSON.stringify(putParams),
             'otherIds':JSON.stringify(userIdsArray)
         }
-        BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
             BaseUtils.pageMsgBlock();
             $putAjax({

@@ -568,7 +568,6 @@ var SnippetMainPageDict = function() {
                 }
             }
         }
-        BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({

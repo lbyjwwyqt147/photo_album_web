@@ -176,154 +176,69 @@ var SnippetMainPageHumanPortrait = function() {
     /**
      * 删除
      */
-    var humanPortraitMainPageDeleteData = function(obj) {
+    var humanPortraitMainPageDeleteData = function(dataId) {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/verify/human_portrait/d";
-        var delData = null;
-        if (obj != null) {
-            delData = {
-                'id' : obj.data.id,
-                'userId' : obj.data.userId
-            }
-        } else {
-            var idsArray = [];
-            var userIdsArray = [];
-            // 获取选中的数据对象
-            var checkRows = humanPortraitMainPageTable.checkStatus('human_portrait_mainPage_grid');
-            //获取选中行的数据
-            var checkData = checkRows.data;
-            if (checkData.length > 0) {
-                $.each(checkData, function(index,element){
-                    idsArray.push(element.id);
-                    userIdsArray.push(element.userId);
-                });
-                ajaxDelUrl = serverUrl + "v1/verify/human_portrait/d/b";
-                delData = {
-                    'ids' : JSON.stringify(idsArray),
-                    'otherIds': JSON.stringify(userIdsArray)
+        var ajaxDelUrl = serverUrl + "v1/verify/album/d";
+        var delData = {
+            'id' : dataId
+        };
+        //询问框
+        layer.confirm('你确定要删除?', {
+            shade: [0.3, 'rgb(230, 230, 230)'],
+            btn: ['确定','取消'] //按钮
+        }, function(index, layero){   //按钮【按钮一】的回调
+            layer.close(index);
+            BaseUtils.pageMsgBlock();
+            $deleteAjax({
+                url:ajaxDelUrl,
+                data: delData,
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                if (response.success) {
+                    humanPortraitMainPageRefreshGrid();
                 }
-            }
-        }
-        if (delData != null) {
-            //询问框
-            layer.confirm('你确定要删除?', {
-                shade: [0.3, 'rgb(230, 230, 230)'],
-                btn: ['确定','取消'] //按钮
-            }, function(index, layero){   //按钮【按钮一】的回调
-                layer.close(index);
-                BaseUtils.pageMsgBlock();
-                $encrypDeleteAjax({
-                    url:ajaxDelUrl,
-                    data: delData,
-                    headers: BaseUtils.cloudHeaders()
-                }, function (response) {
-                    if (response.success) {
-                        if (obj != null) {
-                            obj.del();
-                        } else {
-                            human_portraitMainPageRefreshGrid();
-                        }
-                    }
-                }, function (data) {
-
-                });
-            }, function () {  //按钮【按钮二】的回调
+            }, function (data) {
 
             });
-        }
+        }, function () {  //按钮【按钮二】的回调
+
+        });
+
     };
 
     /**
      *  修改状态
      */
-    var humanPortraitMainPageUpdateDataStatus = function(obj,status) {
+    var humanPortraitMainPageUpdateDataStatus = function(obj) {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
-        }
-        var ajaxPutUrl = serverUrl + "v1/verify/human_portrait/p";
-        var putData = null;
-        if (obj != null) {
-            var dataVersion = $(obj.elem.outerHTML).attr("dataversion");
-            var userId = $(obj.elem.outerHTML).attr("userid");
-            var curDataParam = {
-                "id" : userId,
-                "dataVersion" : dataVersion
-            }
-            putData = {
-                'id' : obj.value,
-                'status' : status,
-                'putParams' : JSON.stringify(curDataParam),
-                'otherIds':userId
-            }
-        } else {
-            var idsArray = [];
-            var putParams = [];
-            var userIdsArray = [];
-            // 获取选中的数据对象
-            var checkRows = humanPortraitMainPageTable.checkStatus('human_portrait_mainPage_grid');
-            //获取选中行的数据
-            var checkData = checkRows.data;
-            if (checkData.length > 0) {
-                $.each(checkData, function(index,element){
-                    var curDataParam = {
-                        "id" : element.userId,
-                        "dataVersion" : element.dataVersion
-                    }
-                    putParams.push(curDataParam);
-                    idsArray.push(element.id);
-                    userIdsArray.push(element.userId);
-                });
-                putData = {
-                    'putParams' : JSON.stringify(idsArray),
-                    'ids': JSON.stringify(idsArray),
-                    'status' : status,
-                    'otherIds':JSON.stringify(userIdsArray)
-                }
-            }
-        }
-        BaseUtils.checkLoginTimeoutStatus();
-        if (putData != null) {
-            BaseUtils.pageMsgBlock();
-            $encrypPutAjax({
-                url: ajaxPutUrl,
-                data: putData,
-                headers: BaseUtils.cloudHeaders()
-            }, function (response) {
-                  if (response.success) {
-                      human_portraitMainPageRefreshGrid();
-                  }  else if (response.status == 202) {
-                    if (status == 1) {
-                        obj.othis.removeClass("layui-form-checked");
-                    } else {
-                        obj.othis.addClass("layui-form-checked");
-                    }
-                    layer.tips(BaseUtils.updateMsg, obj.othis,  {
-                        tips: [4, '#f4516c']
-                    });
-                  } else if (response.status == 409) {
-                      human_portraitMainPageRefreshGrid();
-                  } else {
-                     if (status == 1) {
-                        obj.othis.removeClass("layui-form-checked");
-                        $(obj.elem).removeAttr("checked");
-                     } else {
-                        obj.othis.addClass("layui-form-checked");
-                     }
-                     if (response.status == 504) {
-                         BaseUtils.LoginTimeOutHandler();
-                     } else {
-                         layer.tips(response.message, obj.othis,  {
-                             tips: [4, '#f4516c']
-                         });
-                     }
+        };
+        var ajaxPutUrl = serverUrl + "v1/verify/album/p";
+        var curDataParam = {
+            "id" : obj.id,
+            "dataVersion" : obj.dataVersion,
+            'status' : obj.status
+        };
+        BaseUtils.pageMsgBlock();
+        $putAjax({
+            url: ajaxPutUrl,
+            data: curDataParam,
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+              if (response.success) {
+                  humanPortraitMainPageRefreshGrid();
+              }  else if (response.status == 202) {
 
-                }
-            }, function (data) {
+              } else if (response.status == 409) {
+                  humanPortraitMainPageRefreshGrid();
+              } else if (response.status == 504) {
+                  BaseUtils.LoginTimeOutHandler();
+              }
+        }, function (data) {
 
-            });
-        }
+        });
     };
 
     /**
@@ -335,8 +250,8 @@ var SnippetMainPageHumanPortrait = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/verify/human_portrait/sync",
-            headers: BaseUtils.cloudHeaders()
+            url: serverUrl + "v1/verify/album/sync",
+            headers: BaseUtils.serverHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
             if (response.success) {
@@ -386,8 +301,12 @@ var SnippetMainPageHumanPortrait = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
-            console.log($(this).attr("value"))
-
+            var params = {
+                "id" : $(this).attr("value"),
+                "status" : 0,
+                "dataVersion" : $(this).attr("dataVersion")
+            };
+            humanPortraitMainPageUpdateDataStatus(params);
             return false;
         });
 
@@ -397,8 +316,12 @@ var SnippetMainPageHumanPortrait = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
-            console.log($(this).attr("value"))
-
+            var params = {
+                "id" : $(this).attr("value"),
+                "status" : 1,
+                "dataVersion" : $(this).attr("dataVersion")
+            };
+            humanPortraitMainPageUpdateDataStatus(params);
             return false;
         });
 
@@ -408,8 +331,7 @@ var SnippetMainPageHumanPortrait = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
-            console.log($(this).attr("value"))
-
+            humanPortraitMainPageDeleteData($(this).attr("value"));
             return false;
         });
     };

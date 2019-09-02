@@ -549,7 +549,6 @@ var SnippetMainPageOrganization = function() {
                 }
             }
         }
-        BaseUtils.checkLoginTimeoutStatus();
         if (putData != null) {
             BaseUtils.pageMsgBlock();
             $encrypPutAjax({
