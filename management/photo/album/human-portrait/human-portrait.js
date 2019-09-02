@@ -110,12 +110,7 @@ var SnippetMainPageHumanPortrait = function() {
                             var rowCount = response.total;
                             var curPageNumber = 1;
                             if (rowCount != 0 ) {
-                                var numb =  rowCount % humanGridPageSize;
-                                if (numb == 0) {
-                                    curPageNumber = parseInt(numb);
-                                } else {
-                                    curPageNumber = parseInt(numb) + 1;
-                                }
+                                 curPageNumber =  (rowCount + humanGridPageSize - 1) / humanGridPageSize;
                             }
                             next(humanImagesArray.join(""), page < curPageNumber);
                             //绑定事件
@@ -136,6 +131,7 @@ var SnippetMainPageHumanPortrait = function() {
         $("#album-style-query").val(queryAlbumStyperOptions.join(','));
         var  params = $("#human-portrait-page-grid-query-form").serializeJSON();
         params.pageSize = humanGridPageSize;
+        $("#human_portrait_mainPage_grid").html('');
         humanPortraitMainPageInitDataGrid(params);
     };
 
