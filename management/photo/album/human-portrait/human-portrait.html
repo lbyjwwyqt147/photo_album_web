@@ -17,6 +17,22 @@
         border-right: 0px solid #ebedf2;
     }
 
+    #human_portrait_mainPage_grid {
+        padding: 20px 10px 0px 25px;
+    }
+
+    #human-portrait-page-frame .m-dropdown.m-dropdown--align-right.m-dropdown--align-push .m-dropdown__wrapper {
+        margin-right: -10px;
+    }
+
+    #human-portrait-page-frame .layui-flow-more {
+        margin: 10px 0;
+        text-align: center;
+        color: #999;
+        font-size: 14px;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 
 </style>
 
@@ -29,7 +45,7 @@
 
                         <!--begin:: grid -->
                         <div class="m-widget1">
-                            <div class="m-portlet__head" style="height: 60px; padding-left: 0px;">
+                            <div class="m-portlet__head" style="height: 60px; padding-left: 0px; border-bottom: 1px solid #ebedf2; ">
                                 <div class="m-portlet__head-caption col-xl-10">
                                     <!--begin::query Form-->
                                     <form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed  col-xl-10" id="human-portrait-page-grid-query-form">
@@ -37,7 +53,7 @@
                                             <div class="form-group m-form__group row" style="padding-top: 5px; padding-bottom: 5px;">
 
                                                 <label class="col-lg-1 col-form-label" >类型:</label>
-                                                <div class="col-lg-3"  id="album-classification">
+                                                <div class="col-lg-2"  id="album-classification">
                                                     <select class="form-control m-bootstrap-select m_selectpicker" name="albumClassification" id="albumClassification"  placeholder="类型" autocomplete="off">
                                                         <option value="" >--请选择--</option>
                                                         <option value="1" >样片</option>
@@ -46,12 +62,22 @@
                                                     </select>
                                                 </div>
 
+                                                <label class="col-lg-1 col-form-label" >状态:</label>
+                                                <div class="col-lg-2" >
+                                                    <select  class="form-control m-bootstrap-select m_selectpicker" name="" id="album-status-query"  placeholder="状态" autocomplete="off">
+                                                        <option  >--请选择--</option>
+                                                        <option value="0" >已发布</option>
+                                                        <option value="1" >不可见</option>
+                                                        <option value="2" >草稿</option>
+                                                    </select>
+                                                </div>
+
                                                 <label class="col-lg-1 col-form-label" >风格:</label>
                                                 <div class="col-lg-3" >
                                                     <select  class="form-control m-select2" multiple="multiple"   id="album-style"  placeholder="风格" autocomplete="off">
 
                                                     </select>
-                                                    <input type="hidden" name="albumStyle" id="albumStyle"  autocomplete="off">
+                                                    <input type="hidden" name="albumStyle" id="album-style-query"  autocomplete="off">
                                                 </div>
 
                                                 <div style="padding-top: 5px; ">
@@ -73,7 +99,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <table class="layui-hide" id="human_portrait_mainPage_grid"  lay-filter="human_portrait_mainPage_grid"></table>
+                            <div class="row"  id="human_portrait_mainPage_grid" ></div>
 
                         </div>
 

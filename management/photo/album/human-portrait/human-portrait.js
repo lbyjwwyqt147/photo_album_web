@@ -7,6 +7,7 @@ var SnippetMainPageHumanPortrait = function() {
     var humanPortraitMainPageTable;
     var humanPortraitMainPageMark = 1;
     var humanPortraitMainPageModuleCode = '1020';
+    var humanGridPageSize = 20;
 
     /**
      * 初始化 功能按钮
@@ -77,36 +78,98 @@ var SnippetMainPageHumanPortrait = function() {
     /**
      *  初始化 dataGrid 组件
      */
-    var humanPortraitMainPageInitDataGrid = function () {
+    var humanPortraitMainPageInitDataGrid = function (params) {
+        if (params == null) {
+            params = {
+                'pageSize' : humanGridPageSize
+            }
+        }
+        layui.use('flow', function(){
+            var flow = layui.flow;
+            flow.load({
+                elem: '#human_portrait_mainPage_grid', //流加载容器
+                done: function(page, next){ //执行下一页的回调
+                    params.pageNumber = page;
+                    BaseUtils.htmPageBlock();
+                    // 追加数据
+                    setTimeout(function(){
+                        $getAjax({
+                            url:serverUrl + "v1/table/album/g",
+                            data : params,
+                            headers: BaseUtils.serverHeaders()
+                        }, function (response) {
+                            BaseUtils.htmPageUnblock();
+                            var datas =  response.data;
+                            var humanImagesArray = [];
+                            $.each(datas, function(i, v){
+                                var col_div = ImagesView.imagesListHtmlAppend("human_portrait_mainPage_grid", v);
+                                humanImagesArray.push(col_div);
+                            });
+                            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                            //curPageNumber总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                            var rowCount = response.total;
+                            var curPageNumber = 1;
+                            if (rowCount != 0 ) {
+                                var numb =  rowCount % humanGridPageSize;
+                                if (numb == 0) {
+                                    curPageNumber = parseInt(numb);
+                                } else {
+                                    curPageNumber = parseInt(numb) + 1;
+                                }
+                            }
+                            next(humanImagesArray.join(""), page < curPageNumber);
+                            //绑定事件
+                            initHumanPortraitImageEventBinding();
+                        });
 
+                    }, 500);
+                }
+            });
+        });
     };
 
     /**
      * 刷新grid
      */
     var humanPortraitMainPageRefreshGrid = function () {
-
-
+        var queryAlbumStyperOptions = $("#album-style").select2("val");
+        $("#album-style-query").val(queryAlbumStyperOptions.join(','));
+        var  params = $("#human-portrait-page-grid-query-form").serializeJSON();
+        params.pageSize = humanGridPageSize;
+        humanPortraitMainPageInitDataGrid(params);
     };
 
     /**
      * 初始化 select 组件
      */
-    var initSelectpicker = function () {
+    var humanPortraitMainPageInitSelectpicker = function () {
         $("#albumClassification").selectpicker('refresh');
+        $("#album-status-query").selectpicker('refresh');
+        var $albumStyle = $("#album-style");
+        $albumStyle.select2({
+            placeholder: "风格",
+            allowClear: true
+        });
         // 风格 multi select
         BaseUtils.dictDataSelect("image_style", function (data) {
-            var $albumStyle = $("#album-style");
             Object.keys(data).forEach(function(key){
                 $albumStyle.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
-            $albumStyle.select2({
-                placeholder: "风格",
-                allowClear: true
-            });
         });
-
     }
+
+    /**
+     * 重置查询条件
+     */
+    var humanPortraitMainPageRefreshGridQueryCondition = function () {
+        $("#human-portrait-page-grid-query-form")[0].reset();
+        $("#albumClassification").selectpicker('refresh');
+        $("#album-status-query").selectpicker('refresh');
+        $("#image_style").val(null).trigger("change");
+        $("#image_style").select2("val", "");
+        $("#image_style").val("");
+        $("#image_style .select2-selection__choice").remove();
+    };
 
 
 
@@ -284,20 +347,96 @@ var SnippetMainPageHumanPortrait = function() {
         });
     };
 
+    /**
+     * 事件绑定
+     */
+    var initHumanPortraitImageEventBinding = function () {
+        // 编辑按钮
+        $('.human_portrait_mainPage_grid_edit_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            var layerArea = ['100%', '100%'];
+            /*if ($(window).width() > 1920 && $(window).height() > 937) {
+                layerArea = ['2000px', '950px']
+            }*/
+            var dataId = $(this).attr("value");
+            var photoIframContent = layer.open({
+                type: 2,
+                title: '写真图册',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: layerArea,
+                content: '../../management/photo/album/photo-uploading.html?dataId='+dataId+'&albumClassify=1',
+                end : function () {
+                    humanPortraitMainPageRefreshGridQueryCondition();
+                    humanPortraitMainPageRefreshGrid();
+                }
+            });
+            // 窗口全屏打开
+            layer.full(photoIframContent);
+            return false;
+        });
+
+        // 发布按钮
+        $('.human_portrait_mainPage_grid_publish_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            console.log($(this).attr("value"))
+
+            return false;
+        });
+
+        // 隐藏按钮
+        $('.human_portrait_mainPage_grid_hide_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            console.log($(this).attr("value"))
+
+            return false;
+        });
+
+        // 删除按钮
+        $('.human_portrait_mainPage_grid_del_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            console.log($(this).attr("value"))
+
+            return false;
+        });
+    };
 
     //== Public Functions
     return {
         // public functions
         init: function() {
+            humanPortraitMainPageInitSelectpicker();
             humanPortraitMainPageInitFunctionButtonGroup();
             humanPortraitMainPageInitDataGrid();
-            initSelectpicker();
             $('#human_portrait_mainPage_delete_btn').click(function(e) {
                 e.preventDefault();
                 if (BaseUtils.checkLoginTimeoutStatus()) {
                     return;
                 }
                 humanPortraitMainPageDeleteData(null);
+                return false;
+            });
+            $('#human-portrait-page-grid-query-btn').click(function(e) {
+                e.preventDefault();
+                humanPortraitMainPageRefreshGrid();
+                return false;
+            });
+            $('#human-portrait-page-grid-query-rotate-btn').click(function(e) {
+                e.preventDefault();
+                humanPortraitMainPageRefreshGridQueryCondition();
                 return false;
             });
             $('#human_portrait_mainPage_add_btn').click(function(e) {
@@ -312,20 +451,21 @@ var SnippetMainPageHumanPortrait = function() {
                 /*if ($(window).width() > 1920 && $(window).height() > 937) {
                     layerArea = ['2000px', '950px']
                 }*/
-
-                // 显示 dialog
-               // human_portraitMainPageFormModal.modal('show');
-                var perContent = layer.open({
+                var photoUploadContent = layer.open({
                     type: 2,
                     title: '写真图册',
                     shadeClose: true,
                     shade: false,
                     maxmin: true, //开启最大化最小化按钮
                     area: layerArea,
-                    content: '../../management/photo/album/photo-uploading.html?dataId=1&albumClassify=1'
+                    content: '../../management/photo/album/photo-uploading.html?dataId=0&albumClassify=1',
+                    end : function () {
+                        humanPortraitMainPageRefreshGridQueryCondition();
+                        humanPortraitMainPageRefreshGrid();
+                    }
                 });
                 // 窗口全屏打开
-                layer.full(perContent);
+                layer.full(photoUploadContent);
                 return false;
             });
 
@@ -340,7 +480,7 @@ var SnippetMainPageHumanPortrait = function() {
             });
 
             window.onresize = function(){
-                humanPortraitMainPageTable.resize("human_portrait_mainPage_grid");
+               // humanPortraitMainPageTable.resize("human_portrait_mainPage_grid");
             }
         }
     };

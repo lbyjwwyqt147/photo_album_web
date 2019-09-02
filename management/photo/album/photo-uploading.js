@@ -59,13 +59,30 @@ var SnippetMainPageUploading= function() {
      * 初始化 form 数据
      */
     var initFormData = function () {
-        $getAjax({
-            url:serverUrl + "v1/table/album/" + businessId,
-            headers: BaseUtils.serverHeaders()
-        }, function (response) {
-            uploadingMainPageSubmitForm.setForm(response.data);
-        });
+        if (businessId != 0) {
+            $getAjax({
+                url:serverUrl + "v1/table/album/" + businessId,
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                uploadingMainPageSubmitForm.setForm(response.data);
+                initPhotoUploadingSelected(response.data);
+            });
+        }
     }
+
+    /**
+     * select 控件回显值
+     */
+    var initPhotoUploadingSelected = function (obj) {
+        $('#albumClassification').selectpicker('val', obj.albumClassification);
+        $('#albumStyle').selectpicker('val', obj.albumStyle);
+        $('#spotForPhotography').selectpicker('val', obj.spotForPhotography);
+        $("#albumPhotographyAuthor").val(obj.albumPhotographyAuthor.split(",")).trigger("change");
+        $("#albumAnaphasisAuthor").val(obj.albumAnaphasisAuthor.split(",")).trigger("change");
+        $("#albumDresser").val(obj.albumDresser.split(",")).trigger("change");
+
+        // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
+    };
 
     /**
      * 初始化 select 组件
@@ -225,34 +242,47 @@ var SnippetMainPageUploading= function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
+
         // 验证是否有图片
         if (photoUploadingMainPageWebuploader.getFiles().length == 0) {
             $(".uploader_wrap .placeholder").css("border","1px dashed #ff0b5a");
             $("#image-has-danger").show();
             return;
         } else {
+            BaseUtils.pageMsgBlock();
             $(".uploader_wrap .placeholder").css("border","1px dashed #e6e6e6");
             $("#image-has-danger").hide();
             photoUploadingMainPageWebuploader.upload();
             var curPhotoImageList = [];
+            var firstVertex = 0;
             // 文件上传成功，给item添加成功class, 用样式标记上传成功。
             photoUploadingMainPageWebuploader.on('uploadSuccess', function (file, response) {
                 if (response.success) {
+                    var curImageWidth = file._info.width;
+                    var curImageHeight = file._info.height;
                     var curImageObj = response.data[0];
+                    var curFirstVertex = 0;
+                    if (firstVertex === 0 && (curImageWidth != null || obj != undefined )) {
+                        curFirstVertex = curImageWidth > curImageHeight ? 0 : 1;
+                    }
                     var curPhotoImage = {
                         "id" : curImageObj.id,
                         "fileCallAddress" : curImageObj.fileCallAddress,
                         "fileName" : curImageObj.fileName,
                         "fileCategory" : curImageObj.fileCategory
                     };
-                    curPhotoImageList.push(curPhotoImage);
+                    if (curFirstVertex === 1 && firstVertex === 0) {
+                        firstVertex = 1;
+                        curPhotoImageList.splice(0, 0, curPhotoImage);
+                    } else {
+                        curPhotoImageList.push(curPhotoImage);
+                    }
                 }
             });
 
             //所有文件上传完毕
             photoUploadingMainPageWebuploader.on("uploadFinished", function () {
                 //提交表单
-                console.log("图片全部上传完毕");
                 $("#photo-file-list").val(JSON.stringify(curPhotoImageList));
                 $("#album_title").val($("#album-name").val());
                 var albumPhotographyAuthorOptions = $("#albumPhotographyAuthor").select2("val");
@@ -268,7 +298,7 @@ var SnippetMainPageUploading= function() {
                     data:uploadingMainPageSubmitForm.serializeJSON(),
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
-                    BaseUtils.modalUnblock("#photo_uploading_mainPage_dataSubmit_form_modal");
+                    BaseUtils.htmPageUnblock();
                     if (response.success) {
                         // toastr.success(BaseUtils.saveSuccessMsg);
                         // 关闭 dialog
@@ -278,7 +308,7 @@ var SnippetMainPageUploading= function() {
 
                     }
                 }, function (data) {
-                    BaseUtils.modalUnblock("#photo_uploading_mainPage_dataSubmit_form_modal");
+                    BaseUtils.htmPageUnblock();
                 });
 
             });
@@ -301,12 +331,11 @@ var SnippetMainPageUploading= function() {
     return {
         // public functions
         init: function() {
+            initSelectpicker();
             uploadingMainPageInitWebuploader();
             // 解决 点击选择图片按钮 无反应 问题
             $('#uploading-filePicker div:eq(1)').attr('style', 'position: absolute; top: 20px; left: 612.5px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;');
             initFormData();
-            initSelectpicker();
-            uploadingMainPageFormSubmitHandle();
             $('#photo_uploading_mainPage_dataSubmit_form_close').click(function (e) {
                 e.preventDefault();
                 closeOpenLayer();

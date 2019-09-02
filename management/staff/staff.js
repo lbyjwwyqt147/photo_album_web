@@ -334,7 +334,7 @@ var SnippetMainPageStaff = function() {
                         return;
                     }
                     staffMainPageSubmitForm.setForm(obj.data);
-                    initSelected(obj.data);
+                    initStaffSelected(obj.data);
                     staffMainPageMark = 2;
                     // 显示 dialog
                     staffMainPageFormModal.modal('show');
@@ -374,7 +374,7 @@ var SnippetMainPageStaff = function() {
             staffMainPageTable.on('rowDouble(staff_mainPage_grid)', function(obj){
                 staffMainPageMark = 3;
                 staffMainPageSubmitForm.setForm(obj.data);
-                initSelected(obj.data);
+                initStaffSelected(obj.data);
                 BaseUtils.readonlyForm(staffMainPageSubmitFormId);
                 staffMainPageFormModal.modal('show');
             });
@@ -549,7 +549,7 @@ var SnippetMainPageStaff = function() {
     /**
      * select 控件回显值
      */
-    var initSelected = function (obj) {
+    var initStaffSelected = function (obj) {
         $('#probationStatus').selectpicker('val', obj.probationStatus);
         $('#staffPosition').selectpicker('val', obj.staffPosition);
         $('#province').selectpicker('val', obj.province);
