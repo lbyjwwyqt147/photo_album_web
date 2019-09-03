@@ -99,7 +99,7 @@ var ImagesView = {
             images_col_div += '<li class="m-nav__item">\n';
             images_col_div += '<a href="#" class="'+rowId+'_hide_btn m-nav__link"  value = "'+v.id+'" status = "'+v.status+'" dataVersion = "'+v.dataVersion+'">\n';
             images_col_div += '<i class="m-nav__link-icon flaticon-close"></i>\n';
-            images_col_div += '<span class="m-nav__link-text">隐藏</span>\n';
+            images_col_div += '<span class="m-nav__link-text">下架</span>\n';
             images_col_div += '</a>\n';
             images_col_div += '</li>\n';
         }
@@ -125,7 +125,7 @@ var ImagesView = {
         images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom: 0.5rem;">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 28.5rem;padding-bottom: 0.5rem;">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 91%;padding-bottom: 0.5rem;">\n';
         images_col_div += v.total;
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';

@@ -4,6 +4,7 @@
  */
 var SnippetMainPageUploading= function() {
     var serverUrl = BaseUtils.serverAddress;
+    var cloudServerUrl = BaseUtils.cloudServerAddress;
     var uploadingMainPageSubmitForm = $("#photo_uploading_mainPage_dataSubmit_form");
     var uploadingMainPageSubmitFormId = "#photo_uploading_mainPage_dataSubmit_form";
     var photoUploadingMainPageWebuploader;
@@ -36,13 +37,14 @@ var SnippetMainPageUploading= function() {
             fileSizeLimit: 30*1024*1024*25,  // 总文件大小
             fileSingleSizeLimit: 1024*1024*25, // 单个文件大小
             //处理客户端新文件上传时，需要调用后台处理的地址, 必填
-            uploadUrl: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
+            uploadUrl: cloudServerUrl + 'v1/verify/file/upload/batch',
             //处理客户端原有文件更新时的后台处理地址，必填
             updateUrl: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
             //当客户端原有文件删除时的后台处理地址，必填
-            removeUrl: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
+            removeUrl: serverUrl + 'v1/verify/album/picture/d',
             //初始化客户端上传文件，从后台获取文件的地址, 可选，当此参数为空时，默认已上传的文件为空
-            initUrl: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
+            initServerFileUrl:  serverUrl + 'v1/table/album/picture',
+            businessId : businessId,
             formData: {
                 'systemCode' : BaseUtils.systemCode,
                 'businessCode' : 10,
@@ -130,7 +132,6 @@ var SnippetMainPageUploading= function() {
         // 化妆师 multi select
         BaseUtils.staffDataSelect({"staffPosition" : 3 }, function (data) {
             Object.keys(data).forEach(function(key){
-                console.log(data);
                 $albumDresser.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
 
@@ -144,7 +145,6 @@ var SnippetMainPageUploading= function() {
         // 摄影师 multi select
         BaseUtils.staffDataSelect({"staffPosition" : 1 }, function (data) {
             Object.keys(data).forEach(function(key){
-                console.log(key);
                 $albumPhotographyAuthor.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
         });
@@ -242,9 +242,10 @@ var SnippetMainPageUploading= function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-
+        var firnFileList = $("#photo-file-list").val();
         // 验证是否有图片
-        if (photoUploadingMainPageWebuploader.getFiles().length == 0) {
+        var  hasImage = photoUploadingMainPageWebuploader.getFiles().length == 0 && ( firnFileList == "" ||  firnFileList == "[]" || firnFileList.length == 0)
+        if (hasImage) {
             $(".uploader_wrap .placeholder").css("border","1px dashed #ff0b5a");
             $("#image-has-danger").show();
             return;

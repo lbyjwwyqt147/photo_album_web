@@ -4,7 +4,6 @@
  */
 var SnippetMainPageHumanPortrait = function() {
     var serverUrl = BaseUtils.serverAddress;
-    var humanPortraitMainPageTable;
     var humanPortraitMainPageMark = 1;
     var humanPortraitMainPageModuleCode = '1020';
     var humanGridPageSize = 20;
@@ -28,32 +27,8 @@ var SnippetMainPageHumanPortrait = function() {
                 save_btn_html += '</a>\n';
                 save_btn_html += '</li>\n';
                 gridHeadToolsHtml.append(save_btn_html);
-
-
-
-                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改图册信息" lay-event="edit">\n'
-                edit_btn_html += '<i class="la la-edit"></i>\n';
-                edit_btn_html += '</a>\n';
-                tableToolbarHtml.append(edit_btn_html);
-
             }
-            var delete_index = $.inArray("2", buttonGroup);
-            if (delete_index != -1) {
-                var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除图册信息">\n';
-                delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="human_portrait_mainPage_delete_btn">\n';
-                delete_btn_html += '<i class="la la-trash-o"></i>\n';
-                delete_btn_html += '</a>\n';
-                delete_btn_html += '</li>\n';
-                gridHeadToolsHtml.append(delete_btn_html);
 
-
-
-                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 删除图册信息" lay-event="del">\n'
-                table_del_btn_html += '<i class="la la-trash-o"></i>\n';
-                table_del_btn_html += '</a>\n';
-                tableToolbarHtml.append(table_del_btn_html);
-
-            }
             var sync_index = $.inArray("10", buttonGroup);
             if (sync_index != -1) {
                 var sync_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="同步数据">\n';
@@ -64,10 +39,6 @@ var SnippetMainPageHumanPortrait = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
 
-            var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 预览图册信息" lay-event="look">\n'
-            table_del_btn_html += '<i class="la la-eye"></i>\n';
-            table_del_btn_html += '</a>\n';
-            tableToolbarHtml.append(table_del_btn_html);
         }
         // Tooltip
         $('[data-toggle="m-tooltip"]').tooltip();
@@ -339,14 +310,7 @@ var SnippetMainPageHumanPortrait = function() {
             humanPortraitMainPageInitSelectpicker();
             humanPortraitMainPageInitFunctionButtonGroup();
             humanPortraitMainPageInitDataGrid();
-            $('#human_portrait_mainPage_delete_btn').click(function(e) {
-                e.preventDefault();
-                if (BaseUtils.checkLoginTimeoutStatus()) {
-                    return;
-                }
-                humanPortraitMainPageDeleteData(null);
-                return false;
-            });
+
             $('#human-portrait-page-grid-query-btn').click(function(e) {
                 e.preventDefault();
                 humanPortraitMainPageRefreshGrid();

@@ -34,7 +34,7 @@
             //swf的地址
             var swf_path = "./Uploader.swf";
             // 上传后台服务地址
-            var server_path = 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch';
+            var server_path = options.uploadUrl;
             //相册名称
             var $galname = "";
             var supportTransition = (function(){
@@ -263,23 +263,62 @@
              * @param file
              */
             function removeServerFile( file ){
-                $.ajax({
-                    type:'get',
-                    url: options.removeUrl,
-                    data:{id:file.name},
-                    dataType:'json',
-                    success:function(data){
-                        fileCount--;
-                        updateStatus();
-                    }
+                //询问框
+                layer.confirm('你确定要删除?', {
+                    shade: [0.3, 'rgb(230, 230, 230)'],
+                    btn: ['确定','取消'] //按钮
+                }, function(index, layero){   //按钮【按钮一】的回调
+                    layer.close(index);
+                    BaseUtils.pageMsgBlock();
+                    $deleteAjax({
+                        url: options.removeUrl,
+                        data:{id: options.businessId},
+                        headers: BaseUtils.serverHeaders()
+                    }, function (response) {
+                        if (response.success) {
+                            fileCount--;
+                            updateStatus();
+                        }
+                    }, function (data) {
+
+                    });
+                }, function () {  //按钮【按钮二】的回调
+
                 });
             }
 
             /**
-             * 初始化服务端附件
+             * 编辑时初始化回显服务端附件
              */
             function initServerFile(){
-
+                $getAjax({
+                    url: options.initServerFileUrl,
+                    data:{id: options.businessId},
+                    headers: BaseUtils.serverHeaders()
+                }, function (response) {
+                    console.log(response);
+                    var datas = response.data;
+                    if (datas != null ) {
+                        $.each(datas, function(index,item){
+                            var obj ={
+                                "name" : item.pictureName,
+                                "size" : item.pictureSize,
+                                "lastModifiedDate" : item.createTime,
+                                "id" : item.id,
+                                "ext" : item.pictureType.substr(1)
+                            };
+                            /*obj.name = item.fileName;
+                            obj.size = item.size;
+                            obj.lastModifiedDate = item.createTime;
+                            obj.id = item.id;
+                            obj.ext = item.fileType.substr(1);*/
+                            var file = new WebUploader.File(obj);
+                            //此处是关键，将文件状态改为'已上传完成'
+                            file.setStatus('complete')
+                            uploader.addFiles(file)
+                        });
+                    }
+                });
             }
 
             /**
@@ -596,7 +635,9 @@
                     $placeHolder.addClass('element-invisible');
                     $statusBar.show();
                 }
-
+                console.log(" ----------- ")
+                console.log(file);
+                console.log(" ----------- ")
                 addFile( file );
                 setState( 'ready' );
                 updateTotalProgress();
