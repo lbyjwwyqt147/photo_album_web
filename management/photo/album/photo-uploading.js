@@ -15,6 +15,7 @@ var SnippetMainPageUploading= function() {
      * 初始化上传组件
      */
     var uploadingMainPageInitWebuploader = function () {
+        $("#photo_uploading_form_body").css("height", $(window).height() - 10);
         var curUrl = location.search; //获取url中"?"符后的字串
         if (curUrl.indexOf("?") != -1) {    //判断是否有参数
             var param = curUrl.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
@@ -270,7 +271,9 @@ var SnippetMainPageUploading= function() {
                         "id" : curImageObj.id,
                         "fileCallAddress" : curImageObj.fileCallAddress,
                         "fileName" : curImageObj.fileName,
-                        "fileCategory" : curImageObj.fileCategory
+                        "fileCategory" : curImageObj.fileCategory,
+                        "fileSize" : curImageObj.fileSize,
+                        "fileSuffix" : curImageObj.fileSuffix
                     };
                     if (curFirstVertex === 1 && firstVertex === 0) {
                         firstVertex = 1;

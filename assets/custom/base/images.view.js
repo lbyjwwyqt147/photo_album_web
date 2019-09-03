@@ -125,7 +125,7 @@ var ImagesView = {
         images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom: 0.5rem;">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 91%;padding-bottom: 0.5rem;">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 92%;padding-bottom: 0.5rem;">\n';
         images_col_div += v.total;
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';

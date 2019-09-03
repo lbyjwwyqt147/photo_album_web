@@ -302,7 +302,7 @@
                         $.each(datas, function(index,item){
                             var obj ={
                                 "name" : item.pictureName,
-                                "size" : item.pictureSize,
+                                "size" : item.pictureSize * 1204,
                                 "lastModifiedDate" : item.createTime,
                                 "id" : item.id,
                                 "ext" : item.pictureType.substr(1)
@@ -389,6 +389,7 @@
                                 img.bind('load', setDragEvent);
                                 $wrap.empty().append( img );
                             } else {
+                                console.log("图片预览")
                                 // 图片预览
                                 /* $.ajax('../../server/preview.php', {
                                      method: 'POST',

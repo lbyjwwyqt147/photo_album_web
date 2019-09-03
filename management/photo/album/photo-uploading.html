@@ -97,7 +97,8 @@
                                         <span class="percentage"></span>
                                     </div><div class="info"></div>
                                     <div class="btns">
-                                        <div id="uploading-filePicker2" class="uploader_filePicker2"></div><div class="uploadBtn">开始上传</div>
+                                        <div id="uploading-filePicker2" class="uploader_filePicker2"></div>
+                                       <!-- <div class="uploadBtn">开始上传</div> -->
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +108,7 @@
                             <!-- 表单数据 开始 -->
                             <!--begin::Form-->
                             <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="photo_uploading_mainPage_dataSubmit_form">
-                                <div class="m-portlet__body" style="padding-top: 10px; padding-bottom: 5px;">
+                                <div class="m-portlet__body" id="photo_uploading_form_body" style="padding-top: 10px; padding-bottom: 5px;">
                                     <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">主题:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
@@ -217,7 +218,7 @@
                                         <input type="hidden" class="form-control  m-input" name="albumNumber"  placeholder="albumNumber"  autocomplete="off">
                                     </div>
 
-                                    <div class="modal-footer" style="position: fixed;">
+                                    <div class="modal-footer" style="padding-right: 15%;">
                                         <div>
                                             <a href="javascript:;" class="btn btn-primary m-btn m-btn--icon" id="photo_uploading_mainPage_dataSubmit_form_preview">
                                             <span>
