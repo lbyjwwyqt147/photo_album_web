@@ -243,20 +243,41 @@ var SnippetMainPageUploading= function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var firnFileList = $("#photo-file-list").val();
+        var curPhotoFlies = photoUploadingMainPageWebuploader.getFiles();
+        console.log(curPhotoFlies);
         // 验证是否有图片
-        var  hasImage = photoUploadingMainPageWebuploader.getFiles().length == 0 && ( firnFileList == "" ||  firnFileList == "[]" || firnFileList.length == 0)
+        var  hasImage = curPhotoFlies.length == 0 ? true : false
         if (hasImage) {
             $(".uploader_wrap .placeholder").css("border","1px dashed #ff0b5a");
             $("#image-has-danger").show();
             return;
         } else {
-            BaseUtils.pageMsgBlock();
+            //BaseUtils.pageMsgBlock();
             $(".uploader_wrap .placeholder").css("border","1px dashed #e6e6e6");
             $("#image-has-danger").hide();
             photoUploadingMainPageWebuploader.upload();
             var curPhotoImageList = [];
             var firstVertex = 0;
+            $.each(curPhotoFlies, function (index, item) {
+                var fileSource = item.source.source;
+                var nowFileId = fileSource.fileId;
+                if (nowFileId === undefined || typeof (nowFileId) == undefined) {
+
+                } else {
+                    if (fileSource.cover == 0) {
+                        firstVertex = 1;
+                    }
+                    var curPhotoImage = {
+                        "id" : nowFileId,
+                        "fileCallAddress" : fileSource.srcUrl,
+                        "fileName" : item.name,
+                        "fileCategory" : fileSource.fileCategory,
+                        "fileSize" : item.size,
+                        "fileSuffix" :  fileSource.fileSuffix
+                    };
+                    curPhotoImageList.push(curPhotoImage);
+                }
+            });
             // 文件上传成功，给item添加成功class, 用样式标记上传成功。
             photoUploadingMainPageWebuploader.on('uploadSuccess', function (file, response) {
                 if (response.success) {
@@ -264,7 +285,7 @@ var SnippetMainPageUploading= function() {
                     var curImageHeight = file._info.height;
                     var curImageObj = response.data[0];
                     var curFirstVertex = 0;
-                    if (firstVertex === 0 && (curImageWidth != null || obj != undefined )) {
+                    if (firstVertex === 0 && (curImageWidth != null || curImageWidth != undefined )) {
                         curFirstVertex = curImageWidth > curImageHeight ? 0 : 1;
                     }
                     var curPhotoImage = {
@@ -272,7 +293,7 @@ var SnippetMainPageUploading= function() {
                         "fileCallAddress" : curImageObj.fileCallAddress,
                         "fileName" : curImageObj.fileName,
                         "fileCategory" : curImageObj.fileCategory,
-                        "fileSize" : curImageObj.fileSize,
+                        "fileSize" : parseInt(curImageObj.fileSize/1024),
                         "fileSuffix" : curImageObj.fileSuffix
                     };
                     if (curFirstVertex === 1 && firstVertex === 0) {
@@ -283,7 +304,7 @@ var SnippetMainPageUploading= function() {
                     }
                 }
             });
-
+            console.log(curPhotoImageList);
             //所有文件上传完毕
             photoUploadingMainPageWebuploader.on("uploadFinished", function () {
                 //提交表单
@@ -295,9 +316,8 @@ var SnippetMainPageUploading= function() {
                 $("#album-dresser").val(albumDresserOptions.join(','));
                 var albumAnaphasisAuthorOptions = $("#albumAnaphasisAuthor").select2("val");
                 $("#album-anaphasi-author").val(albumAnaphasisAuthorOptions.join(','));
-                BaseUtils.modalBlock("#photo_uploading_mainPage_dataSubmit_form_modal");
                 // 保存数据
-                $postAjax({
+             /*   $postAjax({
                     url:serverUrl + "v1/verify/album/s",
                     data:uploadingMainPageSubmitForm.serializeJSON(),
                     headers: BaseUtils.serverHeaders()
@@ -313,7 +333,7 @@ var SnippetMainPageUploading= function() {
                     }
                 }, function (data) {
                     BaseUtils.htmPageUnblock();
-                });
+                });*/
 
             });
         }

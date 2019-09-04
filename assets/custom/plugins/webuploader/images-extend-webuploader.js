@@ -111,10 +111,10 @@
                     height: thumbnailHeight,
 
                     // 图片质量，只有type为`image/jpeg`的时候才有效。
-                    quality: 70,
+                    quality: 100,
 
-                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
-                    allowMagnify: true,
+                    // true 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                    allowMagnify: false,
 
                     // 是否允许裁剪。
                     crop: true,
@@ -130,7 +130,7 @@
                     height: 1600,
 
                     // 图片质量，只有type为`image/jpeg`的时候才有效。
-                    quality: 90,
+                    quality: 100,
 
                     // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
                     allowMagnify: false,
@@ -145,8 +145,8 @@
                     // 此属性可能会影响图片自动纠正功能
                     noCompressIfLarger: false,
 
-                    // 单位字节，如果图片大小小于此值，不会采用压缩。
-                    compressSize: 0
+                    // 单位字节，如果图片大小小于此值，不会采用压缩。 设置为1MB
+                    compressSize: 10 * 1048576
                 },
 
                 //{Boolean} [可选] [默认值：false] 设置为 true 后，不需要手动调用上传，有文件选择即开始上传。
@@ -233,7 +233,7 @@
                     is_moveing = false;
                     e.originalEvent.dataTransfer.dropEffect = 'move';
                 });
-            }
+            };
 
             /**
              * 更新服务端附件
@@ -256,70 +256,124 @@
                         uploader.reset();
                     }
                 });
-            }
+            };
 
             /**
              * 删除服务端附件
              * @param file
              */
-            function removeServerFile( file ){
+            function removeServerFile( file, imageId){
                 //询问框
-                layer.confirm('你确定要删除?', {
-                    shade: [0.3, 'rgb(230, 230, 230)'],
-                    btn: ['确定','取消'] //按钮
-                }, function(index, layero){   //按钮【按钮一】的回调
-                    layer.close(index);
-                    BaseUtils.pageMsgBlock();
-                    $deleteAjax({
-                        url: options.removeUrl,
-                        data:{id: options.businessId},
-                        headers: BaseUtils.serverHeaders()
-                    }, function (response) {
-                        if (response.success) {
-                            fileCount--;
-                            updateStatus();
-                        }
-                    }, function (data) {
+                swal({
+                    title: '你确定要删除?',
+                    showCancelButton: true,
+                    confirmButtonText: '确认',
+                    cancelButtonText: '取消'
+                }).then(function(result){
+                    if (result.value) {
+                        var curImageId = imageId;
+                        BaseUtils.pageMsgBlock();
+                        $deleteAjax({
+                            url: options.removeUrl,
+                            data:{id: curImageId},
+                            headers: BaseUtils.serverHeaders()
+                        }, function (response) {
+                            if (response.success) {
+                                removeFile( file );
+                                uploader.removeFile( file );
+                                fileCount--;
+                                updateStatus();
+                            }
+                        }, function (data) {
 
-                    });
-                }, function () {  //按钮【按钮二】的回调
+                        });
+                    } else if (result.dismiss === 'cancel') {
 
+                    }
                 });
-            }
+
+            };
 
             /**
              * 编辑时初始化回显服务端附件
              */
             function initServerFile(){
-                $getAjax({
-                    url: options.initServerFileUrl,
-                    data:{id: options.businessId},
-                    headers: BaseUtils.serverHeaders()
-                }, function (response) {
-                    console.log(response);
-                    var datas = response.data;
-                    if (datas != null ) {
-                        $.each(datas, function(index,item){
-                            var obj ={
-                                "name" : item.pictureName,
-                                "size" : item.pictureSize * 1204,
-                                "lastModifiedDate" : item.createTime,
-                                "id" : item.id,
-                                "ext" : item.pictureType.substr(1)
-                            };
-                            /*obj.name = item.fileName;
-                            obj.size = item.size;
-                            obj.lastModifiedDate = item.createTime;
-                            obj.id = item.id;
-                            obj.ext = item.fileType.substr(1);*/
-                            var file = new WebUploader.File(obj);
-                            //此处是关键，将文件状态改为'已上传完成'
-                            file.setStatus('complete')
-                            uploader.addFiles(file)
-                        });
+                if (options.businessId > 0) {
+                    $getAjax({
+                        url: options.initServerFileUrl,
+                        data:{id: options.businessId},
+                        headers: BaseUtils.serverHeaders()
+                    }, function (response) {
+                        console.log(response);
+                        var datas = response.data;
+                        if (datas != null ) {
+                            $.each(datas, function(index,item){
+                                getFileObject(item.pictureLocation, item, function (fileObject) {
+                                    var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'), fileObject);
+                                    var file = new WebUploader.File(wuFile);
+                                    uploader.addFiles(file);
+                                    //此处是关键，将文件状态改为'已上传完成'
+                                    file.setStatus('complete');
+                                });
+                            });
+                        }
+                    });
+                }
+            };
+
+            /**
+             * 获取文件信息
+             * @param imageUrl
+             * @param cb
+             */
+            function getFileBlob(imageUrl, cb) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", imageUrl, true);
+                xhr.responseType = "blob";
+                xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                xhr.setRequestHeader("Accept","*/*");
+                xhr.setRequestHeader("Access-Control-Allow-Headers","Content-Type, Content-Length, Authorization, Accept, X-Requested-With");
+                xhr.setRequestHeader("Content-Type", "image/jpeg");
+                xhr.setRequestHeader("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+                xhr.addEventListener('load', function() {
+                    if (this.status == 200) {
+                        cb(xhr.response);
                     }
                 });
-            }
+                xhr.send();
+            };
+
+            /**
+             *
+             * @param blob
+             * @param name  文件名称
+             * @param id
+             * @returns {*}
+             */
+            function  blobToFile (blob, fileData) {
+                blob.lastModifiedDate = new Date();
+                blob.name = fileData.pictureName;
+                blob.id = fileData.id;
+                blob.fileId = fileData.pictureId;
+                blob.fileCategory = fileData.pictureCategory;
+                blob.srcUrl = fileData.pictureLocation;
+                blob.fileSuffix = fileData.pictureType;
+                blob.cover = fileData.cover;
+                return blob;
+            };
+
+            /**
+             * 得到文件对象
+             * @param fileData
+             * @param filePathOrUrl
+             * @param cb
+             */
+            function getFileObject(filePathOrUrl, fileData, cb) {
+                getFileBlob(filePathOrUrl, function (blob) {
+                    cb(blobToFile(blob, fileData));
+                });
+            };
+
 
             /**
              * 添加附件到webuploader中
@@ -389,8 +443,8 @@
                                 img.bind('load', setDragEvent);
                                 $wrap.empty().append( img );
                             } else {
-                                console.log("图片预览")
                                 // 图片预览
+                                console.log(" 直接访问图片地址..........")
                                 /* $.ajax('../../server/preview.php', {
                                      method: 'POST',
                                      data: src,
@@ -473,7 +527,13 @@
                             if( file.src == "client")
                                 uploader.removeFile( file );
                             else{
-                                removeServerFile( file );
+                                var newFileId = file.source.source.id;
+                                if (newFileId === undefined || typeof (newFileId) == undefined) {
+                                    removeFile( file );
+                                } else {
+                                    //删除服务器上的文件
+                                    removeServerFile( file, newFileId )
+                                }
                                 $('#'+file.id).remove();
                             }
                             return;
@@ -498,6 +558,12 @@
                     }
                 });
                 $li.appendTo( $queue );
+
+               /* $(".coverBoard").click(function (e) {
+                    e.preventDefault();
+                    console.log("设置封面");
+                    return false;
+                });*/
             }
 
             /**
@@ -526,8 +592,6 @@
                 } );
 
                 percent = total ? loaded / total : 0;
-
-
                 spans.eq( 0 ).text( Math.round( percent * 100 ) + '%' );
                 spans.eq( 1 ).css( 'width', Math.round( percent * 100 ) + '%' );
                 updateStatus();
@@ -555,7 +619,7 @@
                         if (stats.successNum != 0
                             && stats.successNum == fileCount) {
                             //图片上传成功提示
-                            console.log("图片上传成功.");
+                           // console.log("图片上传成功.");
                         }
                     }
                 }
@@ -613,7 +677,7 @@
                     case 'finish':
                         stats = uploader.getStats();
                         if( stats.successNum ){
-                            console.log('上传成功');
+                           // console.log('上传成功');
                         } else {
                             state = 'done';
                             location.reload();
@@ -636,9 +700,6 @@
                     $placeHolder.addClass('element-invisible');
                     $statusBar.show();
                 }
-                console.log(" ----------- ")
-                console.log(file);
-                console.log(" ----------- ")
                 addFile( file );
                 setState( 'ready' );
                 updateTotalProgress();
@@ -685,7 +746,7 @@
 
             //某个文件开始上传前触发，一个文件只会触发一次。
             uploader.on("uploadStart", options.uploadStart || function (file) {
-                console.log("uploadStart", file);
+               // console.log("uploadStart", file);
             });
 
             uploader.addButton({
@@ -715,8 +776,14 @@
                 fileSize -= file.size;
                 if( !fileCount){
                     setState('pedding');
+                };
+                var curFileId = file.source.source.id;
+                if (curFileId === undefined || typeof (curFileId) == undefined) {
+                    removeFile( file );
+                } else {
+                    //删除服务器上的文件
+                    removeServerFile(file, curFileId);
                 }
-                removeFile( file );
                 updateTotalProgress();
             });
 
@@ -746,14 +813,13 @@
                reason {String}出错的code
            */
             uploader.on('uploadError', function(file, reason){
-                console.log('uploadError',file, reason ,"上传失败");
-
+               // console.log('uploadError',file, reason ,"上传失败");
             });
 
             // 不管成功或者失败，文件上传完成时触发。
             uploader.on('uploadComplete', function(file){
                 $('#' + file.id ).find('p.state').fadeOut();
-                console.log('uploadComplete', file, "上传结束")
+               // console.log('uploadComplete', file, "上传结束")
             });
 
             uploader.on('all', function( type ){
