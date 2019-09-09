@@ -281,6 +281,8 @@
                             if (response.success) {
                                 removeFile( file );
                                 uploader.removeFile( file );
+                                //清空队列
+                                uploader.reset();
                                 fileCount--;
                                 updateStatus();
                             }
