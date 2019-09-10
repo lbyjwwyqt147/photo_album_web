@@ -279,11 +279,9 @@
                             headers: BaseUtils.serverHeaders()
                         }, function (response) {
                             if (response.success) {
-                                removeFile( file );
-                                uploader.removeFile( file );
-                                //清空队列
-                                uploader.reset();
-                                fileCount--;
+                                file.source.del = 1;
+                                removeFile(file);
+                               // uploader.removeFile( file, true);
                                 updateStatus();
                             }
                         }, function (data) {
@@ -306,7 +304,6 @@
                         data:{id: options.businessId},
                         headers: BaseUtils.serverHeaders()
                     }, function (response) {
-                        console.log(response);
                         var datas = response.data;
                         if (datas != null ) {
                             $.each(datas, function(index,item){
@@ -534,7 +531,7 @@
                                     removeFile( file );
                                 } else {
                                     //删除服务器上的文件
-                                    removeServerFile( file, newFileId )
+                                    removeServerFile( file, newFileId );
                                 }
                                 $('#'+file.id).remove();
                             }
@@ -779,12 +776,15 @@
                 if( !fileCount){
                     setState('pedding');
                 };
-                var curFileId = file.source.source.id;
+                var itemSource = file.source;
+                var curFileId = itemSource.source.id;
                 if (curFileId === undefined || typeof (curFileId) == undefined) {
                     removeFile( file );
                 } else {
-                    //删除服务器上的文件
-                    removeServerFile(file, curFileId);
+                    if (itemSource.del != 1) {
+                        //删除服务器上的文件
+                        removeServerFile(file, curFileId);
+                    }
                 }
                 updateTotalProgress();
             });

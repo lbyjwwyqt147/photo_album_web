@@ -244,7 +244,6 @@ var SnippetMainPageUploading= function() {
             return;
         }
         var curPhotoFlies = photoUploadingMainPageWebuploader.getFiles();
-        console.log(curPhotoFlies);
         // 验证是否有图片
         var  hasImage = curPhotoFlies.length == 0 ? true : false
         if (hasImage) {
@@ -252,30 +251,33 @@ var SnippetMainPageUploading= function() {
             $("#image-has-danger").show();
             return;
         } else {
-            //BaseUtils.pageMsgBlock();
+            BaseUtils.pageMsgBlock();
             $(".uploader_wrap .placeholder").css("border","1px dashed #e6e6e6");
             $("#image-has-danger").hide();
             photoUploadingMainPageWebuploader.upload();
             var curPhotoImageList = [];
             var firstVertex = 0;
             $.each(curPhotoFlies, function (index, item) {
-                var fileSource = item.source.source;
+               var itemSource = item.source;
+                var fileSource = itemSource.source;
                 var nowFileId = fileSource.fileId;
-                if (nowFileId === undefined || typeof (nowFileId) == undefined) {
+                if (nowFileId == undefined || typeof (nowFileId) == undefined) {
 
                 } else {
-                    if (fileSource.cover == 0) {
-                        firstVertex = 1;
+                    if (itemSource.del != 1) {
+                        if (fileSource.cover == 0) {
+                            firstVertex = 1;
+                        }
+                        var curPhotoImage = {
+                            "id" : nowFileId,
+                            "fileCallAddress" : fileSource.srcUrl,
+                            "fileName" : item.name,
+                            "fileCategory" : fileSource.fileCategory,
+                            "fileSize" : item.size,
+                            "fileSuffix" :  fileSource.fileSuffix
+                        };
+                        curPhotoImageList.push(curPhotoImage);
                     }
-                    var curPhotoImage = {
-                        "id" : nowFileId,
-                        "fileCallAddress" : fileSource.srcUrl,
-                        "fileName" : item.name,
-                        "fileCategory" : fileSource.fileCategory,
-                        "fileSize" : item.size,
-                        "fileSuffix" :  fileSource.fileSuffix
-                    };
-                    curPhotoImageList.push(curPhotoImage);
                 }
             });
             // 文件上传成功，给item添加成功class, 用样式标记上传成功。
@@ -304,7 +306,6 @@ var SnippetMainPageUploading= function() {
                     }
                 }
             });
-            console.log(curPhotoImageList);
             //所有文件上传完毕
             photoUploadingMainPageWebuploader.on("uploadFinished", function () {
                 //提交表单
@@ -317,13 +318,15 @@ var SnippetMainPageUploading= function() {
                 var albumAnaphasisAuthorOptions = $("#albumAnaphasisAuthor").select2("val");
                 $("#album-anaphasi-author").val(albumAnaphasisAuthorOptions.join(','));
                 // 保存数据
-             /*   $postAjax({
+                $postAjax({
                     url:serverUrl + "v1/verify/album/s",
                     data:uploadingMainPageSubmitForm.serializeJSON(),
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
                     BaseUtils.htmPageUnblock();
                     if (response.success) {
+                         //清空队列
+                         photoUploadingMainPageWebuploader.reset();
                         // toastr.success(BaseUtils.saveSuccessMsg);
                         // 关闭 dialog
                         closeOpenLayer();
@@ -333,7 +336,7 @@ var SnippetMainPageUploading= function() {
                     }
                 }, function (data) {
                     BaseUtils.htmPageUnblock();
-                });*/
+                });
 
             });
         }
