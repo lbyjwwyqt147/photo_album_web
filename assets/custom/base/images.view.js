@@ -55,7 +55,7 @@ var ImagesView = {
      * 图片展示样式设置
      */
     imagesListHtmlAppend:function (rowId, v) {
-        var images_col_div = '<div class="col-xl-3">\n';
+        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
         images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
         images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
         images_col_div += '<div class="m-portlet__head-caption">\n';
@@ -63,7 +63,7 @@ var ImagesView = {
         if (v.status === 0) {
             images_col_div += '<span class="m-badge m-badge--success m-badge--wide">已发布</span>\n';
         } else if (v.status === 1) {
-            images_col_div += '<span class="m-badge m-badge--danger m-badge--wide">隐藏</span>\n';
+            images_col_div += '<span class="m-badge m-badge--danger m-badge--wide">下架</span>\n';
         } else {
             images_col_div += '<span class="m-badge m-badge--warning m-badge--wide">草稿</span>\n';
         }
@@ -109,6 +109,14 @@ var ImagesView = {
         images_col_div += '<span class="m-nav__link-text">删除</span>\n';
         images_col_div += '</a>\n';
         images_col_div += '</li>\n';
+
+        images_col_div += '<li class="m-nav__item">\n';
+        images_col_div += '<a href="#" class="'+rowId+'_look_btn m-nav__link"  value = "'+v.id+'" status = "'+v.status+'" dataVersion = "'+v.dataVersion+'">\n';
+        images_col_div += '<i class="m-nav__link-icon flaticon-eye"></i>\n';
+        images_col_div += '<span class="m-nav__link-text">查看</span>\n';
+        images_col_div += '</a>\n';
+        images_col_div += '</li>\n'
+
         images_col_div += '</ul>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';

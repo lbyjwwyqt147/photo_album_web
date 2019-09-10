@@ -94,6 +94,7 @@ var SnippetMainPageHumanPortrait = function() {
         });
     };
 
+
     /**
      * 刷新grid
      */
@@ -138,7 +139,41 @@ var SnippetMainPageHumanPortrait = function() {
         $("#image_style .select2-selection__choice").remove();
     };
 
-
+    /**
+     * 查看图片信息
+     * @param dataId
+     */
+    var lookPortaitImages = function (dataId) {
+        $getAjax({
+            url: serverUrl + 'v1/table/album/picture',
+            data:{id: dataId},
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            var datas = response.data;
+            if (datas != null ) {
+                var fancyboxItems = [];
+                $.each(datas, function(index,item){
+                   var curImageItem = {
+                        src  : item.pictureLocation,
+                        opts : {
+                            caption : '',
+                            thumb   : item.pictureLocation
+                        }
+                    };
+                    fancyboxItems.push(curImageItem);
+                });
+                $.fancybox.open(fancyboxItems, {
+                    loop : true,
+                    thumbs : {
+                        autoStart : true,    //打开时显示缩略图  值为： true    false
+                        axis: 'y',          // 缩略图展示  垂直(y)或水平(x)滚动
+                        width  : '230px',
+                        height : '230px'
+                    }
+                });
+            }
+        });
+    }
 
     /**
      * 删除
@@ -301,6 +336,46 @@ var SnippetMainPageHumanPortrait = function() {
             humanPortraitMainPageDeleteData($(this).attr("value"));
             return false;
         });
+
+        // 查看图片
+        $('.human_portrait_mainPage_grid_fancybox_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            lookPortaitImages($(this).attr("value"));
+            return false;
+        });
+
+        // 查看按钮
+        $('.human_portrait_mainPage_grid_look_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            var layerArea = ['100%', '100%'];
+            /*if ($(window).width() > 1920 && $(window).height() > 937) {
+                layerArea = ['2000px', '950px']
+            }*/
+            var dataId = $(this).attr("value");
+            var lookPhotoIframContent = layer.open({
+                type: 2,
+                title: '写真图册',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: layerArea,
+                content: '../../management/photo/album/photo-uploading-look.html?dataId='+dataId+'&albumClassify=1',
+                end : function () {
+
+                }
+            });
+            // 窗口全屏打开
+            layer.full(lookPhotoIframContent);
+            return false;
+        });
+
+
     };
 
     //== Public Functions

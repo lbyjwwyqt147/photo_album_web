@@ -327,8 +327,12 @@
              */
             function getFileBlob(imageUrl, cb) {
                 var xhr = new XMLHttpRequest();
+                if (window.ActiveXObject) {
+                    xhr = new ActiveXObject("Microsoft.XMLHttp");
+                }
                 xhr.open("GET", imageUrl, true);
                 xhr.responseType = "blob";
+                xhr.setRequestHeader("Cache-Control","no-cache");  //这段代码很重要 不缓存数据  由于缓存的问题，当url一样的时间就从上次得到的结果中直接取，而不与后台进行数据交互了
                 xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
                 xhr.setRequestHeader("Accept","*/*");
                 xhr.setRequestHeader("Access-Control-Allow-Headers","Content-Type, Content-Length, Authorization, Accept, X-Requested-With");
