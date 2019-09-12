@@ -173,7 +173,7 @@ var SnippetMainPageHumanPortrait = function() {
                 });
             }
         });
-    }
+    };
 
     /**
      * 删除

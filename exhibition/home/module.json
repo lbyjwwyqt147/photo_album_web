@@ -1,0 +1,67 @@
+{
+  "data": [{
+    "id": 1,
+    "menuIcon": "",
+    "menuOpenUrl": "../exhibition/photograph/photograph.html",
+    "moduleCode": "1001",
+    "moduleName": "写真",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 2
+  }, {
+    "id": 2,
+    "menuIcon": "",
+    "menuOpenUrl": "",
+    "moduleCode": "1002",
+    "moduleName": "婚纱",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 3
+  }, {
+    "id": 3,
+    "menuIcon": "",
+    "menuOpenUrl": "",
+    "moduleCode": "1003",
+    "moduleName": "客片",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 4
+  }, {
+    "id": 4,
+    "menuIcon": "",
+    "menuOpenUrl": "",
+    "moduleCode": "1004",
+    "moduleName": "最新主题",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 5
+  }, {
+    "id": 5,
+    "menuIcon": "",
+    "menuOpenUrl": "",
+    "moduleCode": "1005",
+    "moduleName": "最新活动",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 6
+  }, {
+    "id": 6,
+    "menuIcon": "",
+    "menuOpenUrl": "",
+    "moduleCode": "1006",
+    "moduleName": "企业文化",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0,
+    "classify" : 7
+  }],
+  "message": "success.",
+  "status": 200,
+  "success": true,
+  "timestamp": "2019-03-16 08:24:48"
+}

@@ -52,7 +52,7 @@ var ImagesView = {
     },
 
     /**
-     * 图片展示样式设置
+     * 后台图片展示样式设置
      */
     imagesListHtmlAppend:function (rowId, v) {
         var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
@@ -146,6 +146,41 @@ var ImagesView = {
         images_col_div += '</div>\n';
         return images_col_div;
     },
+
+
+    /**
+     * 首页图片展示
+     * @param rowId
+     * @param v
+     * @returns {string}
+     */
+    leadingPortraitListHtmlAppend:function (rowId, v) {
+        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
+        images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
+        images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
+        images_col_div += '<div class="m-portlet__head-caption">\n';
+        images_col_div += '<div class="m-portlet__head-action">\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '<div class="m-portlet__body">\n';
+        images_col_div += '<div class="m-widget19">\n';
+        images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
+        images_col_div += '<img src="'+v.cover+'" alt="">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom: 0.5rem;">\n';
+        images_col_div += v.title;
+        images_col_div += '\n</h3>\n';
+        images_col_div += '<div class="m-widget19__shadow"></div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '<div class="m-widget19__content">\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        return images_col_div;
+    },
+
 
 
 
