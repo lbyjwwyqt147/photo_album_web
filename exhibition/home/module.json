@@ -2,7 +2,7 @@
   "data": [{
     "id": 1,
     "menuIcon": "",
-    "menuOpenUrl": "../exhibition/photograph/photograph.html",
+    "menuOpenUrl": "../../exhibition/fahrenheit/fahrenheit.html",
     "moduleCode": "1001",
     "moduleName": "写真",
     "modulePid": 0,
@@ -49,16 +49,6 @@
     "moduleType": 1,
     "status": 0,
     "classify" : 6
-  }, {
-    "id": 6,
-    "menuIcon": "",
-    "menuOpenUrl": "",
-    "moduleCode": "1006",
-    "moduleName": "企业文化",
-    "modulePid": 0,
-    "moduleType": 1,
-    "status": 0,
-    "classify" : 7
   }],
   "message": "success.",
   "status": 200,

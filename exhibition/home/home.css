@@ -2,7 +2,7 @@
 
 /** 首页页面样式  开始 **/
 .m-page--fluid .m-page .m-page__container {
-    padding: 0 0px;
+    padding: 0 75px;
 }
 
 .m-tabs-line {
@@ -26,6 +26,10 @@
     padding-bottom: 25px;
 }
 
+.nav-item.m-tabs__item {
+    padding-right: 30px;
+}
+
 /** 右边悬浮导航栏 */
 .m-nav-sticky {
     width: 60px;
@@ -36,7 +40,7 @@
     padding: 5px 0;
     margin: 0;
     z-index: 110;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px 8px 8px 8px;
 }
 
 /** 首页页面样式  结束 **/

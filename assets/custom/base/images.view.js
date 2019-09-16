@@ -138,8 +138,6 @@ var ImagesView = {
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';
         images_col_div += '</div>\n';
-        images_col_div += '<div class="m-widget19__content">\n';
-        images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
@@ -155,7 +153,7 @@ var ImagesView = {
      * @returns {string}
      */
     leadingPortraitListHtmlAppend:function (rowId, v) {
-        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
+        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer; margin-right: 20px;">\n';
         images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
         images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
         images_col_div += '<div class="m-portlet__head-caption">\n';
@@ -167,12 +165,9 @@ var ImagesView = {
         images_col_div += '<div class="m-widget19">\n';
         images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
         images_col_div += '<img src="'+v.cover+'" alt="">\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom: 0.5rem;">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light m-image-title" style="display:block; padding-left: 0rem; padding-bottom: 0rem; width: 100%; text-align: center; height: 40px; line-height: 40px; background-color: rgba(0,0,0,0.2);">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
-        images_col_div += '<div class="m-widget19__shadow"></div>\n';
-        images_col_div += '</div>\n';
-        images_col_div += '<div class="m-widget19__content">\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
