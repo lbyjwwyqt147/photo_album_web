@@ -9,8 +9,6 @@ var SnippetMainPageUploading= function() {
     var uploadingMainPageSubmitFormId = "#carousel_uploading_mainPage_dataSubmit_form";
     var photoUploadingMainPageWebuploader;
     var businessId = 0;
-    var businessType = 0;
-    var albumClassify = 1;
     /**
      * 初始化上传组件
      */
@@ -22,9 +20,7 @@ var SnippetMainPageUploading= function() {
             var params = param.split("&");   //用&进行分隔 （如果只有一个参数 直接用等号进分隔； 如果有多个参数 要用&号分隔 再用等号进行分隔）
             var businessIdParams = params[0].split("=");
             businessId = businessIdParams[1];
-            var businessTypeParams = params[1].split("=");
-            businessType = businessTypeParams[1];
-            albumClassify = businessTypeParams[1];
+
         }
         var curUser = BaseUtils.getCurrentUser();
         photoUploadingMainPageWebuploader = window.webuploaderUtils.init({
@@ -44,7 +40,7 @@ var SnippetMainPageUploading= function() {
             //当客户端原有文件删除时的后台处理地址，必填
             removeUrl: serverUrl + 'v1/verify/album/picture/d',
             //初始化客户端上传文件，从后台获取文件的地址, 可选，当此参数为空时，默认已上传的文件为空
-            initServerFileUrl:  serverUrl + 'v1/table/album/picture',
+            initServerFileUrl:  serverUrl + 'v1/table/carousel/picture',
             businessId : businessId,
             formData: {
                 'systemCode' : BaseUtils.systemCode,
@@ -64,7 +60,7 @@ var SnippetMainPageUploading= function() {
     var initFormData = function () {
         if (businessId != 0) {
             $getAjax({
-                url:serverUrl + "v1/table/album/" + businessId,
+                url:serverUrl + "v1/table/carousel/" + businessId,
                 headers: BaseUtils.serverHeaders()
             }, function (response) {
                 uploadingMainPageSubmitForm.setForm(response.data);
@@ -91,71 +87,26 @@ var SnippetMainPageUploading= function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
-        $("#albumClassify").val(albumClassify);
-        var $albumDresser = $("#albumDresser");
-        $albumDresser.select2({
-            placeholder: "化妆师",
-            allowClear: true
-        });
-        var $albumAnaphasisAuthor = $("#albumAnaphasisAuthor");
-        $albumAnaphasisAuthor.select2({
-            placeholder: "后期设计",
-            allowClear: true
-        });
-        var $albumPhotographyAuthor = $("#albumPhotographyAuthor");
-        $albumPhotographyAuthor.select2({
-            placeholder: "摄影师",
-            allowClear: true
-        });
-        //初始化 优先级 控件
         BootstrapTouchspin.initByteTouchSpin("#carousel_uploading_mainPage_dataSubmit_form_uploading_seq");
-        $('.m_selectpicker').selectpicker({
-            noneSelectedText : '请选择' //默认显示内容
-        });
-        var laydate;
-        layui.use('laydate', function() {
-            laydate = layui.laydate;
-            //拍摄日期控件
-            laydate.render({
-                elem: '#shootingsDate'
-            });
-        });
-        // 拍摄地点 select
-        BaseUtils.dictDataSelect("image_site", function (data) {
-            var $spotForPhotography = $("#spotForPhotography");
-            $spotForPhotography.append("<option value=''>--请选择--</option>");
+        // 页面 select
+        BaseUtils.dictDataSelect("image_page", function (data) {
+            var $pageBusinessCode = $("#businessCode");
             Object.keys(data).forEach(function(key){
-                $spotForPhotography.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                $pageBusinessCode.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
             //必须加，刷新select
-            $spotForPhotography .selectpicker('refresh');
-        });
-        // 化妆师 multi select
-        BaseUtils.staffDataSelect({"staffPosition" : 3 }, function (data) {
-            Object.keys(data).forEach(function(key){
-                $albumDresser.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
-            });
+            $pageBusinessCode .selectpicker('refresh');
 
         });
-        // 后期 multi select
-        BaseUtils.staffDataSelect({"staffPosition" :  2}, function (data) {
+
+        // 位置 select
+        BaseUtils.dictDataSelect("page_position", function (data) {
+            var $pagePosition = $("#position");
             Object.keys(data).forEach(function(key){
-                $albumAnaphasisAuthor.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                $pagePosition.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
-        });
-        // 摄影师 multi select
-        BaseUtils.staffDataSelect({"staffPosition" : 1 }, function (data) {
-            Object.keys(data).forEach(function(key){
-                $albumPhotographyAuthor.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
-            });
-        });
-        // 风格 multi select
-        BaseUtils.dictDataSelect("image_style", function (data) {
-            var $albumStyle = $("#albumStyle");
-            Object.keys(data).forEach(function(key){
-                $albumStyle.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
-            });
-            $albumStyle .selectpicker('refresh');
+            //必须加，刷新select
+            $pagePosition .selectpicker('refresh');
         });
 
     }
@@ -167,50 +118,27 @@ var SnippetMainPageUploading= function() {
         BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
         uploadingMainPageSubmitForm.validate({
             rules: {
-                albumName: {
+                businessCode: {
                     required: true,
-                    chcharacterNum:true,
-                    maxlength: 32
+                    maxlength: 10
                 },
-                albumClassification: {
-                    required: true
+                position: {
+                    required: true,
+                    maxlength: 10
                 },
-                albumStyle: {
-                    required: true
+                hrefLink: {
+                    required: true,
+                    maxlength: 255
                 },
-                albumLabel: {
-                    chcharacterNum:true,
-                    maxlength: 32
-                },
-                albumPriority: {
+                priority: {
                     required: true,
                     range: [0,127]
                 },
-                albumMusicAddress: {
+                description: {
                     required: false,
-                    url:true,
-                    maxlength: 255
-                },
-                albumPhotographyAuthor: {
-                    required: false,
-                    maxlength: 40
-                },
-                albumAnaphasisAuthor: {
-                    required: false,
-                    maxlength: 40
-                },
-                albumDresser: {
-                    required: false,
-                    maxlength: 40
-                },
-                spotForPhotography: {
-                    required: false,
-                    maxlength: 10
-                },
-
-                albumDescription: {
-                    maxlength: 255
+                    maxlength: 100
                 }
+
             },
             errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
             errorPlacement: function (error, element) {   // 验证失败调用的函数
@@ -319,7 +247,7 @@ var SnippetMainPageUploading= function() {
                 $("#album-anaphasi-author").val(albumAnaphasisAuthorOptions.join(','));
                 // 保存数据
                 $postAjax({
-                    url:serverUrl + "v1/verify/album/s",
+                    url:serverUrl + "v1/verify/carousel/s",
                     data:uploadingMainPageSubmitForm.serializeJSON(),
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
