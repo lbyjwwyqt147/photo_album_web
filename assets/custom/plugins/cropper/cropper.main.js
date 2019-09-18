@@ -264,13 +264,14 @@ $(function () {
     var businessType = 0;
     var curUrl = location.search; //获取url中"?"符后的字串
     if (curUrl.indexOf("?") != -1) {    //判断是否有参数
-      var param = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+      var param = curUrl.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
       var params = param.split("&");   //用&进行分隔 （如果只有一个参数 直接用等号进分隔； 如果有多个参数 要用&号分隔 再用等号进行分隔）
       var businessIdParams = params[0].split("=");
       businessId = businessIdParams[1];
       var businessTypeParams = params[1].split("=");
       businessType = businessTypeParams[1];
     }
+    BaseUtils.pageMsgBlock("头像上传中....");
     $image.cropper('getCroppedCanvas').toBlob(function(blob){
       var formData = new FormData();  //这里创建FormData()对象
       formData.append('file', blob);  //给表单对象中添加一个name为file的文件  blod是这个插件选择文件后返回的文件对象
@@ -279,11 +280,11 @@ $(function () {
       // 更新头像url
       var _url = BaseUtils.serverAddress;
       switch (businessType) {
-        case 1:
+        case "1":
           // 员工头像处理
           _url =  _url + "v1/verify/staff/s/portrait"
           break;
-        case 2:
+        case "2":
           // 顾客头像处理
           businessCode = "200";
           _url =  _url + ""
@@ -293,9 +294,9 @@ $(function () {
       }
       formData.append('businessCode', businessCode);
       $.ajax({
-        url: BaseUtils.cloudServerAddress + "v1/verify/file/upload/batch",  //这里我上传的是我自己开源的一个文件服务器  github地址:https://github.com/Admin1024Admin/FileServer.git
+        url: BaseUtils.cloudServerAddress + "v1/verify/file/upload/batch",  //上传文件服务器
         type: "POST",
-        headers: BaseUtils.cloudHeaders,
+        headers: BaseUtils.cloudHeaders(),
         crossDomain: true,
         cache: false,
         timeout: 60000,
@@ -303,10 +304,11 @@ $(function () {
         contentType: false,  //这里需要注意
         processData: false,
         success: function(data, textStatus){
-          console.log(data)
-          if(data.result=="ok"){
+          if(data.success){
+            var portaintObj = data.data[0];
             // 上传后的头像url
-            var portraitUrl = null;
+            var portraitUrl = portaintObj.fileCallAddress;
+            var portraitId = portaintObj.id;
             //异步更新头像地址
             $.ajax({
               url: _url,
@@ -318,19 +320,24 @@ $(function () {
               data: {
                 id: businessId,
                 portrait: portraitUrl,
-                portraitId: portraitUrl,
+                portraitId: portraitId,
                 _method :'PUT'
               },
-              headers: BaseUtils.serverHeaders,
+              headers: BaseUtils.serverHeaders(),
               crossDomain: true,
               timeout: 60000,
               success: function (data) {
-
+                BaseUtils.htmPageUnblock();
+                //获取窗口索引
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
               },
               error: function (data) {
                 $("#up-error").show();
               }
             });
+          } else {
+            $("#up-error").show();
           }
         },
         error: function(){

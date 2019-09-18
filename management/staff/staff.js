@@ -219,7 +219,7 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
 
-            var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
+            var table_del_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
             table_del_btn_html += '<i class="la la-eye"></i>\n';
             table_del_btn_html += '</a>\n';
             tableToolbarHtml.append(table_del_btn_html);
@@ -258,7 +258,9 @@ var SnippetMainPageStaff = function() {
                             if (value == null || value == '' ) {
                                 value = "../../assets/custom/images/user/user_0.png";
                             }
-                            var spanHtml = '<img style="display: inline-block; width: 100%; height: 100%;" src="' + value + '">';
+                            var spanHtml = '<a href="' + value + '" data-fancybox>';
+                            spanHtml += '<img style="display: inline-block; width: 100%; height: 100%;" src="' + value + '"/>';
+                            spanHtml += '</a>';
                             return spanHtml;
                         }
                     },
@@ -723,6 +725,9 @@ var SnippetMainPageStaff = function() {
                                     staffMainPageRefreshGrid();
                                     layer.close(index);
                                     return false;
+                                },
+                                end : function () {
+                                    staffMainPageRefreshGrid();
                                 }
                             });
                         }, function () {  //按钮【按钮二】的回调

@@ -23,23 +23,23 @@ var SnippetMainPageCarousel = function() {
             var save_index = $.inArray("1", buttonGroup);
             if (save_index != -1) {
                 var save_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="新增信息">\n';
-                save_btn_html += '<a href="javascript:;" class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" id="Sarousel_mainPage_add_btn">\n';
+                save_btn_html += '<a href="javascript:;" class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" id="carousel_mainPage_add_btn">\n';
                 save_btn_html += '<i class="la la-plus"></i>\n';
                 save_btn_html += '</a>\n';
                 save_btn_html += '</li>\n';
                 gridHeadToolsHtml.append(save_btn_html);
 
 
-                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改信息" lay-event="edit">\n'
+        /*        var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改信息" lay-event="edit">\n'
                 edit_btn_html += '<i class="la la-edit"></i>\n';
                 edit_btn_html += '</a>\n';
-                tableToolbarHtml.append(edit_btn_html);
+                tableToolbarHtml.append(edit_btn_html);*/
 
             }
             var delete_index = $.inArray("2", buttonGroup);
             if (delete_index != -1) {
                 var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除信息">\n';
-                delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="Sarousel_mainPage_delete_btn">\n';
+                delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="carousel_mainPage_delete_btn">\n';
                 delete_btn_html += '<i class="la la-trash-o"></i>\n';
                 delete_btn_html += '</a>\n';
                 delete_btn_html += '</li>\n';
@@ -56,14 +56,14 @@ var SnippetMainPageCarousel = function() {
             var sync_index = $.inArray("10", buttonGroup);
             if (sync_index != -1) {
                 var sync_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="同步数据">\n';
-                sync_btn_html += '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon btn-sm m-btn--icon-only" id="Sarousel_mainPage_sync_btn">\n';
+                sync_btn_html += '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon btn-sm m-btn--icon-only" id="carousel_mainPage_sync_btn">\n';
                 sync_btn_html += '<i class="la la-rotate-right"></i>\n';
                 sync_btn_html += '</a>\n';
                 sync_btn_html += '</li>\n';
                 gridHeadToolsHtml.append(sync_btn_html);
             }
 
-            var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 查看信息" lay-event="look">\n'
+            var table_del_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-toggle="tooltip"  title=" 预览图片" lay-event="look">\n'
             table_del_btn_html += '<i class="la la-eye"></i>\n';
             table_del_btn_html += '</a>\n';
             tableToolbarHtml.append(table_del_btn_html);
@@ -83,12 +83,12 @@ var SnippetMainPageCarousel = function() {
                 url: serverUrl + 'v1/table/carousel/g',
                 method:"get",
                 where: {   //传递额外参数
-                    SarouselStatus : 0
+
                 },
                 headers: BaseUtils.serverHeaders(),
                 title: '图片信息列表',
                 initSort: {
-                    field: 'businessCode', //排序字段，对应 cols 设定的各字段名
+                    field: 'status', //排序字段，对应 cols 设定的各字段名
                     type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
                 },
                 cols: [[
@@ -96,13 +96,15 @@ var SnippetMainPageCarousel = function() {
                     {field:'id', title:'ID', unresize:true, hide:true },
                     {field:'pageText', title:'所属页面'},
                     {field:'positionText', title:'页面位置'},
-                    {field:'pictureLocation', title:'照片', unresize:true,  align: 'center', width:60,
+                    {field:'pictureLocation', title:'照片', unresize:true,  align: 'center', width:120,
                         templet : function (row) {
-                            var value = row.SarouselPortrait;
+                            var value = row.pictureLocation;
                             if (value == null || value == '' ) {
                                 value = "../../assets/custom/images/user/user_0.png";
                             }
-                            var spanHtml = '<img style="display: inline-block; width: 100%; height: 100%;" src="' + value + '">';
+                            var spanHtml = '<a href="' + value + '" data-fancybox>';
+                            spanHtml += '<img style="display: inline-block; width: 100%; height: 100%;" src="' + value + '"/>';
+                            spanHtml += '</a>';
                             return spanHtml;
                         }
                     },
@@ -114,7 +116,7 @@ var SnippetMainPageCarousel = function() {
                             var curStatusText = "发布";
                             switch (value) {
                                 case 1:
-                                    curStatusText = "草稿";
+                                    curStatusText = "禁用";
                                     spanCss = "m-badge--warning";
                                     break;
                                 default:
@@ -124,7 +126,7 @@ var SnippetMainPageCarousel = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#carousel_mainPage_table_toolbar', align: 'center', width:210}
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#carousel_mainPage_table_toolbar', align: 'center', width:180}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -153,11 +155,8 @@ var SnippetMainPageCarousel = function() {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
                     }
-                    carouselMainPageSubmitForm.setForm(obj.data);
-                    initSarouselSelected(obj.data);
-                    carouselMainPageMark = 2;
+
                     // 显示 dialog
-                    carouselMainPageFormModal.modal('show');
                 } else if (obj.event === 'ejection')  {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
@@ -166,7 +165,7 @@ var SnippetMainPageCarousel = function() {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
                     }
-                    lookSarouselParticulars(obj);
+                    lookCarouselParticulars(obj);
                 }
             });
 
@@ -192,7 +191,7 @@ var SnippetMainPageCarousel = function() {
 
             //监听行双击事件
             carouselMainPageTable.on('rowDouble(carousel_mainPage_grid)', function(obj){
-                carouselMainPageMark = 3;
+                lookCarouselParticulars(obj);
 
             });
         });
@@ -271,6 +270,40 @@ var SnippetMainPageCarousel = function() {
      * @param obj
      */
     var  lookCarouselParticulars = function (obj) {
+        console.log(obj);
+        var objData = obj.data;
+        $getAjax({
+            url: serverUrl + 'v1/table/carousel/picture',
+            data:{
+                businessCode: objData.businessCode,
+                position: objData.position
+            },
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            var datas = response.data;
+            if (datas != null ) {
+                var fancyboxItems = [];
+                $.each(datas, function(index,item){
+                    var curImageItem = {
+                        src  : item.pictureLocation,
+                        opts : {
+                            caption : '',
+                            thumb   : item.pictureLocation
+                        }
+                    };
+                    fancyboxItems.push(curImageItem);
+                });
+                $.fancybox.open(fancyboxItems, {
+                    loop : true,
+                    thumbs : {
+                        autoStart : true,    //打开时显示缩略图  值为： true    false
+                        axis: 'y',          // 缩略图展示  垂直(y)或水平(x)滚动
+                        width  : '230px',
+                        height : '230px'
+                    }
+                });
+            }
+        });
 
     }
 
@@ -345,22 +378,12 @@ var SnippetMainPageCarousel = function() {
         }
         var ajaxPutUrl = serverUrl + "v1/verify/carousel/p";
         var putData = null;
-        var idsArray = [];
+        var curId = null;
         if (obj != null) {
-            idsArray.push(obj.value)
-        } else {
-            // 获取选中的数据对象
-            var checkRows = carouselMainPageTable.checkStatus('carousel_mainPage_grid');
-            //获取选中行的数据
-            var checkData = checkRows.data;
-            if (checkData.length > 0) {
-                $.each(checkData, function(index,element){
-                    idsArray.push(element.id);
-                });
-            }
+            curId = obj.value;
         }
         putData = {
-            'ids': JSON.stringify(idsArray),
+            'id': curId,
             'status' : status
         }
         if (putData != null) {
@@ -451,7 +474,7 @@ var SnippetMainPageCarousel = function() {
                 /*if ($(window).width() > 1920 && $(window).height() > 937) {
                     layerArea = ['2000px', '950px']
                 }*/
-                var dataId = $(this).attr("value");
+                var dataId = 0;
                 var photoIframContent = layer.open({
                     type: 2,
                     title: '轮播图',
@@ -503,5 +526,5 @@ var SnippetMainPageCarousel = function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetMainPageSarousel.init();
+    SnippetMainPageCarousel.init();
 });

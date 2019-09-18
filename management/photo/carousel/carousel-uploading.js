@@ -38,7 +38,7 @@ var SnippetMainPageUploading= function() {
             //处理客户端原有文件更新时的后台处理地址，必填
             updateUrl: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
             //当客户端原有文件删除时的后台处理地址，必填
-            removeUrl: serverUrl + 'v1/verify/album/picture/d',
+            removeUrl: serverUrl + 'v1/verify/carousel/picture/d',
             //初始化客户端上传文件，从后台获取文件的地址, 可选，当此参数为空时，默认已上传的文件为空
             initServerFileUrl:  serverUrl + 'v1/table/carousel/picture',
             businessId : businessId,
@@ -127,7 +127,7 @@ var SnippetMainPageUploading= function() {
                     maxlength: 10
                 },
                 hrefLink: {
-                    required: true,
+                    required: false,
                     maxlength: 255
                 },
                 priority: {
@@ -238,13 +238,6 @@ var SnippetMainPageUploading= function() {
             photoUploadingMainPageWebuploader.on("uploadFinished", function () {
                 //提交表单
                 $("#photo-file-list").val(JSON.stringify(curPhotoImageList));
-                $("#album_title").val($("#album-name").val());
-                var albumPhotographyAuthorOptions = $("#albumPhotographyAuthor").select2("val");
-                $("#album-photography-author").val(albumPhotographyAuthorOptions.join(','));
-                var albumDresserOptions = $("#albumDresser").select2("val");
-                $("#album-dresser").val(albumDresserOptions.join(','));
-                var albumAnaphasisAuthorOptions = $("#albumAnaphasisAuthor").select2("val");
-                $("#album-anaphasi-author").val(albumAnaphasisAuthorOptions.join(','));
                 // 保存数据
                 $postAjax({
                     url:serverUrl + "v1/verify/carousel/s",
@@ -258,7 +251,6 @@ var SnippetMainPageUploading= function() {
                         // toastr.success(BaseUtils.saveSuccessMsg);
                         // 关闭 dialog
                         closeOpenLayer();
-                        $("#id").val(response.data);
                     } else if (response.status == 409) {
 
                     }
