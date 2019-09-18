@@ -62,10 +62,9 @@ var SnippetMainPageFahrenheitIndex = function() {
 
             //改变下时间间隔、动画类型、高度
             carousel.render({
-                elem: '#leading_fahrenheit_portrait_carousel'
-                ,interval: 1800
-                ,anim: 'fade'
-                ,height: '120px'
+                elem: '#leading_fahrenheit_portrait_carousel',
+                width: '100%' //设置容器宽度
+
             });
 
 
@@ -78,11 +77,11 @@ var SnippetMainPageFahrenheitIndex = function() {
             });*/
 
             //事件
-            carousel.on('change(leading_fahrenheit_portrait_carousel)', function(res){
-                console.log(res)
+            carousel.on('change(leading_fahrenheit_portrait_carousel)', function(obj){
+                console.log(obj)
             });
 
-            var $ = layui.$, active = {
+            /*var $ = layui.$, active = {
                 set: function(othis){
                     var THIS = 'layui-bg-normal'
                         ,key = othis.data('key')
@@ -114,7 +113,7 @@ var SnippetMainPageFahrenheitIndex = function() {
             $('.demoTest .layui-btn').on('click', function(){
                 var othis = $(this), type = othis.data('type');
                 active[type] ? active[type].call(this, othis) : '';
-            });
+            });*/
         });
     };
 
