@@ -38,7 +38,7 @@ var SnippetMainPageCarousel = function() {
             }
             var delete_index = $.inArray("2", buttonGroup);
             if (delete_index != -1) {
-                var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除信息">\n';
+                var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除图片">\n';
                 delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="carousel_mainPage_delete_btn">\n';
                 delete_btn_html += '<i class="la la-trash-o"></i>\n';
                 delete_btn_html += '</a>\n';
@@ -47,7 +47,7 @@ var SnippetMainPageCarousel = function() {
 
 
 
-                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 删除信息" lay-event="del">\n'
+                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 删除图片" lay-event="del">\n'
                 table_del_btn_html += '<i class="la la-trash-o"></i>\n';
                 table_del_btn_html += '</a>\n';
                 tableToolbarHtml.append(table_del_btn_html);

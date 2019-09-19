@@ -188,7 +188,7 @@ var SnippetMainPageOrganization = function() {
                 gridHeadToolsHtml.append(save_btn_html);
 
 
-                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改组织机构" lay-event="edit">\n'
+                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="修改组织机构" lay-event="edit">\n'
                 edit_btn_html += '<i class="la la-edit"></i>\n';
                 edit_btn_html += '</a>\n';
                 tableToolbarHtml.append(edit_btn_html);
@@ -205,7 +205,7 @@ var SnippetMainPageOrganization = function() {
 
 
 
-                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 删除组织机构" lay-event="del">\n'
+                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 删除组织机构" lay-event="del">\n'
                 table_del_btn_html += '<i class="la la-trash-o"></i>\n';
                 table_del_btn_html += '</a>\n';
                 tableToolbarHtml.append(table_del_btn_html);

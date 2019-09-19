@@ -180,13 +180,28 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(save_btn_html);
 
 
+                var show_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="展示员工在官网">\n';
+                show_btn_html += '<a href="javascript:;" class="btn btn-primary m-btn m-btn--icon btn-sm m-btn--icon-only" id="staff_mainPage_show_btn">\n';
+                show_btn_html += '<i class="la la-bookmark"></i>\n';
+                show_btn_html += '</a>\n';
+                show_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(show_btn_html);
+
+
+                var hiden_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="取消员工展示在官网">\n';
+                hiden_btn_html += '<a href="javascript:;" class="btn btn-warning m-btn m-btn--icon btn-sm m-btn--icon-only" id="staff_mainPage_hiden_btn">\n';
+                hiden_btn_html += '<i class="la la-eye-slash"></i>\n';
+                hiden_btn_html += '</a>\n';
+                hiden_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(hiden_btn_html);
+
                 /*var table_ejection_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 员工离职操作" lay-event="ejection">\n'
                 table_ejection_btn_html += '<i class="la la-user-times"></i>\n';
                 table_ejection_btn_html += '</a>\n';
                 tableToolbarHtml.append(table_ejection_btn_html);*/
 
 
-                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title="修改员工信息" lay-event="edit">\n'
+                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="修改员工信息" lay-event="edit">\n'
                 edit_btn_html += '<i class="la la-edit"></i>\n';
                 edit_btn_html += '</a>\n';
                 tableToolbarHtml.append(edit_btn_html);
@@ -203,7 +218,7 @@ var SnippetMainPageStaff = function() {
 
 
 
-                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 删除员工信息" lay-event="del">\n'
+                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 删除员工信息" lay-event="del">\n'
                 table_del_btn_html += '<i class="la la-trash-o"></i>\n';
                 table_del_btn_html += '</a>\n';
                 tableToolbarHtml.append(table_del_btn_html);
@@ -219,7 +234,7 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
 
-            var table_del_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="m-tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
+            var table_del_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
             table_del_btn_html += '<i class="la la-eye"></i>\n';
             table_del_btn_html += '</a>\n';
             tableToolbarHtml.append(table_del_btn_html);
@@ -901,6 +916,60 @@ var SnippetMainPageStaff = function() {
     };
 
     /**
+     *  修改数据是否在官网展示字段
+     */
+    var staffMainPageUpdateDataShowStatus = function(status) {
+        if (BaseUtils.checkLoginTimeoutStatus()) {
+            return;
+        }
+        var ajaxPutUrl = serverUrl + "v1/verify/staff/show/p";
+        var putData = null;
+        var idsArray = [];
+        var putParams = [];
+        // 获取选中的数据对象
+        var checkRows = staffMainPageTable.checkStatus('staff_mainPage_grid');
+        //获取选中行的数据
+        var checkData = checkRows.data;
+        if (checkData.length > 0) {
+            $.each(checkData, function(index,element){
+                idsArray.push(element.id);
+            });
+            putData = {
+                'ids': JSON.stringify(idsArray),
+                'status' : status,
+            }
+        }
+        if (putData != null) {
+            var title = "你确定要将员工信息展示在官网吗?";
+            if (status == 1) {
+                title = "你确定要将员工信息在官网取消展示吗?";
+            }
+            //询问框
+            layer.confirm(title, {
+                shade: [0.3, 'rgb(230, 230, 230)'],
+                btn: ['确定','取消'] //按钮
+            }, function(index, layero){   //按钮【按钮一】的回调
+                layer.close(index);
+                BaseUtils.pageMsgBlock();
+                $putAjax({
+                    url: ajaxPutUrl,
+                    data: putData,
+                    headers: BaseUtils.serverHeaders()
+                }, function (response) {
+                    if (response.success) {
+                        staffMainPageRefreshGrid();
+                    }
+                }, function (data) {
+                    BaseUtils.htmPageUnblock();
+                });
+            }, function () {  //按钮【按钮二】的回调
+
+            });
+        }
+    };
+
+
+    /**
      *  同步数据
      */
     var staffMainPageSyncData = function() {
@@ -1019,6 +1088,22 @@ var SnippetMainPageStaff = function() {
                 staffMainPageMark = 1;
                 // 显示 dialog
                 staffMainPageFormModal.modal('show');
+                return false;
+            });
+            $('#staff_mainPage_show_btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                staffMainPageUpdateDataShowStatus(0);
+                return false;
+            });
+            $('#staff_mainPage_hiden_btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                staffMainPageUpdateDataShowStatus(1);
                 return false;
             });
             $('#staff_mainPage_searchNode_btn').click(function(e) {

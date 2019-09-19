@@ -87,6 +87,10 @@ var SnippetMainPageUploading= function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
+       var  $variety = $("#variety");
+        $variety.selectpicker('refresh');
+        $("#maniyerizm").selectpicker('refresh');
+
         BootstrapTouchspin.initByteTouchSpin("#carousel_uploading_mainPage_dataSubmit_form_uploading_seq");
         // 页面 select
         BaseUtils.dictDataSelect("image_page", function (data) {
@@ -97,7 +101,15 @@ var SnippetMainPageUploading= function() {
             //必须加，刷新select
             $pageBusinessCode .selectpicker('refresh');
 
+            $pageBusinessCode.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+                if (newValue == "1") {
+                    $variety.selectpicker('val', '1');
+                } else {
+                    $variety.selectpicker('val', '2');
+                }
+            });
         });
+
 
         // 位置 select
         BaseUtils.dictDataSelect("page_position", function (data) {
