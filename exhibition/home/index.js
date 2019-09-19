@@ -1,12 +1,9 @@
-/***
- * 首页
- * @type {{init: SnippetMainPageLeadingEndMainIndex.init}}
- */
-var SnippetMainPageLeadingEndMainIndex = function() {
+//== Class Definition
+var SnippetMainPageLeadingEndHomeIndex = function() {
     /**
      * 初始化菜单数据项
      */
-    var  initLeadingEndMainMainMenuData = function () {
+    var  initLeadingEndHomeHomeMenuData = function () {
         $.ajax({
             type: "GET",
             url: "module.json",
@@ -15,7 +12,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
             headers: BaseUtils.serverHeaders(),
             success:function (response) {
                 if (response.success) {
-                    var $menuHtml = $("#leading_portrait_Main_tabs");
+                    var $menuHtml = $("#leading_portrait_home_tabs");
                     var arrayData = response.data;
                     $.each(arrayData, function (i, v) {
                         var root = v;
@@ -55,11 +52,11 @@ var SnippetMainPageLeadingEndMainIndex = function() {
                     var curClassify = $(this).attr("value");
                     var curContentUrl = $(this).attr("content");
                     console.log(curClassify);
-                    initLeadingEndMainMenuEvent(curClassify);
+                    initLeadingEndHomeMenuEvent(curClassify);
                     var curHrefDiv = $(e.target).attr("href");
                     console.log(curHrefDiv);
                     console.log( $(curHrefDiv));
-                    $(curHrefDiv).html(initLeadingEndMainTabsContent(curContentUrl, curHrefDiv))
+                    $(curHrefDiv).html(initLeadingEndHomeTabsContent(curContentUrl, curHrefDiv))
                 });
             },
             error:function () {
@@ -71,7 +68,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
     /**
      * 头部菜单点击事件
      */
-    var initLeadingEndMainMenuEvent = function (classify) {
+    var initLeadingEndHomeMenuEvent = function (classify) {
         var navSticky = $("#m-nav-sticky");
         navSticky.hide();
         navSticky.html("");
@@ -95,7 +92,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
     /**
      * 初始化 Tab 内容
      */
-    var initLeadingEndMainTabsContent = function (target, divId) {
+    var initLeadingEndHomeTabsContent = function (target, divId) {
         var tabContent = $(divId);
         if ($.trim(tabContent.html()) == "") {
             $.get(""+target+"",function(data) {
@@ -124,7 +121,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
               type: 2 ,
               title: false,
               closeBtn: 0, //不显示关闭按钮
-              area: ['700px', '550px'],
+              area: ['700px', '553px'],
               shade: [0],
               maxmin: false,
               shadeClose: true,
@@ -137,13 +134,14 @@ var SnippetMainPageLeadingEndMainIndex = function() {
     return {
         // public functions
         init: function() {
-            initLeadingEndMainMainMenuData();
+            initLeadingEndHomeHomeMenuData();
             baiduMap();
+            initLeadingEndHomeTabsContent("home.html", "#m_portlet_base_picture_1_1_tab_content");
         }
     };
 }();
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetMainPageLeadingEndMainIndex.init();
+    SnippetMainPageLeadingEndHomeIndex.init();
 });

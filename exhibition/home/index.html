@@ -30,7 +30,7 @@
 		<link href="../../assets/custom/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"  media="all" >
 		<link rel="stylesheet" type="text/css" href="../../assets/custom/plugins/fancybox/jquery.fancybox.min.css">
 
-		<link href="home.css" rel="stylesheet"  type="text/css">
+		<link href="index.css" rel="stylesheet" type="text/css">
 
 		<!--end::Base Styles -->
 		<link rel="shortcut icon" href="assets/demo10/demo/media/img/logo/favicon.ico" />
@@ -75,7 +75,7 @@
 
 										<ul class="nav nav-tabs m-tabs-line m-tabs-line--success m-tabs-line--2x" role="tablist">
 											<li class="nav-item m-tabs__item" >
-												<a class="nav-link m-tabs__link m_tabs_item_click active" data-toggle="tab" href="#m_portlet_base_picture_1_1_tab_content" role="tab" value="1">
+												<a class="nav-link m-tabs__link m_tabs_item_click active" data-toggle="tab" href="#m_portlet_base_picture_1_1_tab_content" role="tab" value="1" content="home.html">
 													首页
 												</a>
 											</li>
@@ -102,9 +102,7 @@
 				<div class="m-grid__item m-grid__item--fluid m-wrapper">
 					<div class="tab-content">
 						<div class="tab-pane active" id="m_portlet_base_picture_1_1_tab_content" role="tabpanel">
-							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
-							survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
 						</div>
 						<div class="tab-pane" id="m_portlet_base_picture_1_2_tab_content" role="tabpanel">
 
@@ -132,44 +130,6 @@
 			<footer class="m-grid__item m-footer ">
 				<div class="m-container m-container--fluid m-container--full-height m-page__container">
 					<div class="m-footer__wrapper">
-						<div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
-							<div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
-								<span class="m-footer__copyright">
-									2017 &copy; Metronic theme by
-									<a href="https://keenthemes.com" class="m-link">Keenthemes</a>
-								</span>
-							</div>
-							<div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
-								<ul class="m-footer__nav m-nav m-nav--inline m--pull-right">
-									<li class="m-nav__item">
-										<a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">About</span>
-										</a>
-									</li>
-									<li class="m-nav__item">
-										<a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">Privacy</span>
-										</a>
-									</li>
-									<li class="m-nav__item">
-										<a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">T&C</span>
-										</a>
-									</li>
-									<li class="m-nav__item">
-										<a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">Purchase</span>
-										</a>
-									</li>
-									<li class="m-nav__item">
-										<a href="#" class="m-nav__link" data-toggle="m-tooltip" title="Support Center" data-placement="left">
-											<i class="m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-
 						<div class="tab-pane active" id="m_widget5_tab1_content" aria-expanded="true">
 
 							<!--begin::m-widget5-->
@@ -177,53 +137,49 @@
 								<div class="m-widget5__item">
 									<div class="m-widget5__content">
 										<div class="m-widget5__section">
-											<h4 class="m-widget5__title">
-												工作室
-											</h4>
+											<h2 class="m-subheader__title ">
+                                                青橙摄影工作室
+											</h2>
+                                            <div class="m-widget5__info" style="font-size: 1.5rem; padding-top: 10px;">
+                                                <div>
+                                                    	<span class="m-portlet__head-text">
+													运营地址:
+												</span>
+                                                <span class="m-portlet__head-text m--font-info" >
+                                                    成都市成华区建设路1号&nbsp;万科金域蓝湾(SM广场对面)18栋
+                                                </span>
+                                                 <i class="flaticon-map-location" id="office_address_btn" style="font-size: 2rem !important; cursor: pointer;"></i>
+                                                </div>
 
-											<div class="m-widget5__info">
-																	<span class="m-widget5__author">
-																		运营地址:
-																	</span>
-
-												<span class="m-widget5__info-author m--font-info">
-																		建设路
-																	</span>
-												<span class="m-widget5__info-label">
-																		联系电话:
-																	</span>
-												<span class="m-widget5__info-date m--font-info">
-																		2019
-																	</span>
+                                                <div style="padding-top: 10px;">
+                                                    <span class="m-portlet__head-text" >
+                                                        联系电话:
+                                                    </span>
+                                                    <span class="m-portlet__head-text m--font-info">
+                                                        13408497745
+                                                    </span>
+                                                </div>
 											</div>
 										</div>
 									</div>
 									<div class="m-widget5__content">
-										<div class="m-widget5__stats1">
-											<span class="m-widget5__number"><img class="m-widget7__img" src="assets/app/media/img//products/product10.jpg" alt="">
-</span>
-											<br>
-											<span class="m-widget5__sales">微博</span>
+										<div class="m-widget5__stats1" style="padding-right: 10px;">
+                                            <img class="m-widget1__img" src="../../assets/custom/images/user/weixin.png" width="150px" height="150px" alt="">
 										</div>
 										<div class="m-widget5__stats2">
-											<span class="m-widget5__number"><img class="m-widget7__img" src="assets/app/media/img//products/product10.jpg" alt="">
-</span>
-											<br>
-											<span class="m-widget5__votes">微信</span>
+                                            <img class="m-widget1__img" src="../../assets/custom/images/user/qq.png" width="150px" height="150px"  alt="">
 										</div>
 									</div>
 								</div>
 								<div class="m-widget5__item">
-									<div class="m-widget5__content">
-										<div class="m-widget5__section">
-											<span class="m-widget5__desc">
+									<div class="m-widget5__content" style="text-align: center;">
+										<span class="m-widget5__desc">
 												本站所有图片版权归青橙摄影工作室所有
-
+                                                <br/>
 												严禁盗用！盗用必究！
-
+                                                <br/>
 												ICP备案号：京ICP备16040102号-1
-											</span>
-										</div>
+                                        </span>
 									</div>
 									<div class="m-widget5__content">
 									</div>
@@ -272,7 +228,7 @@
 		<!--begin::Page Snippets -->
 		<script type="text/javascript" src="../../assets/custom/base/base.utils.js" ></script>
 		<script type="text/javascript" src = "../../assets/custom/base/base.ajax.js"></script>
-		<script type="text/javascript" src="home.js" ></script>
+		<script type="text/javascript" src="index.js" ></script>
 		<!--end::Page Snippets -->
 
 		<!-- begin::Page Loader -->

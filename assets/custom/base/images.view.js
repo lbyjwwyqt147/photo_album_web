@@ -153,7 +153,7 @@ var ImagesView = {
      * @returns {string}
      */
     leadingPortraitListHtmlAppend:function (rowId, v) {
-        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer; margin-right: 20px;">\n';
+        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer;">\n';
         images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
         images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
         images_col_div += '<div class="m-portlet__head-caption">\n';

@@ -31,6 +31,14 @@
         border-right: 0px solid #ebedf2;
     }
 
+    #leadingEnd-fahrenheit-page-frame .col-xl-3 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding-left: 0px;
+        padding-right: 15px;
+    }
 
 </style>
 
@@ -38,20 +46,22 @@
     <div class="col-xl-12">
         <div class="m-portlet">
             <div class="m-portlet__body  m-portlet__body--no-padding">
-                <div class="row">
+                <!-- 轮播图片 开始 -->
+                <div class="row" style="padding-bottom: 20px;">
                     <div class="layui-carousel" id="leading_fahrenheit_portrait_carousel" style="margin-top: 1px;">
-                        <div carousel-item>
-                            <div>条目1</div>
-                            <div>条目2</div>
-                            <div>条目3</div>
-                            <div>条目4</div>
-                            <div>条目5</div>
+                        <div carousel-item id="leading_fahrenheit_portrait_carousel_images">
+
                         </div>
                     </div>
                 </div>
-                <div class="row m-row--no-padding m-row--col-separator-xl" id="leading_fahrenheit_portrait_mainPage_grid">
+                <!-- 轮播图片 结束 -->
+
+                <!-- 图片列表 开始 -->
+                <div class="row" id="leading_fahrenheit_portrait_mainPage_grid">
 
                 </div>
+                <!-- 图片列表 结束 -->
+
             </div>
         </div>
     </div>
