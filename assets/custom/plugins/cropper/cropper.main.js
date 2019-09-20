@@ -8,13 +8,13 @@ $(function () {
     aspectRatio: 4 / 3, //裁剪框比例  16 / 9     4 / 3    1 / 1
     preview: '.img-preview',
     crop: function (e) {
-      console.log(Math.round(e.detail.x));
+    /*  console.log(Math.round(e.detail.x));
       console.log(Math.round(e.detail.y));
       console.log(Math.round(e.detail.height));
       console.log(Math.round(e.detail.width));
       console.log(e.detail.rotate);
       console.log(e.detail.scaleX);
-      console.log(e.detail.scaleY);
+      console.log(e.detail.scaleY);*/
     }
   };
   var originalImageURL = $image.attr('src');
@@ -28,19 +28,19 @@ $(function () {
   // Cropper
   $image.on({
     ready: function (e) {
-      console.log(e.type);
+     // console.log(e.type);
     },
     cropstart: function (e) {
-      console.log(e.type, e.detail.action);
+      //console.log(e.type, e.detail.action);
     },
     cropmove: function (e) {
-      console.log(e.type, e.detail.action);
+     // console.log(e.type, e.detail.action);
     },
     cropend: function (e) {
-      console.log(e.type, e.detail.action);
+     // console.log(e.type, e.detail.action);
     },
     crop: function (e) {
-      console.log(e.type);
+     // console.log(e.type);
     },
     zoom: function (e) {
       console.log(e.type, e.detail.ratio);
@@ -110,7 +110,7 @@ $(function () {
           try {
             data.option = JSON.parse($target.val());
           } catch (e) {
-            console.log(e.message);
+           // console.log(e.message);
           }
         }
       }
@@ -182,7 +182,7 @@ $(function () {
         try {
           $target.val(JSON.stringify(result));
         } catch (e) {
-          console.log(e.message);
+          //console.log(e.message);
         }
       }
     }

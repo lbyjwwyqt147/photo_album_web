@@ -300,7 +300,7 @@ var SnippetMainPageStaff = function() {
                     {field:'staffEmail', title:'电子邮箱'},
                     {field:'staffOrgName', title:'组织机构'},
                     {field:'workingYears', title:'在职年限', sort:true, unresize:true},
-                    {field:'staffStatus', title:'状态', align: 'center',  fixed: 'right', unresize:true,
+                    {field:'staffStatus', title:'状态', align: 'center',  unresize:true,
                         templet : function (row) {
                             var value = row.staffStatus;
                             var spanCss = "m-badge--success";
@@ -313,6 +313,23 @@ var SnippetMainPageStaff = function() {
                                 case 2:
                                     curStatusText = "离职";
                                     spanCss = "m-badge--danger";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + curStatusText + '</span>';
+                            return spanHtml;
+                        }
+                    },
+                    {field:'display', title:'是否展示在官网', align: 'center',  fixed: 'right', unresize:true,
+                        templet : function (row) {
+                            var value = row.display;
+                            var spanCss = "m-badge--warning";
+                            var curStatusText = "否";
+                            switch (value) {
+                                case 0:
+                                    curStatusText = "是";
+                                    spanCss = "m-badge--success";
                                     break;
                                 default:
                                     break;

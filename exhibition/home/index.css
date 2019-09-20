@@ -57,3 +57,67 @@
 }
 
 /** 二维码样式 结束  */
+
+/** 边框阴影样式  开始 */
+.border_shadow {
+    -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08) !important;
+    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08) !important;
+    background-color: #ffffff;
+}
+/** 边框阴影样式  结束 */
+
+/** 头像样式 开始  */
+
+.m-widget19 .m-widget19__content .m-widget19__header .m-widget19__user-img .m-widget19__img {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+}
+
+.m-widget19 .m-widget19__content .m-widget19__header {
+    display: table;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/** 头像样式结束  */
+
+
+/** 图片特效样式 开始 */
+
+
+figure.effect-chico img {
+    -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+    transition: opacity 0.35s, transform 0.35s;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+
+figure.effect-chico:hover img {
+    opacity: 0.9;
+    -webkit-transform: scale(1.01);
+    transform: scale(1.01);
+}
+
+/** 图片特效样式 结束 */
+
+
+/** 分隔标题样式 开始  */
+.m-alert{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.alert-success:not(.m-alert--outline) {
+    color: #90e8d9;
+    background-color: rgba(243,250,255,0.5) !important;
+    border-color: #f3faff !important;
+}
+
+.alert.m-alert--air {
+     -webkit-box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
+     box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
+}
+
+/** 分隔标题样式 结束  */

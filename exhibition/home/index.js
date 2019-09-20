@@ -94,6 +94,8 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
      */
     var initLeadingEndHomeTabsContent = function (target, divId) {
         var tabContent = $(divId);
+        console.log(" -==== tab 内容 如下  === ");
+        console.log($.trim(tabContent.html()));
         if ($.trim(tabContent.html()) == "") {
             $.get(""+target+"",function(data) {
                 tabContent.html(data);

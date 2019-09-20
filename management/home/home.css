@@ -587,4 +587,13 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     padding-right: 6px;
 }
 
+/** 边框阴影样式  开始 */
+.border_shadow {
+    -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08) !important;
+    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08) !important;
+    background-color: #ffffff;
+}
+
+/** 边框阴影样式  结束 */
+
 /** modal 样式  结束   */

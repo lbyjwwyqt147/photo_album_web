@@ -13,7 +13,8 @@ var SnippetMainPageFahrenheitIndex = function() {
             params = {
                 'pageSize' : fahrenheitGridPageSize,
                 'albumClassification' : 1,
-                'albumClassify' : 1
+                'albumClassify' : 1,
+                'albumStatus' : 0
             }
         }
         layui.use('flow', function(){
@@ -61,7 +62,8 @@ var SnippetMainPageFahrenheitIndex = function() {
             url:serverUrl + "v1/table/carousel/picture",
             data : {
                 businessCode : '3',
-                position: '1'
+                position: '1',
+                status : 0
             },
             headers: BaseUtils.serverHeaders()
         }, function (response) {

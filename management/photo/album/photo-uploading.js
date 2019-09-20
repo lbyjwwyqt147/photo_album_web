@@ -83,7 +83,9 @@ var SnippetMainPageUploading= function() {
         $("#albumPhotographyAuthor").val(obj.albumPhotographyAuthor.split(",")).trigger("change");
         $("#albumAnaphasisAuthor").val(obj.albumAnaphasisAuthor.split(",")).trigger("change");
         $("#albumDresser").val(obj.albumDresser.split(",")).trigger("change");
-
+        if (obj.display != null) {
+            $("input:radio[name=\"display\"][value='"+obj.display+"']").click();
+        }
         // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
     };
 
@@ -91,7 +93,18 @@ var SnippetMainPageUploading= function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
+        var $albumClassification = $("#albumClassification");
+        $albumClassification .selectpicker('refresh');
+        var $display = $("#display");
+        $display .selectpicker('refresh');
         $("#albumClassify").val(albumClassify);
+        $albumClassification.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+            if (newValue == "1") {
+              $("#home-show-option").attr("disabled", 'disabled');
+            } else {
+                $("#home-show-option").removeAttr("disabled");
+            }
+        });
         var $albumDresser = $("#albumDresser");
         $albumDresser.select2({
             placeholder: "化妆师",

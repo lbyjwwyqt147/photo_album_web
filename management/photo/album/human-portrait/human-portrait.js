@@ -113,6 +113,7 @@ var SnippetMainPageHumanPortrait = function() {
     var humanPortraitMainPageInitSelectpicker = function () {
         $("#albumClassification").selectpicker('refresh');
         $("#album-status-query").selectpicker('refresh');
+        $("#album-display-query").selectpicker('refresh');
         var $albumStyle = $("#album-style");
         $albumStyle.select2({
             placeholder: "风格",
@@ -243,6 +244,40 @@ var SnippetMainPageHumanPortrait = function() {
         });
     };
 
+
+    /**
+     *  修改首页展示图片状态
+     */
+    var humanPortraitMainPageUpdateShowStatus = function(obj) {
+        if (BaseUtils.checkLoginTimeoutStatus()) {
+            return;
+        };
+        var ajaxPutUrl = serverUrl + "v1/verify/album/p/show";
+        var curDataParam = {
+            "id" : obj.id,
+            "dataVersion" : obj.dataVersion,
+            'status' : obj.status
+        };
+        BaseUtils.pageMsgBlock();
+        $putAjax({
+            url: ajaxPutUrl,
+            data: curDataParam,
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            if (response.success) {
+                humanPortraitMainPageRefreshGrid();
+            }  else if (response.status == 202) {
+
+            } else if (response.status == 409) {
+                humanPortraitMainPageRefreshGrid();
+            } else if (response.status == 504) {
+                BaseUtils.LoginTimeOutHandler();
+            }
+        }, function (data) {
+
+        });
+    };
+
     /**
      *  同步数据
      */
@@ -334,6 +369,37 @@ var SnippetMainPageHumanPortrait = function() {
                 return;
             }
             humanPortraitMainPageDeleteData($(this).attr("value"));
+            return false;
+        });
+
+        // 图片展示在官网按钮
+        $('.human_portrait_mainPage_grid_show_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            var params = {
+                "id" : $(this).attr("value"),
+                "status" : 0,
+                "dataVersion" : $(this).attr("dataVersion")
+            };
+            humanPortraitMainPageUpdateShowStatus(params);
+            return false;
+        });
+
+
+        // 取消在官网展示按钮
+        $('.human_portrait_mainPage_grid_hiden_btn').click(function(e) {
+            e.preventDefault();
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            var params = {
+                "id" : $(this).attr("value"),
+                "status" : 1,
+                "dataVersion" : $(this).attr("dataVersion")
+            };
+            humanPortraitMainPageUpdateShowStatus(params);
             return false;
         });
 
