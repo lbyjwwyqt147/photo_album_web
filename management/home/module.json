@@ -29,6 +29,26 @@
     "modulePid": 0,
     "moduleType": 1,
     "status": 0
+  },  {
+    "children": [{
+      "functionButtonGroup": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      "id": 40,
+      "menuIcon": "la-outdent",
+      "menuOpenUrl": "../photo/activities/activities.html",
+      "moduleCode": "1040",
+      "moduleName": "最新活动",
+      "modulePid": 4,
+      "moduleType": 2,
+      "status": 0
+    }],
+    "id": 4,
+    "menuIcon": "flaticon-notes",
+    "menuOpenUrl": "",
+    "moduleCode": "1004",
+    "moduleName": "活动管理",
+    "modulePid": 0,
+    "moduleType": 1,
+    "status": 0
   }, {
     "children": [{
       "functionButtonGroup": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -69,7 +89,7 @@
     "modulePid": 0,
     "moduleType": 1,
     "status": 0
-  }, {
+  },{
     "children": [{
       "functionButtonGroup": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
       "id": 30,
