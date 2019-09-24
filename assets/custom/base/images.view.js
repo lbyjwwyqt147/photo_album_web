@@ -185,7 +185,7 @@ var ImagesView = {
         images_col_div += '<div class="m-widget19">\n';
         images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
         images_col_div += '<img src="'+v.cover+'" alt="">\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light m-image-title" style="display:block; padding-left: 0rem; padding-bottom: 0rem; width: 100%; text-align: center; height: 40px; line-height: 40px; background-color: rgba(0,0,0,0.2);">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light m-image-title" style="display:block; padding-left: 0rem;  margin-bottom: 0px; width: 100%; text-align: center; height: 40px; line-height: 40px; background-color: rgba(0,0,0,0.2);">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
         images_col_div += '</div>\n';
@@ -197,6 +197,28 @@ var ImagesView = {
         return images_col_div;
     },
 
+    /**
+     * 活动图片
+     * @param rowId
+     * @param v
+     * @returns {string}
+     */
+    leadingActivityPortraitListHtmlAppend:function (rowId, v) {
+        var images_col_div = '<div class="col-xl-4 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer;">\n';
+        images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n';
+        images_col_div += '<div class="m-portlet__body" style="padding-bottom: 0px;">\n';
+        images_col_div += '<figure class="effect-chico">\n';
+        images_col_div += '<div class="m-widget19">\n';
+        images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n';
+        images_col_div += '<img src="'+v.pictureLocation+'" alt="">\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</figure>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        images_col_div += '</div>\n';
+        return images_col_div;
+    },
 
 
 

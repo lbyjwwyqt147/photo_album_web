@@ -597,3 +597,122 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 /** 边框阴影样式  结束 */
 
 /** modal 样式  结束   */
+
+
+/** kt-callout 样式 开始  */
+
+.kt-callout--success {
+    background-color: rgba(10, 187, 135, 0.07) !important;
+}
+
+.kt-callout {
+    padding: 1.2rem;
+}
+.kt-portlet {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.kt-portlet .kt-portlet__body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.kt-callout .kt-callout__body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.kt-callout .kt-callout__body .kt-callout__content {
+    -webkit-box-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+
+.kt-callout .kt-callout__body .kt-callout__action {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.kt-callout .kt-callout__body .kt-callout__content .kt-callout__title {
+    font-size: 1.85rem;
+    font-weight: 500;
+    color: #48465b;
+    margin-bottom: 1rem;
+}
+
+.kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc:last-child {
+    margin-bottom: 0;
+}
+
+.kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc {
+    font-size: 1.15rem;
+    line-height: 2rem;
+    color: #9392a0;
+    padding-right: 2rem;
+    font-weight: 400;
+}
+.kt-callout .kt-callout__body .kt-callout__action .btn.btn-custom {
+    padding: 1rem 1.3rem;
+    font-size: 0.9rem;
+}
+
+
+.kt-callout--danger {
+    background-color: rgba(253, 57, 122, 0.07) !important;
+}
+
+.kt-callout--brand {
+    background-color: rgba(93, 120, 255, 0.07) !important;
+}
+
+.kt-callout__body_image {
+    margin-right: 10px;
+    margin-left: -15px;
+    margin-top: -17px;
+    margin-bottom: -17px;
+}
+
+.m-portlet .m-portlet-fit--top {
+    margin-top: 0rem !important;
+}
+
+/**  kt-callout 样式 结束 */

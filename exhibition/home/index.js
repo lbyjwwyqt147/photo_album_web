@@ -1,5 +1,7 @@
 //== Class Definition
 var SnippetMainPageLeadingEndHomeIndex = function() {
+    var businessId = 0;
+    var businessType = 0;
     /**
      * 初始化菜单数据项
      */
@@ -19,7 +21,7 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                         var liRootHtml = '';
                         if (root.moduleType == 1) {
                             liRootHtml = '<li class="nav-item m-tabs__item">\n'
-                            liRootHtml += '<a class="nav-link m-tabs__link m_tabs_item_click" data-toggle="tab" href="#m_portlet_base_picture_1_2_tab_content" role="tab" value = "'+root.classify+'" content="'+ root.menuOpenUrl +'">\n';
+                            liRootHtml += '<a class="nav-link m-tabs__link m_tabs_item_click" data-toggle="tab" href="'+root.href+'" id="'+root.eleId+'" role="tab" value = "'+root.classify+'" content="'+ root.menuOpenUrl +'">\n';
                         } else {
                             liRootHtml += '<li class="nav-item dropdown m-tabs__item">\n';
                             liRootHtml += '<a class="nav-link m-tabs__link dropdown-toggle"  data-toggle="dropdown" href="#"  role="button" aria-haspopup="true" aria-expanded="true">\n';
@@ -34,7 +36,7 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                                 if (ci > 0) {
                                     liChildrenRootHtml += '<div class="dropdown-divider"></div>\n';
                                 }
-                                liChildrenRootHtml += '<a class="dropdown-item m_tabs_item_click" data-toggle="tab" href="#m_portlet_base_picture_1_3_tab_content">'+cv.moduleName+'</a>\n';
+                                liChildrenRootHtml += '<a class="dropdown-item m_tabs_item_click" data-toggle="tab"  href="'+cv.href+'">'+cv.moduleName+'</a>\n';
                             });
                             liChildrenRootHtml += '</div>\n';
                             liRootHtml += liChildrenRootHtml;
@@ -42,6 +44,11 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                         liRootHtml += '</li>\n';
                         $menuHtml.before(liRootHtml);
                     });
+                    if (businessType == 10) {
+                        $(".m_tabs_item_click").removeClass("active");
+                        $("#activities_li").click();
+                        businessType = 0;
+                    }
                 }
                 /**
                  * 头部导航菜单点击事件
@@ -56,6 +63,7 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                     var curHrefDiv = $(e.target).attr("href");
                     console.log(curHrefDiv);
                     console.log( $(curHrefDiv));
+
                     $(curHrefDiv).html(initLeadingEndHomeTabsContent(curContentUrl, curHrefDiv))
                 });
             },
@@ -96,6 +104,9 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
         var tabContent = $(divId);
         console.log(" -==== tab 内容 如下  === ");
         console.log($.trim(tabContent.html()));
+        if (businessType == 10) {
+            tabContent.html("");
+        };
         if ($.trim(tabContent.html()) == "") {
             $.get(""+target+"",function(data) {
                 tabContent.html(data);
@@ -136,9 +147,21 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
     return {
         // public functions
         init: function() {
+            var curUrl = location.search; //获取url中"?"符后的字串
+            if (curUrl.indexOf("?") != -1) {    //判断是否有参数
+                var param = curUrl.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+                var params = param.split("&");   //用&进行分隔 （如果只有一个参数 直接用等号进分隔； 如果有多个参数 要用&号分隔 再用等号进行分隔）
+                businessId = params[0];
+                businessType = params[1];
+            }
             initLeadingEndHomeHomeMenuData();
             baiduMap();
-            initLeadingEndHomeTabsContent("home.html", "#m_portlet_base_picture_1_1_tab_content");
+            if (businessType == 10) {
+                initLeadingEndHomeTabsContent("../../exhibition/activities/details.html?"+businessId, "#m_portlet_base_picture_1_6_tab_content");
+            } else {
+                initLeadingEndHomeTabsContent("home.html", "#m_portlet_base_picture_1_1_tab_content");
+            }
+
         }
     };
 }();

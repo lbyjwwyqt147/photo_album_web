@@ -1,6 +1,11 @@
 @charset "UTF-8";
 
 /** 首页页面样式  开始 **/
+
+.m-body .m-content {
+    padding: 15px 0 0 0 !important;
+}
+
 .m-page--fluid .m-page .m-page__container {
     padding: 0 75px;
 }
@@ -10,6 +15,10 @@
     font-size: 18px;
     font-weight: 300;
     font-family: none;
+}
+
+.nav-tabs {
+     border-bottom: 0px solid #ebedf2 !important;
 }
 
 .m-tabs-line .m-tabs__link {
@@ -22,7 +31,7 @@
 
 .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link:hover, .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link.active, .m-tabs-line.m-tabs-line--success a.m-tabs__link:hover, .m-tabs-line.m-tabs-line--success a.m-tabs__link.active {
     color: #34bfa3;
-    border-bottom: 1px solid #34bfa3;
+    border-bottom: 0px solid #34bfa3;
     padding-bottom: 25px;
 }
 
@@ -98,6 +107,15 @@ figure.effect-chico:hover img {
     opacity: 0.9;
     -webkit-transform: scale(1.01);
     transform: scale(1.01);
+}
+
+
+.m-portlet .m-portlet-fit--top {
+     margin-top: 0rem !important;
+}
+
+.m-portlet.m-portlet--bordered-semi .m-portlet__body {
+    padding-top: 0rem !important;
 }
 
 /** 图片特效样式 结束 */

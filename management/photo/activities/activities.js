@@ -283,7 +283,7 @@ var SnippetMainPageActivities = function() {
             var dataId = $(this).attr("value");
             var activitiesIframContent = layer.open({
                 type: 2,
-                title: '写真图册',
+                title: '最新活动',
                 shadeClose: true,
                 shade: false,
                 maxmin: true, //开启最大化最小化按钮
@@ -300,7 +300,7 @@ var SnippetMainPageActivities = function() {
         });
 
         // 发布按钮
-        $('.activities_mainPage_grid_publish_btn').click(function(e) {
+        $('.activities_mainPage_grid_star_btn').click(function(e) {
             e.preventDefault();
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
@@ -314,15 +314,15 @@ var SnippetMainPageActivities = function() {
             return false;
         });
 
-        // 隐藏按钮
-        $('.activities_mainPage_grid_hide_btn').click(function(e) {
+        // 下架按钮
+        $('.activities_mainPage_grid_slash_btn').click(function(e) {
             e.preventDefault();
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
             var params = {
                 "id" : $(this).attr("value"),
-                "status" : 1,
+                "status" : 2,
                 "dataVersion" : $(this).attr("dataVersion")
             };
             activitiesMainPageUpdateDataStatus(params);
@@ -330,7 +330,7 @@ var SnippetMainPageActivities = function() {
         });
 
         // 删除按钮
-        $('.activities_mainPage_grid_del_btn').click(function(e) {
+        $('.activities_mainPage_grid_trash_btn').click(function(e) {
             e.preventDefault();
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
@@ -345,38 +345,10 @@ var SnippetMainPageActivities = function() {
             if (BaseUtils.checkLoginTimeoutStatus()) {
                 return;
             }
-            lookPortaitImages($(this).attr("value"));
+            window.open("../../exhibition/home/index.html?"+$(this).attr("value") + "&10");
+            //lookPortaitImages($(this).attr("value"));
             return false;
         });
-
-        // 查看按钮
-        $('.activities_mainPage_grid_look_btn').click(function(e) {
-            e.preventDefault();
-            if (BaseUtils.checkLoginTimeoutStatus()) {
-                return;
-            }
-            var layerArea = ['100%', '100%'];
-            /*if ($(window).width() > 1920 && $(window).height() > 937) {
-                layerArea = ['2000px', '950px']
-            }*/
-            var dataId = $(this).attr("value");
-            var lookActivitiesIframContent = layer.open({
-                type: 2,
-                title: '活动图片',
-                shadeClose: true,
-                shade: false,
-                maxmin: true, //开启最大化最小化按钮
-                area: layerArea,
-                content: '../../management/photo/album/photo-uploading-look.html?dataId='+dataId+'&albumClassify=1',
-                end : function () {
-
-                }
-            });
-            // 窗口全屏打开
-            layer.full(lookActivitiesIframContent);
-            return false;
-        });
-
 
     };
 
@@ -439,7 +411,7 @@ var SnippetMainPageActivities = function() {
             });
 
             window.onresize = function(){
-               // activitiesMainPageTable.resize("activities_mainPage_grid");
+
             }
         }
     };
