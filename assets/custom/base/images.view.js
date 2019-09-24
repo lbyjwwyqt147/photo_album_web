@@ -57,11 +57,15 @@ var ImagesView = {
     imagesListHtmlAppend:function (rowId, v) {
         var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
         images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
-        images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
+        images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem; margin-bottom: -50px; height:auto;">\n';
         images_col_div += '<div class="m-portlet__head-caption">\n';
         images_col_div += '<div class="m-portlet__head-action">\n';
         if (v.status === 0) {
-            images_col_div += '<span class="m-badge m-badge--success m-badge--wide">已发布</span>\n';
+            if (v.display == 0) {
+                images_col_div += '<span class="m-badge m-badge--accent m-badge--wide">首页展示</span>\n';
+            } else {
+                images_col_div += '<span class="m-badge m-badge--success m-badge--wide">已发布</span>\n';
+            }
         } else if (v.status === 1) {
             images_col_div += '<span class="m-badge m-badge--danger m-badge--wide">下架</span>\n';
         } else {
@@ -146,6 +150,8 @@ var ImagesView = {
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         images_col_div += '<div class="m-portlet__body">\n';
+        images_col_div += '<figure class="effect-chico">\n';
+
         images_col_div += '<div class="m-widget19">\n';
         images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
         images_col_div += '<img src="'+v.cover+'" alt="">\n';
@@ -157,6 +163,7 @@ var ImagesView = {
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';
         images_col_div += '</div>\n';
+        images_col_div += '</figure>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';

@@ -163,7 +163,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
             $.each(datas, function(i, v){
                 col_div += '<div class="col-xl-3 ">\n';
                 col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force border_shadow">\n';
-                col_div += '<div class="m-portlet__head m-portlet__head--fit">\n';
+                col_div += '<div class="m-portlet__head m-portlet__head--fit" style="height: 0px;">\n';
                 col_div += '<div class="m-portlet__head-caption">\n';
                 col_div += ' <div class="m-portlet__head-action">\n';
                 col_div += ' </div>\n';

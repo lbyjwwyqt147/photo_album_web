@@ -105,8 +105,8 @@ figure.effect-chico img {
 
 figure.effect-chico:hover img {
     opacity: 0.9;
-    -webkit-transform: scale(1.01);
-    transform: scale(1.01);
+    -webkit-transform: scale(1.003);
+    transform: scale(1.003);
 }
 
 
@@ -128,7 +128,7 @@ figure.effect-chico:hover img {
     margin-bottom: 1rem;
 }
 .alert-success:not(.m-alert--outline) {
-    color: #90e8d9;
+    color: #90e8d9 !important;
     background-color: rgba(243,250,255,0.5) !important;
     border-color: #f3faff !important;
 }
@@ -137,5 +137,6 @@ figure.effect-chico:hover img {
      -webkit-box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
      box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
 }
+
 
 /** 分隔标题样式 结束  */

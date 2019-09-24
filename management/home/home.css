@@ -715,4 +715,18 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     margin-top: 0rem !important;
 }
 
+
+figure.effect-chico img {
+    -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+    transition: opacity 0.35s, transform 0.35s;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+
+figure.effect-chico:hover img {
+    opacity: 0.9;
+    -webkit-transform: scale(1.003);
+    transform: scale(1.003);
+}
 /**  kt-callout 样式 结束 */
