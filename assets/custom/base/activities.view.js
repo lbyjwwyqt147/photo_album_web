@@ -55,7 +55,7 @@ var ActivitiesView = {
      * 后台图片展示样式设置
      */
     activitiesListHtmlAppend:function (rowId, v) {
-        var activities_col_div = '<div class="col-lg-4 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
+        var activities_col_div = '<div class="col-lg-4" value = "'+v.id+'" style="cursor:pointer">\n';
         if (v.activityStatus === 0) {
             activities_col_div += '<div class="kt-portlet kt-callout kt-callout--success">\n';
         } else if (v.activityStatus === 1) {
@@ -63,16 +63,21 @@ var ActivitiesView = {
         } else {
             activities_col_div += '<div class="kt-portlet kt-callout kt-callout--danger">\n';
         }
-        activities_col_div += '<div class="kt-portlet__body">\n';
+        activities_col_div += '<div class="kt-portlet__body" style="padding: 0px;">\n';
         activities_col_div += '<div class="kt-callout__body">\n';
-        activities_col_div += ' <img src="'+v.surfacePlot+'" width="200px" height="143px" class="kt-callout__body_image">\n';
+        activities_col_div += ' <img src="'+v.surfacePlot+'" onload="BaseUtils.autoResizeImage(210,143,this)" width="210px" height="143px" class="kt-callout__body_image '+rowId+'_fancybox_btn" value = "'+v.id+'" >\n';
         activities_col_div += ' <div class="kt-callout__content">\n';
         activities_col_div += '<h3 class="kt-callout__title">\n';
         activities_col_div +=  v.activityTheme;
         activities_col_div += '</h3>\n';
         activities_col_div += '<p class="kt-callout__desc">\n';
-        activities_col_div +=   v.activityDescription;
-        activities_col_div +=  '<br/>活动价：￥' + v.activityPrice ;
+        activities_col_div +=  '活动价：￥' + v.activityPrice ;
+        activities_col_div += '</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=   '联系人：' + v.contactPerson;
+        activities_col_div += '</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=   '电话：' + v.contactNumber;
         activities_col_div += '</p>\n';
         activities_col_div += '</div>\n';
 

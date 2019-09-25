@@ -288,7 +288,7 @@ var SnippetMainPageActivities = function() {
                 shade: false,
                 maxmin: true, //开启最大化最小化按钮
                 area: layerArea,
-                content: '../../management/photo/activities/activities.html?dataId='+dataId+'&albumClassify=1',
+                content: '../../management/photo/activities/activities-uploading.html?dataId='+dataId+'&albumClassify=1',
                 end : function () {
                     activitiesMainPageRefreshGridQueryCondition();
                     activitiesMainPageRefreshGrid();

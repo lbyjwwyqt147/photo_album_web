@@ -86,6 +86,7 @@ var SnippetMainPageUploading= function() {
         if (obj.display != null) {
             $("input:radio[name=\"display\"][value='"+obj.display+"']").click();
         }
+        $("#photo_uploading_mainPage_dataSubmit_form_uploading_seq").val(obj.albumPriority);
         // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
     };
 

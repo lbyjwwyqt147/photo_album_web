@@ -295,6 +295,7 @@ var SnippetMainPageOrganization = function() {
                         return;
                     }
                     organizationMainPageSubmitForm.setForm(obj.data);
+                    $("#organization_mainPage_dataSubmit_form_org_seq").val(obj.data.seq)
                     organizationMainPageMark = 2;
                     // 显示 dialog
                     organizationMainPageFormModal.modal('show');
@@ -326,6 +327,7 @@ var SnippetMainPageOrganization = function() {
             organizationMainPageTable.on('rowDouble(organization_mainPage_grid)', function(obj){
                 organizationMainPageMark = 3;
                 organizationMainPageSubmitForm.setForm(obj.data);
+                $("#organization_mainPage_dataSubmit_form_org_seq").val(obj.data.seq)
                 BaseUtils.readonlyForm(organizationMainPageSubmitFormId);
                 organizationMainPageFormModal.modal('show');
             });

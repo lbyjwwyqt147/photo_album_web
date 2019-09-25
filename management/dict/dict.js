@@ -301,6 +301,7 @@ var SnippetMainPageDict = function() {
                         return;
                     }
                     dictMainPageSubmitForm.setForm(obj.data);
+                    $("#dict_mainPage_dataSubmit_form_dict_seq").val(obj.data.priority);
                     dictMainPageMark = 2;
                     // 显示 dialog
                     dictMainPageFormModal.modal('show');
@@ -332,6 +333,7 @@ var SnippetMainPageDict = function() {
             dictMainPageTable.on('rowDouble(dict_mainPage_grid)', function(obj){
                 dictMainPageMark = 3;
                 dictMainPageSubmitForm.setForm(obj.data);
+                $("#dict_mainPage_dataSubmit_form_dict_seq").val(obj.data.priority);
                 BaseUtils.readonlyForm(dictMainPageSubmitFormId);
                 dictMainPageFormModal.modal('show');
             });

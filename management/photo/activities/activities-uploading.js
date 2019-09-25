@@ -79,6 +79,12 @@ var SnippetMainActivitiesPageUploading= function() {
      */
     var initactivitiesUploadingSelected = function (obj) {
         $('#discount').selectpicker('val', obj.discount);
+        $("input[name='activityPrice']").val(obj.activityPrice);
+        $("input[name='originalPrice']").val(obj.originalPrice);
+        $("input[name='activityPriority']").val(obj.activityPriority);
+        $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
+        $('.layui-upload-drag').show();
+        $('#surface-plot-image-href').attr('href', obj.surfacePlot);
     };
 
     /**
@@ -86,36 +92,20 @@ var SnippetMainActivitiesPageUploading= function() {
      */
     var initSelectpicker = function () {
         var $discount = $("#discount")
-        $discount .selectpicker('refresh');
+        $discount.selectpicker('refresh');
+        $discount.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+            calculatePrice(newValue);
+        });
         //初始化 优先级 控件
         BootstrapTouchspin.initByteTouchSpin("#activities_uploading_mainPage_dataSubmit_form_uploading_seq");
-        $("input[name='originalPrice']").TouchSpin({
-            min: 0,//最小值
-            max: 99999,//最大值
-            step: 0.1,//每次点击+/-按钮修改值
-            decimals: 2,//小数位数
-            boostat: 5,
-            maxboostedstep: 10,
-            postfix: '',//后缀符
-            prefix: ''//前缀符
-        }).on("change", function(){
-
+        BootstrapTouchspin.initDecimalsTouchSpin("input[name='originalPrice']");
+        BootstrapTouchspin.initDecimalsTouchSpin("input[name='activityPrice']");
+        $("input[name='activityPrice']").on('change', function () {
+            calculatePrice($(this).val());
         });
-
-        $("input[name='activityPrice']").TouchSpin({
-            min: 0,//最小值
-            max: 99999,//最大值
-            step: 0.1,//每次点击+/-按钮修改值
-            decimals: 2,//小数位数
-            boostat: 5,
-            maxboostedstep: 10,
-            postfix: '',//后缀符
-            prefix: ''//前缀符
-        }).on("change", function(){
-
+        $("input[name='originalPrice']").on('change', function () {
+            calculatePrice($(this).val());
         });
-
-
         var laydate;
         layui.use('laydate', function() {
             laydate = layui.laydate;
@@ -172,10 +162,21 @@ var SnippetMainActivitiesPageUploading= function() {
                 }
             });
         });
+    };
 
-
-
-    }
+    /**
+     * 计算价格
+     */
+    var calculatePrice = function (newValue) {
+        var originalPriceVal = $("#originalPrice").val();
+        var activityPriceVal = $("#activityPrice").val();
+        if (originalPriceVal != "" && activityPriceVal == "" ) {
+            $("#activityPrice").val(originalPriceVal*(newValue/10));
+        }
+        if (activityPriceVal != '' && originalPriceVal == "") {
+            $("#originalPrice").val(activityPriceVal/(newValue/10));
+        }
+    };
 
     /**
      * 初始化表单提交

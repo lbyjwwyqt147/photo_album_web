@@ -79,7 +79,6 @@ var SnippetMainPageUploading= function() {
         $("#albumPhotographyAuthor").val(obj.albumPhotographyAuthor.split(",")).trigger("change");
         $("#albumAnaphasisAuthor").val(obj.albumAnaphasisAuthor.split(",")).trigger("change");
         $("#albumDresser").val(obj.albumDresser.split(",")).trigger("change");
-
         // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
     };
 
@@ -91,7 +90,6 @@ var SnippetMainPageUploading= function() {
         $variety.selectpicker('refresh');
         $("#maniyerizm").selectpicker('refresh');
 
-        BootstrapTouchspin.initByteTouchSpin("#carousel_uploading_mainPage_dataSubmit_form_uploading_seq");
         // 页面 select
         BaseUtils.dictDataSelect("image_page", function (data) {
             var $pageBusinessCode = $("#businessCode");
