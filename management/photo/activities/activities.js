@@ -1,5 +1,5 @@
 /***
- * 写真集图册
+ * 最新活动
  * @type {{init}}
  */
 var SnippetMainPageActivities = function() {

@@ -1,0 +1,152 @@
+
+<style>
+
+
+    /** kt-callout 样式 开始  */
+
+    #honeActivities_mainPage_grid .kt-callout {
+        padding: 1rem;
+    }
+    #honeActivities_mainPage_grid .kt-portlet {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+        box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+        background-color: #ffffff;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    #honeActivities_mainPage_grid .kt-portlet .kt-portlet__body {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    #honeActivities_mainPage_grid  .kt-callout .kt-callout__body .kt-callout__content {
+        -webkit-box-flex: 2;
+        -ms-flex: 2;
+        flex: 2;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__action {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__content .kt-callout__title {
+        font-size: 1.85rem;
+        font-weight: 500;
+        color: #48465b;
+        margin-bottom: 1rem;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc:last-child {
+        margin-bottom: 0;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc {
+        font-size: 1.15rem;
+        line-height: 2rem;
+        color: #9392a0;
+        padding-right: 2rem;
+        font-weight: 400;
+    }
+    #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__action .btn.btn-custom {
+        padding: 1rem 1.3rem;
+        font-size: 0.9rem;
+    }
+
+    #honeActivities_mainPage_grid .kt-callout__body_image {
+        margin: 0px 15px 0px 0px;
+        position: relative;
+    }
+
+    #honeActivities_mainPage_grid .m-portlet .m-portlet-fit--top {
+        margin-top: 0rem !important;
+    }
+
+   #honeActivities_mainPage_grid .kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc {
+        font-size: 1.15rem;
+        line-height: 2rem;
+        color: #9392a0;
+        padding-right: 0rem;
+        font-weight: 400;
+    }
+
+    .activities-list-image-title {
+        position: absolute;
+        z-index: 1;
+        display:block;
+        padding-left: 0rem;
+        overflow:hidden;
+        margin-bottom: 0px;
+        bottom: 34px;
+        width: 450px;
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+</style>
+
+<div class="row" id="activities-list-page-frame">
+    <div class="row" style="padding-bottom: 20px;" id="honeActivities_mainPage_grid">
+
+    </div>
+
+    <!-- 轮播图片 开始 -->
+    <div class="row" >
+        <div class="layui-carousel" id="leading_honeActivities_carousel" style="margin-top: 1px;">
+            <div carousel-item id="leading_honeActivities_carousel_images">
+
+            </div>
+        </div>
+    </div>
+    <!-- 轮播图片 结束 -->
+</div>
+
+
+
+
+<script src="../../assets/custom/base/activities.view.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../exhibition/activities/activities.js" ></script>

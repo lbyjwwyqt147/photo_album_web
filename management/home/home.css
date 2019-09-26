@@ -606,7 +606,7 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 }
 
 .kt-callout {
-    padding: 1.2rem;
+    padding: 5px 10px 0rem 0rem;
 }
 .kt-portlet {
     display: -webkit-box;
@@ -705,16 +705,20 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 }
 
 .kt-callout__body_image {
-    margin-right: 10px;
-    margin-left: -14px;
-    margin-top: -17px;
-    margin-bottom: -17px;
+    margin: -5px 10px 0px 0px;
 }
 
 .m-portlet .m-portlet-fit--top {
     margin-top: 0rem !important;
 }
 
+.kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc {
+    font-size: 1.15rem;
+    line-height: 2rem;
+    color: #9392a0;
+    padding-right: 0rem;
+    font-weight: 400;
+}
 
 figure.effect-chico img {
     -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;

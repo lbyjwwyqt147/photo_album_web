@@ -94,6 +94,9 @@
 
 /** 图片特效样式 开始 */
 
+/*---------------*/
+/***** effect-chico *****/
+/*---------------*/
 
 figure.effect-chico img {
     -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
@@ -117,6 +120,23 @@ figure.effect-chico:hover img {
 .m-portlet.m-portlet--bordered-semi .m-portlet__body {
     padding-top: 0rem !important;
 }
+
+.kt-callout--success {
+    background-color: rgba(10, 187, 135, 0.07) !important;
+}
+
+.kt-callout--danger {
+    background-color: rgba(253, 57, 122, 0.07) !important;
+}
+
+.kt-callout--brand {
+    background-color: rgba(93, 120, 255, 0.07) !important;
+}
+
+.kt-callout--disabled {
+    background-color: rgba(139, 137, 137, 0.1) !important;
+}
+
 
 /** 图片特效样式 结束 */
 

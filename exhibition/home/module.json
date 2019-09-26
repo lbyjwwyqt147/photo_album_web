@@ -50,7 +50,7 @@
   }, {
     "id": 5,
     "menuIcon": "",
-    "menuOpenUrl": "",
+    "menuOpenUrl": "../../exhibition/activities/activities.html",
     "moduleCode": "1005",
     "moduleName": "最新活动",
     "eleId": "activities_li",

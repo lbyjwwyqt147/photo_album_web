@@ -23,11 +23,14 @@ var SnippetMainPageAcctivitiesDetails = function() {
             var datas =  response.data;
             if (datas != null) {
                 $("#activities_plot").attr("src", datas.surfacePlot);
-                $("#activities_plot").attr("onload", "BaseUtils.autoResizeImage(460,300,this)");
+                $("#activities_plot").attr("onload", "BaseUtils.autoResizeImage(500,300,this)");
                 $("#activities_plot").show();
+                if (datas.maturity === 1) {
+                    $(".activities-list-image-title").show();
+                }
                 $("#activities_title").html(datas.activityTheme);
                 $("#activities_price").html(datas.activityPrice);
-                $("#activities_date").html(datas.startDateTime + "至" + datas.endDateTime);
+                $("#activities_date").html(datas.startDateTime + " 至 " + datas.endDateTime);
                 $("#activities_linkman").html(datas.contactPerson);
                 $("#activities_linkman_tel").html(datas.contactNumber);
                 $("#activities_business_hours").html(datas.businessHours);
@@ -42,14 +45,37 @@ var SnippetMainPageAcctivitiesDetails = function() {
         });
     };
 
+    /**
+     * 百度地图展示
+     */
+    var acctivitiesDetailsBaiduMap = function () {
+        layui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        });
+        $("#activities_details_office_address_btn").click(function(){
+            layer.open({
+                type: 2 ,
+                title: false,
+                closeBtn: 0, //不显示关闭按钮
+                area: ['700px', '551px'],
+                shade: [0],
+                maxmin: false,
+                shadeClose: true,
+                content: ['../../exhibition/home/baidu.html', 'no']
+            });
+        });
+    };
 
+    /**
+     *  轮播图
+     */
     var initAcctivitiesDetailsCarousel = function () {
         $getAjax({
-            url:serverUrl + "v1/table/carousel/picture",
+            url:serverUrl + "v1/table/activities/g",
             data : {
-                businessCode : '3',
-                position: '1',
-                status : 0
+                'pageSize' : 10,
+                'activityStatus' : 0,
+                'maturity': 0
             },
             headers: BaseUtils.serverHeaders()
         }, function (response) {
@@ -57,70 +83,28 @@ var SnippetMainPageAcctivitiesDetails = function() {
             var col_div = "";
             var datas =  response.data;
             $.each(datas, function(i, v){
-                col_div += '<div><img src="'+v.pictureLocation+'"></div>\n'
+                col_div += '<div style="cursor:pointer"><img class="activities_details_carousel_btn" src="'+v.surfacePlot+'" value="'+v.id+'"></div>\n'
             });
             $carouselImages.append(col_div);
 
-            layui.use(['carousel', 'form'], function(){
-                var carousel = layui.carousel
-                    ,form = layui.form;
-
+            layui.use(['carousel'], function(){
+                var carousel = layui.carousel;
 
                 //改变下时间间隔、动画类型、高度
                 carousel.render({
-                    elem: '#leading_activities_details_mainPage_grid',
+                    elem: '#leading_activities_details_carousel',
                     width: '100%', //设置容器宽度
-                    height: '800px' // 设置容器高度
-
+                    height: '600px' // 设置容器高度
                 });
+            });
 
-
-                //图片轮播
-                /* carousel.render({
-                     elem: '#test10'
-                     ,width: '778px'
-                     ,height: '440px'
-                     ,interval: 5000
-                 });*/
-
-                //事件
-                carousel.on('change(leading_AcctivitiesDetails_portrait_carousel)', function(obj){
-                    console.log(obj)
-                });
-
-                /*var $ = layui.$, active = {
-                    set: function(othis){
-                        var THIS = 'layui-bg-normal'
-                            ,key = othis.data('key')
-                            ,options = {};
-
-                        othis.css('background-color', '#5FB878').siblings().removeAttr('style');
-                        options[key] = othis.data('value');
-                        ins3.reload(options);
-                    }
-                };
-
-                //监听开关
-                form.on('switch(autoplay)', function(){
-                    ins3.reload({
-                        autoplay: this.checked
-                    });
-                });
-
-                $('.demoSet').on('keyup', function(){
-                    var value = this.value
-                        ,options = {};
-                    if(!/^\d+$/.test(value)) return;
-
-                    options[this.name] = value;
-                    ins3.reload(options);
-                });
-
-                //其它示例
-                $('.demoTest .layui-btn').on('click', function(){
-                    var othis = $(this), type = othis.data('type');
-                    active[type] ? active[type].call(this, othis) : '';
-                });*/
+            $('.activities_details_carousel_btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                window.open("../../exhibition/home/index.html?"+$(this).attr("value") + "&10");
+                return false;
             });
 
         });
@@ -182,6 +166,8 @@ var SnippetMainPageAcctivitiesDetails = function() {
         init: function() {
             initAcctivitiesDetailsData();
             initAcctivitiesDetailsCarousel();
+            acctivitiesDetailsBaiduMap();
+
         }
     };
 }();

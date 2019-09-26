@@ -101,10 +101,10 @@ var SnippetMainActivitiesPageUploading= function() {
         BootstrapTouchspin.initDecimalsTouchSpin("input[name='originalPrice']");
         BootstrapTouchspin.initDecimalsTouchSpin("input[name='activityPrice']");
         $("input[name='activityPrice']").on('change', function () {
-            calculatePrice($(this).val());
+            calculatePrice();
         });
         $("input[name='originalPrice']").on('change', function () {
-            calculatePrice($(this).val());
+            calculatePrice();
         });
         var laydate;
         layui.use('laydate', function() {
@@ -168,9 +168,10 @@ var SnippetMainActivitiesPageUploading= function() {
      * 计算价格
      */
     var calculatePrice = function (newValue) {
+        newValue = $("#discount").val();
         var originalPriceVal = $("#originalPrice").val();
         var activityPriceVal = $("#activityPrice").val();
-        if (originalPriceVal != "" && activityPriceVal == "" ) {
+        if (originalPriceVal != ""  ) {
             $("#activityPrice").val(originalPriceVal*(newValue/10));
         }
         if (activityPriceVal != '' && originalPriceVal == "") {
@@ -187,7 +188,6 @@ var SnippetMainActivitiesPageUploading= function() {
             rules: {
                 activityTheme: {
                     required: true,
-                    chcharacterNum:true,
                     maxlength: 50
                 },
                 startDateTime: {

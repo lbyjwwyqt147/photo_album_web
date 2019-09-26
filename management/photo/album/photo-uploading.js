@@ -183,7 +183,6 @@ var SnippetMainPageUploading= function() {
             rules: {
                 albumName: {
                     required: true,
-                    chcharacterNum:true,
                     maxlength: 32
                 },
                 albumClassification: {
@@ -193,7 +192,6 @@ var SnippetMainPageUploading= function() {
                     required: true
                 },
                 albumLabel: {
-                    chcharacterNum:true,
                     maxlength: 32
                 },
                 albumPriority: {

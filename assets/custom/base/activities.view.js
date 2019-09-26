@@ -65,20 +65,23 @@ var ActivitiesView = {
         }
         activities_col_div += '<div class="kt-portlet__body" style="padding: 0px;">\n';
         activities_col_div += '<div class="kt-callout__body">\n';
-        activities_col_div += ' <img src="'+v.surfacePlot+'" onload="BaseUtils.autoResizeImage(210,143,this)" width="210px" height="143px" class="kt-callout__body_image '+rowId+'_fancybox_btn" value = "'+v.id+'" >\n';
+        activities_col_div += ' <img src="'+v.surfacePlot+'" onload="BaseUtils.autoResizeImage(210,150,this)" width="210px" height="150px" class="kt-callout__body_image '+rowId+'_fancybox_btn" value = "'+v.id+'" >\n';
         activities_col_div += ' <div class="kt-callout__content">\n';
         activities_col_div += '<h3 class="kt-callout__title">\n';
         activities_col_div +=  v.activityTheme;
-        activities_col_div += '</h3>\n';
+        activities_col_div += '\n</h3>\n';
         activities_col_div += '<p class="kt-callout__desc">\n';
         activities_col_div +=  '活动价：￥' + v.activityPrice ;
-        activities_col_div += '</p>\n';
+        activities_col_div += '\n</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=  '时间：' + v.startDateTime + "至" + v.endDateTime ;
+        activities_col_div += '\n</p>\n';
         activities_col_div += '<p class="kt-callout__desc">\n';
         activities_col_div +=   '联系人：' + v.contactPerson;
-        activities_col_div += '</p>\n';
+        activities_col_div += '\n</p>\n';
         activities_col_div += '<p class="kt-callout__desc">\n';
         activities_col_div +=   '电话：' + v.contactNumber;
-        activities_col_div += '</p>\n';
+        activities_col_div += '\n</p>\n';
         activities_col_div += '</div>\n';
 
         activities_col_div += '<div class="kt-callout__action">\n';
@@ -90,30 +93,30 @@ var ActivitiesView = {
         if (v.activityStatus === 0) {
             activities_col_div += '<a class="dropdown-item '+rowId+'_slash_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'" >\n';
             activities_col_div += ' <i class="la la-eye-slash"></i> 下架\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
             activities_col_div += '<a class="dropdown-item '+rowId+'_trash_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div += '<i class="la la-trash-o"></i> 删除\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
         } else if (v.activityStatus === 1) {
             activities_col_div += '<a class="dropdown-item '+rowId+'_edit_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div += ' <i class="la la-pencil-square"></i> 编辑\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
             activities_col_div += '<a class="dropdown-item '+rowId+'_star_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div +=  '<i class="la la-star"></i> 发布\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
             activities_col_div += '<a class="dropdown-item '+rowId+'_trash_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div += '<i class="la la-trash-o"></i> 删除\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
         } else {
             activities_col_div += '<a class="dropdown-item '+rowId+'_edit_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div += ' <i class="la la-pencil-square"></i> 编辑\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
             activities_col_div += '<a class="dropdown-item '+rowId+'_star_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div +=  '<i class="la la-star"></i> 发布\n';
             activities_col_div += ' </a>';
             activities_col_div += '<a class="dropdown-item '+rowId+'_trash_btn" href="#" value = "'+v.id+'" dataVersion = "'+v.dataVersion+'">\n';
             activities_col_div += '<i class="la la-trash-o"></i> 删除\n';
-            activities_col_div += ' </a>';
+            activities_col_div += ' </a>\n';
         }
         activities_col_div += '</div>\n';
         activities_col_div += '</div>\n';
@@ -133,39 +136,47 @@ var ActivitiesView = {
      * @returns {string}
      */
     leadingActivitiesListHtmlAppend:function (rowId, v) {
-        var activities_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer;">\n';
-        activities_col_div += '<div class="m-widget5">\n';
-        activities_col_div += '<div class="m-widget5__item">\n';
-        activities_col_div += '<div class="m-widget5__content">\n';
-        activities_col_div += '<div class="m-widget5__pic">\n';
-        activities_col_div += '<img class="m-widget7__img" src="'+v.surfacePlot+'" alt="">\n';
+        var activities_col_div = '<div class="col-lg-6 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer">\n';
+        if (v.maturity === 0) {
+            activities_col_div += '<div class="kt-portlet kt-callout kt-callout--success">\n';
+        } else if (v.maturity === 1) {
+            activities_col_div += '<div class="kt-portlet kt-callout kt-callout--disabled">\n';
+        }
+        activities_col_div += '<div class="kt-portlet__body" style="padding: 0px;">\n';
+
+        activities_col_div += '<div class="kt-callout__body">\n';
+        activities_col_div += ' <img src="'+v.surfacePlot+'" onload="BaseUtils.autoResizeImage(500,300,this)" width="500" height="300" class="kt-callout__body_image" value = "'+v.id+'" >\n';
+        if (v.maturity === 1) {
+            activities_col_div += '<h3 class="activities-list-image-title">\n';
+            activities_col_div += '活动已过期';
+            activities_col_div += '\n</h3>\n'
+        }
+        activities_col_div += ' <div class="kt-callout__content">\n';
+        activities_col_div += '<h3 class="kt-callout__title">\n';
+        activities_col_div +=  v.activityTheme;
+        activities_col_div += '\n</h3>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=  '活动价：￥' + v.activityPrice ;
+        activities_col_div += '\n</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=  '活动时间：' + v.startDateTime + " 至 " + v.endDateTime ;
+        activities_col_div += '\n</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=   '联系人：' + v.contactPerson;
+        activities_col_div += '\n</p>\n';
+        activities_col_div += '<p class="kt-callout__desc">\n';
+        activities_col_div +=   '电话：' + v.contactNumber;
+        activities_col_div += '\n</p>\n';
         activities_col_div += '</div>\n';
-        activities_col_div += '<div class="m-widget5__section">\n';
-        activities_col_div += '<h4 class="m-widget5__title">\n';
-        activities_col_div += v.activityTheme;
-        activities_col_div += '</h4>\n';
-        activities_col_div += '<span class="m-widget5__desc">\n';
-        activities_col_div += '描述';
-        activities_col_div += '</span>\n';
-        activities_col_div += '<div class="m-widget5__info">\n';
-        activities_col_div += '<span class="m-widget5__info-date m--font-info">\n';
-        activities_col_div += v.businessHours;
-        activities_col_div += '</span>\n';
+
         activities_col_div += '</div>\n';
         activities_col_div += '</div>\n';
         activities_col_div += '</div>\n';
-        activities_col_div += '<div class="m-widget5__content">\n';
-        activities_col_div += '<div class="m-widget5__stats1">\n';
-        activities_col_div += '<span class="m-widget5__number">\n';
-        activities_col_div += v.activityPrice;
-        activities_col_div += '</span>\n';
+
         activities_col_div += '</div>\n';
-        activities_col_div += '</div>\n';
-        activities_col_div += '</div>\n';
-        activities_col_div += '</div>\n';
-        activities_col_div += '</div>\n';
+
         return activities_col_div;
-    },
+    }
 
 
 
