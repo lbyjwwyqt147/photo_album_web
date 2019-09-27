@@ -106,12 +106,18 @@
         background-color: rgba(0, 0, 0, 0.2);
     }
 
+    #activities_imags_show .m-portlet .m-portlet__body {
+        padding: 0px;
+    }
+
+
+
     /** 样片展示 样式 结束  */
 
 </style>
 
 <div class="row" id="activities-details-page-frame">
-    <div class="col-xl-12">
+    <div class="col-xl-12" style="padding-left: 30px; padding-right: 30px; padding-top: 14px;">
         <!-- 图片列表 开始 -->
         <div class="row" >
             <div class="kt-portlet kt-callout">
@@ -188,9 +194,11 @@
 
         <!-- 轮播图片 开始 -->
         <div class="row" style="padding-top: 20px;">
-            <div class="layui-carousel" id="leading_activities_details_carousel" style="margin-top: 1px;">
-                <div carousel-item id="leading_activities_details_carousel_images">
+            <div class="m-portlet m-portlet--bordered m-portlet--rounded" style="width: 100%;">
+                <div class="layui-carousel" id="leading_activities_details_carousel" >
+                    <div carousel-item id="leading_activities_details_carousel_images">
 
+                    </div>
                 </div>
             </div>
         </div>

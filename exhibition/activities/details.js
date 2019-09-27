@@ -100,9 +100,6 @@ var SnippetMainPageAcctivitiesDetails = function() {
 
             $('.activities_details_carousel_btn').click(function(e) {
                 e.preventDefault();
-                if (BaseUtils.checkLoginTimeoutStatus()) {
-                    return;
-                }
                 window.open("../../exhibition/home/index.html?"+$(this).attr("value") + "&10");
                 return false;
             });

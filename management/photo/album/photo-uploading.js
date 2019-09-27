@@ -100,6 +100,7 @@ var SnippetMainPageUploading= function() {
         $display .selectpicker('refresh');
         $("#albumClassify").val(albumClassify);
         $albumClassification.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+            newValue = $albumClassification.val();
             if (newValue == "1") {
               $("#home-show-option").attr("disabled", 'disabled');
             } else {

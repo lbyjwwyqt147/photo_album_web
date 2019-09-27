@@ -94,7 +94,7 @@ var SnippetMainActivitiesPageUploading= function() {
         var $discount = $("#discount")
         $discount.selectpicker('refresh');
         $discount.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
-            calculatePrice(newValue);
+            calculatePrice();
         });
         //初始化 优先级 控件
         BootstrapTouchspin.initByteTouchSpin("#activities_uploading_mainPage_dataSubmit_form_uploading_seq");

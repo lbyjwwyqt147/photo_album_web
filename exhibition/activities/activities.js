@@ -62,9 +62,6 @@ var SnippetMainPageHoneActivities = function() {
     var initHoneActivitiesImageEventBinding = function () {
         $('.honeActivities_mainPage_grid_fancybox_btn').click(function(e) {
             e.preventDefault();
-            if (BaseUtils.checkLoginTimeoutStatus()) {
-                return;
-            }
             window.open("../../exhibition/home/index.html?"+$(this).attr("value") + "&10");
             return false;
         });

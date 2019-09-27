@@ -325,7 +325,7 @@ var BaseUtils = {
     },
 
     /**
-     * ajax 获取select 下拉框值
+     * ajax 获取select 字典下拉框值
      * @param dictCode  字典编码
      * @param successCallback  成功后回调函数
      */
@@ -339,7 +339,7 @@ var BaseUtils = {
             },
             async:false,
             dataType: "json",
-            headers: BaseUtils.cloudHeaders,
+            headers: BaseUtils.cloudHeaders(),
             success: function(data){
                 if (data != null) {
                     successCallback(data);
@@ -347,6 +347,7 @@ var BaseUtils = {
             }
         });
     },
+
 
     /**
      * ajax 获取 省市区 select 下拉框值
@@ -362,10 +363,33 @@ var BaseUtils = {
             },
             async:false,
             dataType: "json",
-            headers: BaseUtils.cloudHeaders,
+            headers: BaseUtils.cloudHeaders(),
             success: function(data){
                 if (data != null) {
                     successCallback(data);
+                }
+            }
+        });
+    },
+
+    /**
+     * ajax 获取select 下拉框值
+     * @param url  url
+     * params 参数
+     * @param successCallback  成功后回调函数
+     */
+    dropDownDataSelect : function(url, params, headers, successCallback) {
+        $.ajax({
+            type: "get",
+            url: url,
+            data: params,
+            async:false,
+            dataType: "json",
+            headers: headers,
+            success: function(res){
+                var curData = res.data;
+                if (curData != null) {
+                    successCallback(curData);
                 }
             }
         });
@@ -383,10 +407,11 @@ var BaseUtils = {
             data:params,
             async:false,
             dataType: "json",
-            headers: BaseUtils.cloudHeaders,
-            success: function(data){
-                if (data.data != null) {
-                    successCallback(data.data);
+            headers: BaseUtils.serverHeaders(),
+            success: function(res){
+                var curData = res.data;
+                if (curData != null) {
+                    successCallback(curData);
                 }
             }
         });

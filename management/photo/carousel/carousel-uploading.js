@@ -2,7 +2,7 @@
  * 轮播图片上传
  * @type {{init}}
  */
-var SnippetMainPageUploading= function() {
+var SnippetMainPageCarouselUploading= function() {
     var serverUrl = BaseUtils.serverAddress;
     var cloudServerUrl = BaseUtils.cloudServerAddress;
     var uploadingMainPageSubmitForm = $("#carousel_uploading_mainPage_dataSubmit_form");
@@ -54,33 +54,7 @@ var SnippetMainPageUploading= function() {
         });
     };
 
-    /**
-     * 初始化 form 数据
-     */
-    var initFormData = function () {
-        if (businessId != 0) {
-            $getAjax({
-                url:serverUrl + "v1/table/carousel/" + businessId,
-                headers: BaseUtils.serverHeaders()
-            }, function (response) {
-                uploadingMainPageSubmitForm.setForm(response.data);
-                initPhotoUploadingSelected(response.data);
-            });
-        }
-    }
 
-    /**
-     * select 控件回显值
-     */
-    var initPhotoUploadingSelected = function (obj) {
-        $('#albumClassification').selectpicker('val', obj.albumClassification);
-        $('#albumStyle').selectpicker('val', obj.albumStyle);
-        $('#spotForPhotography').selectpicker('val', obj.spotForPhotography);
-        $("#albumPhotographyAuthor").val(obj.albumPhotographyAuthor.split(",")).trigger("change");
-        $("#albumAnaphasisAuthor").val(obj.albumAnaphasisAuthor.split(",")).trigger("change");
-        $("#albumDresser").val(obj.albumDresser.split(",")).trigger("change");
-        // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
-    };
 
     /**
      * 初始化 select 组件
@@ -94,19 +68,72 @@ var SnippetMainPageUploading= function() {
         BaseUtils.dictDataSelect("image_page", function (data) {
             var $pageBusinessCode = $("#businessCode");
             Object.keys(data).forEach(function(key){
-                $pageBusinessCode.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                if (data[key].id == "2") {
+                    $pageBusinessCode.append("<option value=" + data[key].id + " selected>" + data[key].text + "</option>");
+                } else {
+                    $pageBusinessCode.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                }
             });
             //必须加，刷新select
             $pageBusinessCode .selectpicker('refresh');
 
             $pageBusinessCode.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+                newValue = $pageBusinessCode.val();
                 if (newValue == "1") {
+                    $variety.selectpicker('val', '4');
+                } else if (newValue == "2") {
                     $variety.selectpicker('val', '1');
-                } else {
+                } else if (newValue == "3") {
+                    $variety.selectpicker('val', '2');
+                } else if (newValue == "4") {
+                    $variety.selectpicker('val', '3');
+                } else if (newValue == "5") {
                     $variety.selectpicker('val', '2');
                 }
             });
         });
+
+        var businessDataUrl = serverUrl + 'v1/table/activities/comboBox';
+        var businessDataParams = {};
+        var $businessSelect = $("#business-select");
+        // 图片信息
+        BaseUtils.dropDownDataSelect(businessDataUrl, businessDataParams, BaseUtils.serverHeaders(), function (data) {
+            $businessSelect.html("");
+            Object.keys(data).forEach(function(key){
+                $businessSelect.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+            });
+            //必须加，刷新select
+            $businessSelect .selectpicker('refresh');
+        });
+        $variety.on('changed.bs.select', function (clickedIndex,newValue,oldValue) {
+            newValue = $variety.val();
+            if (newValue == "1") {
+                businessDataUrl = serverUrl + 'v1/table/activities/comboBox'
+            } else if (newValue  == "2") {
+                businessDataUrl = serverUrl + 'v1/table/album/comboBox';
+                businessDataParams.albumClassification = 1;
+                businessDataParams.albumClassify = 1;
+            } else if (newValue  == "3") {
+                businessDataUrl = serverUrl + 'v1/table/album/comboBox';
+                businessDataParams.albumClassification = 1;
+                businessDataParams.albumClassify = 2;
+            } else if (newValue  == "3") {
+                businessDataUrl = serverUrl + 'v1/table/album/comboBox';
+                businessDataParams.albumClassification = 2;
+                businessDataParams.albumClassify = 2;
+            }
+            // 图片信息
+            BaseUtils.dropDownDataSelect(businessDataUrl, businessDataParams,  BaseUtils.serverHeaders(), function (data) {
+                $businessSelect.html("");
+                Object.keys(data).forEach(function(key){
+                    $businessSelect.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+                });
+                //必须加，刷新select
+                $businessSelect .selectpicker('refresh');
+            });
+        });
+
+
 
 
         // 位置 select
@@ -292,7 +319,6 @@ var SnippetMainPageUploading= function() {
             uploadingMainPageInitWebuploader();
             // 解决 点击选择图片按钮 无反应 问题
             $('#uploading-filePicker div:eq(1)').attr('style', 'position: absolute; top: 20px; left: 612.5px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;');
-            initFormData();
             $('#carousel_uploading_mainPage_dataSubmit_form_close').click(function (e) {
                 e.preventDefault();
                 closeOpenLayer();
@@ -316,5 +342,5 @@ var SnippetMainPageUploading= function() {
 
 //== Class Initialization
 jQuery(document).ready(function() {
-    SnippetMainPageUploading.init();
+    SnippetMainPageCarouselUploading.init();
 });

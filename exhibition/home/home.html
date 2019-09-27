@@ -31,47 +31,54 @@
         border-right: 0px solid #ebedf2;
     }
 
+   #leadingEnd-main-page-frame .m-portlet .m-portlet__body {
+        padding: 1rem 1rem;
+    }
+
+    .m-portlet.m-portlet--full-height {
+        height: calc(100% - 0rem);
+    }
 
 </style>
 
 <div class="row" id="leadingEnd-main-page-frame">
-    <div class="col-xl-12">
+    <div class="col-xl-12" style="padding-left: 0px !important; padding-right: 0px !important;">
         <div class="m-portlet">
             <div class="m-portlet__body  m-portlet__body--no-padding">
                 <!-- 轮播图片 开始 -->
                 <div class="row" style="padding-bottom: 20px;">
-                    <div class="layui-carousel" id="leading_main_portrait_carousel" style="margin-top: 1px;">
-                        <div carousel-item id="leading_main_portrait_carousel_images">
+                    <div class="col-xl-12">
+                        <div class="layui-carousel" id="leading_main_portrait_carousel">
+                            <div carousel-item id="leading_main_portrait_carousel_images">
 
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- 轮播图片 结束 -->
 
-                <div class="m-content">
-                    <!-- 最新主题信息 开始  -->
-                    <div class="m-alert  m-alert--air alert alert-success alert-dismissible fade show" role="alert" >
-                        <div class="m-alert__text">
-                            <h2>最新主题</h2>
-                        </div>
+                <!-- 最新主题信息 开始  -->
+                <div class="m-alert  m-alert--air alert alert-success alert-dismissible fade show" role="alert" >
+                    <div class="m-alert__text">
+                        <h2>最新主题</h2>
                     </div>
-                    <div class="row" id="new-theme-info-content">
-
-
-                    </div>
-                    <!-- 最新主题信息 结束  -->
-
-                    <!-- 团队信息 开始  -->
-                    <div class="m-alert m-alert--air alert alert-success alert-dismissible fade show" role="alert" >
-                        <div class="m-alert__text">
-                            <h2>优秀团队</h2>
-                        </div>
-                    </div>
-                    <div class="row" id="staff-info-content">
-
-                    </div>
-                     <!-- 团队信息 结束  -->
                 </div>
+                <div class="row" id="new-theme-info-content">
+
+
+                </div>
+                <!-- 最新主题信息 结束  -->
+
+                <!-- 团队信息 开始  -->
+                <div class="m-alert m-alert--air alert alert-success alert-dismissible fade show" role="alert" >
+                    <div class="m-alert__text">
+                        <h2>优秀团队</h2>
+                    </div>
+                </div>
+                <div class="row" id="staff-info-content">
+
+                </div>
+                 <!-- 团队信息 结束  -->
             </div>
         </div>
     </div>
