@@ -26,7 +26,7 @@
   }, {
     "id": 3,
     "menuIcon": "",
-    "menuOpenUrl": "",
+    "menuOpenUrl": "../../exhibition/loveshow/loveshow.html",
     "moduleCode": "1003",
     "moduleName": "客片馆",
     "href": "#m_portlet_base_picture_1_4_tab_content",
