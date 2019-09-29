@@ -785,6 +785,32 @@ var BaseUtils = {
     /***
      *  动按比例显示图片，按比例压缩图片显示
      */
+     imageAutoSize: function(Img, maxWidth, maxHeight) {
+        var image = new Image();
+        //原图片原始地址（用于获取原图片的真实宽高，当<img>标签指定了宽、高时不受影响）
+        image.src = Img.src;
+        // 当图片比图片框小时不做任何改变
+        if (image.width < maxWidth&& image.height < maxHeight) {
+            Img.width = image.width;
+            Img.height = image.height;
+        }
+        else //原图片宽高比例 大于 图片框宽高比例,则以框的宽为标准缩放，反之以框的高为标准缩放
+        {
+            if (maxWidth/ maxHeight  <= image.width / image.height) //原图片宽高比例 大于 图片框宽高比例
+            {
+                Img.width = maxWidth;   //以框的宽度为标准
+                Img.height = maxWidth* (image.height / image.width);
+            }
+            else {   //原图片宽高比例 小于 图片框宽高比例
+                Img.width = maxHeight  * (image.width / image.height);
+                Img.height = maxHeight  ;   //以框的高度为标准
+            }
+        }
+    },
+
+    /***
+     *  动按比例显示图片，按比例压缩图片显示
+     */
     autoResizeImage : function (maxWidth,maxHeight,objImg) {
         var img = new Image();
         img.src = objImg.src;
@@ -794,7 +820,9 @@ var BaseUtils = {
         var w = img.width;
         var h = img.height;
         wRatio = maxWidth / w;
+        console.log(wRatio);
         hRatio = maxHeight / h;
+        console.log(hRatio);
         if (maxWidth ==0 && maxHeight==0){
             Ratio = 1;
         }else if (maxWidth==0){//
@@ -810,38 +838,6 @@ var BaseUtils = {
         }
         objImg.height = h;
         objImg.width = w;
-    },
-
-    /**
-     *  图片 等比例缩略图不失真
-     * @param Img
-     * @param maxWidth
-     * @param maxHeight
-     * @constructor
-     */
-    AutoSize : function (Img, maxWidth, maxHeight) {
-        var image = new Image();
-        //原图片原始地址（用于获取原图片的真实宽高，当<img>标签指定了宽、高时不受影响）
-        image.src = Img.src;
-        // 当图片比图片框小时不做任何改变
-        if (image.width < maxWidth && image.height < maxHeight) {
-            Img.width = image.width;
-            Img.height = image.height;
-        } else //原图片宽高比例 大于 图片框宽高比例,则以框的宽为标准缩放，反之以框的高为标准缩放
-        {
-            if (maxWidth / maxHeight <= image.width / image.height) //原图片宽高比例 大于 图片框宽高比例
-            {
-                Img.width = maxWidth;   //以框的宽度为标准
-                Img.height = maxWidth * (image.height / image.width);
-            } else {   //原图片宽高比例 小于 图片框宽高比例
-                Img.width = maxHeight * (image.width / image.height);
-                Img.height = maxHeight;   //以框的高度为标准
-            }
-        }
     }
-
-
-
-
 
 };

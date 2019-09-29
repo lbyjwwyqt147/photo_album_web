@@ -101,15 +101,6 @@
 
         /** 删除提示框样式 结束 */
 
-        .layui-upload-drag {
-            position: relative;
-            padding: 10px;
-            border: 1px dashed #e2e2e2;
-            background-color: #fff;
-            text-align: center;
-            cursor: pointer;
-            color: #999;
-        }
 
     </style>
 </head>
@@ -151,12 +142,8 @@
                                     <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">主题封面:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            <div class="layui-upload-drag" style="padding: 0px; display: none;">
-                                                <a data-fancybox="gallery" id="surface-plot-image-href" href=""><img class="layui-upload-img" style="margin-top:-30px; " id="surface-plot-image" width="76px" height="76px"></a>
-                                            </div>
-                                            <div class="layui-upload-drag" id="surfacePlot">
-                                                <i class="layui-icon"></i>
-                                            </div>
+                                            <a data-fancybox="gallery" id="surface-plot-image-href" href=""><img class="layui-upload-img" style="display: none " id="surface-plot-image" width="170" height="76"></a>
+                                            <button type="button" class="layui-btn" id="surfacePlot"><i class="layui-icon"></i>上传封面</button>
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row ">

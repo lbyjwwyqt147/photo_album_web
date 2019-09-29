@@ -72,7 +72,7 @@ var SnippetMainActivitiesPageUploading= function() {
                 initactivitiesUploadingSelected(response.data);
             });
         }
-    }
+    };
 
     /**
      * select 控件回显值
@@ -83,7 +83,8 @@ var SnippetMainActivitiesPageUploading= function() {
         $("input[name='originalPrice']").val(obj.originalPrice);
         $("input[name='activityPriority']").val(obj.activityPriority);
         $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
-        $('.layui-upload-drag').show();
+        $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+        $('#surface-plot-image').show();
         $('#surface-plot-image-href').attr('href', obj.surfacePlot);
     };
 
@@ -144,7 +145,8 @@ var SnippetMainActivitiesPageUploading= function() {
                     //预读本地文件示例，不支持ie8
                     obj.preview(function(index, file, result){
                         $('#surface-plot-image').attr('src', result); //图片链接（base64）
-                        $('.layui-upload-drag').show();
+                        $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+                        $('#surface-plot-image').show();
                         $('#surface-plot-image-href').attr('href', result);
                     });
                 },

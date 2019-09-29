@@ -20,6 +20,16 @@
       "modulePid": 1,
       "moduleType": 2,
       "status": 0
+    }, {
+      "functionButtonGroup": [],
+      "id": 12,
+      "menuIcon": "la-outdent",
+      "menuOpenUrl": "../photo/company/company.html",
+      "moduleCode": "1012",
+      "moduleName": "公司设置",
+      "modulePid": 1,
+      "moduleType": 2,
+      "status": 0
     }],
     "id": 1,
     "menuIcon": "flaticon-cogwheel",
