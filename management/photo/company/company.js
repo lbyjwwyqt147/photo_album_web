@@ -20,6 +20,7 @@ var SnippetMainPageCompany = function() {
             if (response.data != null) {
                 var dataObj = response.data[0];
                 compayMainPageSubmitForm.setForm(dataObj);
+                $("#company-profile").val(BaseUtils.toTextarea( dataObj.companyProfile));
                 $('#weixin-image').attr('src', dataObj.weixinImage);
                 $('#weixin-image').show();
                 $('#weixin-image-href').attr('href',  dataObj.weixinImage);
@@ -164,6 +165,7 @@ var SnippetMainPageCompany = function() {
      */
     var comparyMainPageFormSubmitHandle = function() {
         BaseUtils.formInputTrim("#company-form");
+        $("#company-profile").val(BaseUtils.textareaTo( $("#company-profile").val()));
         compayMainPageSubmitForm.validate({
             rules: {
                 companyName: {

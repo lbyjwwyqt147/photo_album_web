@@ -78,6 +78,7 @@ var SnippetMainActivitiesPageUploading= function() {
      * select 控件回显值
      */
     var initactivitiesUploadingSelected = function (obj) {
+        $("#activity-description").val(BaseUtils.toTextarea( obj.activityDescription));
         $('#discount').selectpicker('val', obj.discount);
         $("input[name='activityPrice']").val(obj.activityPrice);
         $("input[name='originalPrice']").val(obj.originalPrice);
@@ -186,6 +187,7 @@ var SnippetMainActivitiesPageUploading= function() {
      */
     var uploadingMainPageFormSubmitHandle = function() {
         BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
+        $("#activity-description").val(BaseUtils.textareaTo( $("#activity-description").val()));
         uploadingMainPageSubmitForm.validate({
             rules: {
                 activityTheme: {
