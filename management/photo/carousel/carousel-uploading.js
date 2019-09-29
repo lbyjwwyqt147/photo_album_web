@@ -60,7 +60,8 @@ var SnippetMainPageCarouselUploading= function() {
      * 初始化 select 组件
      */
     var initSelectpicker = function () {
-       var  $variety = $("#variety");
+        BootstrapTouchspin.initByteTouchSpin("#priority_form_uploading_seq");
+        var  $variety = $("#variety");
         $variety.selectpicker('refresh');
         $("#maniyerizm").selectpicker('refresh');
 

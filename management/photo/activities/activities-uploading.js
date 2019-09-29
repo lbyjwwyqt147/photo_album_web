@@ -186,8 +186,9 @@ var SnippetMainActivitiesPageUploading= function() {
      * 初始化表单提交
      */
     var uploadingMainPageFormSubmitHandle = function() {
-        BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
         $("#activity-description").val(BaseUtils.textareaTo( $("#activity-description").val()));
+        BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
+        console.log( $("#activity-description").val());
         uploadingMainPageSubmitForm.validate({
             rules: {
                 activityTheme: {
