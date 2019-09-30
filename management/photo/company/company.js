@@ -164,8 +164,8 @@ var SnippetMainPageCompany = function() {
      * 初始化表单提交
      */
     var comparyMainPageFormSubmitHandle = function() {
-        BaseUtils.formInputTrim("#company-form");
         $("#company-profile").val(BaseUtils.textareaTo( $("#company-profile").val()));
+        BaseUtils.formInputTrim("#company-form");
         compayMainPageSubmitForm.validate({
             rules: {
                 companyName: {

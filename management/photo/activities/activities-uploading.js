@@ -188,7 +188,6 @@ var SnippetMainActivitiesPageUploading= function() {
     var uploadingMainPageFormSubmitHandle = function() {
         $("#activity-description").val(BaseUtils.textareaTo( $("#activity-description").val()));
         BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
-        console.log( $("#activity-description").val());
         uploadingMainPageSubmitForm.validate({
             rules: {
                 activityTheme: {
