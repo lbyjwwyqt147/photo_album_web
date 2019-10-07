@@ -101,16 +101,16 @@ var SnippetMainPageCarousel = function() {
                             var value = row.variety;
                             var curVarietyText = "活动图片";
                             switch (value) {
-                                case 1:
+                                case "1":
                                     curVarietyText = "活动图片";
                                     break;
-                                case 2:
+                                case "2":
                                     curVarietyText = "写真图片";
                                     break;
-                                case 3:
+                                case "3":
                                     curVarietyText = "婚纱图片";
                                     break;
-                                case 4:
+                                case "4":
                                     curVarietyText = "其他图片";
                                     break;
                                 default:
