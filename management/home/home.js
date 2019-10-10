@@ -85,6 +85,7 @@ var SnippetMainPageHomeIndex = function() {
         //退出按钮事件
         $(".home_m_card_user_flaticon_logout").click(function (e) {
             e.preventDefault();
+            window.location.href = "login.html";
             toastr.success("退出系统,即将重新登录!");
             return false;
         });

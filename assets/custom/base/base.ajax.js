@@ -44,6 +44,34 @@ jQuery(document).ready(function() {
     };
 
     /**
+     * 默认post 提交
+     * @param ajaxParam
+     * @param successCallback
+     * @param errorCallback
+     */
+    $postAjaxNoToastr = function (ajaxParam, successCallback, errorCallback) {
+        var _url = ajaxParam.url;
+        var _data = ajaxParam.data;
+        $.ajax({
+            url: _url,
+            dataType: "json",
+            cache: false,
+            async: true,
+            type: "POST",
+            data: _data,
+            headers:ajaxParam.headers,
+            crossDomain: true,
+            timeout: 60000,
+            success: function (response) {
+                successCallback(response);
+            },
+            error: function (data) {
+                errorCallback(data);
+            }
+        });
+    };
+
+    /**
      * 加密数据 以json 字符串传到服务器
      * @param ajaxParam
      * @param successCallback
@@ -99,6 +127,50 @@ jQuery(document).ready(function() {
         });
     };
 
+
+    /**
+     * 加密数据 以json 字符串传到服务器
+     * @param ajaxParam
+     * @param successCallback
+     * @param errorCallback
+     */
+    $encryptPostAjaxNoToastr = function (ajaxParam, successCallback, errorCallback) {
+        var _url = ajaxParam.url;
+        var _data = ajaxParam.data;
+        var encryptData = null;
+        var formData = JSON.stringify(_data);
+        var encryption = BaseUtils.encryption;
+        if (encryption) {
+            encryptData = BaseUtils.dataEncrypt(formData);
+        } else {
+            encryptData = formData;
+        }
+        $.ajax({
+            url: _url,
+            type: "POST",
+            dataType: "text",
+            cache: false,
+            async: true,
+            contentType: "application/json",
+            data: encryptData,
+            headers: ajaxParam.headers,
+            crossDomain: true,
+            timeout:60000,
+            success: function (data) {
+                var response = null;
+                if (isJsonObject(data)) {
+                    response = JSON.parse(data);
+                } else {
+                    var decryptData = BaseUtils.dataDecrypt(data.replace("\"",""));
+                    response = JSON.parse(decryptData);
+                }
+                successCallback(response);
+            },
+            error: function (data) {
+                errorCallback(data);
+            }
+        });
+    };
 
     /**
      * 默认delete 提交
