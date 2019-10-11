@@ -81,15 +81,16 @@ var SnippetLogin = function() {
                 showErrorMsg(form, 'danger', '请输入用户名和密码进行登录.');
             }
             if (user_password != '' && user_account != '') {
-                BaseUtils.htmPageBlock();
+               // BaseUtils.htmPageBlock();
                 btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
                 $encryptPostAjaxNoToastr({
                     url:serverUrl + "v1/user/login",
                     data:$("#user-login-form").serializeJSON(),
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
+                    console.log(response);
                     if (response.success && response.status == 200) {
-                        window.location.href = "home.html";
+                       // window.location.href = "home.html";
                     } else if ( response.status == 301) {
                         hidenAlerts(btn, form,"用户已被停用,请联系客服.");
                     } else   {
