@@ -20,7 +20,7 @@ var BaseUtils = {
     'loadingErrorMsg': "加载数据失败,请稍候再试!",
     'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
-    'user_access_token': "photo_album_user_credential_",
+    'user_access_token': "photo_album_user_credential",
     "encryption":true,
     "secretKey":"dO6+g3+08ELBKtx/1/WBYQ==",
     "cloudAppId": "1550817758252",
@@ -197,7 +197,7 @@ var BaseUtils = {
      */
     setCookie: function(key, value, day) {
         if (day == null) {
-            day = 3
+            day = 1
         }
         this.delCookie(key);
         $.cookie(key, value, {expires: day,path: '/', secure: false});
@@ -749,7 +749,8 @@ var BaseUtils = {
         }));
         var headers = {
             "credential": BaseUtils.credential,
-            "sign":sign
+            "sign":sign,
+            "Authorization" :  "Bearer " + BaseUtils.getCookie(BaseUtils.user_access_token)
         };
         return headers;
     },

@@ -90,7 +90,8 @@ var SnippetLogin = function() {
                 }, function (response) {
                     console.log(response);
                     if (response.success && response.status == 200) {
-                       // window.location.href = "home.html";
+                        BaseUtils.setCookie(BaseUtils.user_access_token, response.extend, 1 );
+                        window.location.href = "home.html";
                     } else if ( response.status == 301) {
                         hidenAlerts(btn, form,"用户已被停用,请联系客服.");
                     } else   {
