@@ -23,10 +23,10 @@ var SnippetMainPageAcctivitiesDetails = function() {
             var datas =  response.data;
             if (datas != null) {
                 $("#activities_plot").attr("src", datas.surfacePlot);
-                $("#activities_plot").attr("onload", "BaseUtils.autoResizeImage(500,300,this)");
+                $("#activities_plot").attr("onload", "BaseUtils.autoResizeImage(525,300,this)");
                 $("#activities_plot").show();
                 if (datas.maturity === 1) {
-                    $(".activities-list-image-title").show();
+                    $(".details-image-title").show();
                 }
                 $("#activities_title").html(datas.activityTheme);
                 $("#activities_price").html(datas.activityPrice);
