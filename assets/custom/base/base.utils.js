@@ -750,7 +750,7 @@ var BaseUtils = {
         var headers = {
             "credential": BaseUtils.credential,
             "sign":sign,
-            "Authorization" :  "Bearer " + BaseUtils.getCookie(BaseUtils.user_access_token)
+            "Authorization" :  "bearer " + BaseUtils.getCookie(BaseUtils.user_access_token)
         };
         return headers;
     },
