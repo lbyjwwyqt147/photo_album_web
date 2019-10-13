@@ -13,6 +13,13 @@
 
 .m-page--fluid .m-page .m-page__container {
     padding: 0 75px;
+    background-color: #f5fffA;
+}
+
+.m-header--fixed.m-header--minimize-on .m-header .m-header__top {
+    -webkit-transition: height 0.3s ease;
+    transition: height 0.3s ease;
+    height: 80px;
 }
 
 .m-tabs-line {
@@ -34,14 +41,28 @@
     font-weight: 400 !important;
 }
 
+.m-tabs-line.nav.nav-tabs .nav-link, .m-tabs-line a.m-tabs__link {
+    background: transparent;
+    color: #7b7e8a;
+    padding-top: 40px;
+    height: 80px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link:hover, .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link.active, .m-tabs-line.m-tabs-line--success a.m-tabs__link:hover, .m-tabs-line.m-tabs-line--success a.m-tabs__link.active {
     color: #34bfa3;
     border-bottom: 0px solid #34bfa3;
-    padding-bottom: 25px;
+    text-align: center;
+    background: rgba(99, 204, 137, 0.2) !important;
 }
 
 .nav-item.m-tabs__item {
-    padding-right: 30px;
+    padding-right: 0px;
+}
+
+.m-tabs-line .m-tabs__item {
+     margin-right: 0px;
 }
 
 /** 右边悬浮导航栏 */
