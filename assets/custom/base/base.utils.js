@@ -747,10 +747,12 @@ var BaseUtils = {
             "secret":BaseUtils.secretKey,
             "parameter":false
         }));
+        var access_token =  BaseUtils.getCookie(BaseUtils.user_access_token);
+        var authorization =  access_token != null && access_token != '' ? "bearer " + access_token : "";
         var headers = {
             "credential": BaseUtils.credential,
             "sign":sign,
-            "Authorization" :  "bearer " + BaseUtils.getCookie(BaseUtils.user_access_token)
+            "Authorization" :  authorization
         };
         return headers;
     },
