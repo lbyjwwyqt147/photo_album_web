@@ -2,6 +2,10 @@
 
 /** 首页页面样式  开始 **/
 
+body {
+    background-color: rgba(131,175,155, 1);
+}
+
 .m-body .m-wrapper {
     padding: 30px 20px 15px 20px;
     border-bottom-right-radius: 6px;
@@ -13,13 +17,30 @@
 
 .m-page--fluid .m-page .m-page__container {
     padding: 0 75px;
-    background-color: #f5fffA;
+}
+
+.m-header .m-header__top {
+    -webkit-box-shadow: 0px 4px 30px -4px rgba(0, 51, 90, 0.1);
+    box-shadow: 0px 4px 30px -4px rgba(0, 51, 90, 0.1);
+    padding: 0;
+    position: relative;
+    z-index: 3;
+    height: 60px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: rgba(131,175,155, 1);
 }
 
 .m-header--fixed.m-header--minimize-on .m-header .m-header__top {
     -webkit-transition: height 0.3s ease;
     transition: height 0.3s ease;
-    height: 80px;
+    height: 60px;
+}
+
+.m-header--fixed.m-header--minimize-off .m-header .m-header__top {
+    -webkit-transition: height 0.3s ease;
+    transition: height 0.3s ease;
+    height: 60px;
 }
 
 .m-tabs-line {
@@ -43,18 +64,18 @@
 
 .m-tabs-line.nav.nav-tabs .nav-link, .m-tabs-line a.m-tabs__link {
     background: transparent;
-    color: #7b7e8a;
-    padding-top: 40px;
-    height: 80px;
+    color: #282a3c;
+    padding-top: 30px;
+    height: 60px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
 .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link:hover, .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link.active, .m-tabs-line.m-tabs-line--success a.m-tabs__link:hover, .m-tabs-line.m-tabs-line--success a.m-tabs__link.active {
-    color: #34bfa3;
-    border-bottom: 0px solid #34bfa3;
+    color: #f4f5f8;
+    border-bottom: 0px solid rgba(172,81,24, 1);
     text-align: center;
-    background: rgba(99, 204, 137, 0.2) !important;
+    background: rgba(201,186,131, 0.8) !important;
 }
 
 .nav-item.m-tabs__item {
@@ -186,7 +207,7 @@ figure.effect-chico:hover img {
 }
 .alert-success:not(.m-alert--outline) {
     color: #90e8d9 !important;
-    background-color: rgba(243,250,255,0.5) !important;
+    background-color: rgba(167,220,224,0.2) !important;
     border-color: #f3faff !important;
 }
 
@@ -197,3 +218,22 @@ figure.effect-chico:hover img {
 
 
 /** 分隔标题样式 结束  */
+
+
+/** 底部样式 开始  */
+.m-widget5 .m-widget5__item .m-widget5__content .m-widget5__section {
+    display: table-cell;
+    vertical-align: top;
+     padding-left: 0rem;
+    padding-top: 0.3rem;
+}
+
+.m--font-info {
+    color: #3956ab !important;
+}
+
+.m-widget5 .m-widget5__item {
+    border-bottom: 0.07rem dashed rgba(122, 165, 145, 1);
+}
+
+/** 底部样式 结束  */
