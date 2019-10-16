@@ -3,7 +3,7 @@
 /** 首页页面样式  开始 **/
 
 body {
-    background-color: rgba(131,175,155, 1);
+    background-color: rgba(137,190,178, 1);
 }
 
 .m-body .m-wrapper {
@@ -20,15 +20,15 @@ body {
 }
 
 .m-header .m-header__top {
-    -webkit-box-shadow: 0px 4px 30px -4px rgba(0, 51, 90, 0.1);
-    box-shadow: 0px 4px 30px -4px rgba(0, 51, 90, 0.1);
     padding: 0;
     position: relative;
     z-index: 3;
     height: 60px;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    background-color: rgba(131,175,155, 1);
+    background-color: rgba(137,190,178, 1);
+    box-shadow: 0px 20px 20px -18px rgba(114,83,52, 1);
+
 }
 
 .m-header--fixed.m-header--minimize-on .m-header .m-header__top {
@@ -72,10 +72,10 @@ body {
 }
 
 .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link:hover, .m-tabs-line.m-tabs-line--success.nav.nav-tabs .nav-link.active, .m-tabs-line.m-tabs-line--success a.m-tabs__link:hover, .m-tabs-line.m-tabs-line--success a.m-tabs__link.active {
-    color: #f4f5f8;
-    border-bottom: 0px solid rgba(172,81,24, 1);
+    color: #fff;
+    border-bottom: 0px solid rgba(254,67,101, 1);
     text-align: center;
-    background: rgba(201,186,131, 0.8) !important;
+    background: rgba(244,208,0, 1) !important;
 }
 
 .nav-item.m-tabs__item {

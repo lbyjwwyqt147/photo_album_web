@@ -156,7 +156,7 @@ var BaseUtils = {
     checkLoginTimeoutStatus:function() {
         var timeOut = BaseUtils.checkLoginTimeout();
         if (timeOut) {
-            toastr.warning(BaseUtils.loginTimeOutMsg);
+            this.LoginTimeOutHandler();
             return true;
         }
         return false;
@@ -168,7 +168,7 @@ var BaseUtils = {
      */
     checkIsLoginTimeOut:function(status) {
         if (status == 504) {
-            toastr.warning(BaseUtils.loginTimeOutMsg);
+            this.LoginTimeOutHandler();
             return true;
         }
         return false;
@@ -180,8 +180,35 @@ var BaseUtils = {
      */
     LoginTimeOutHandler:function() {
         toastr.warning(BaseUtils.loginTimeOutMsg);
+        $("#progress-bar-time-out").css("width",  "100%");
+        $('.outValue').html(30);
+        setTimeout(function (){
+            $("#session-timeout-dialog").show();
+            BaseUtils.countDown(31, 100);
+        }, 5000);
+
     },
 
+    /**
+     * 倒计时
+     * @param seconds
+     * @param progress
+     */
+    countDown :function(seconds, progress) {
+        if (seconds > 0){
+            seconds--;
+            progress = progress-3.3;
+            $("#progress-bar-time-out").css("width", progress + "%");
+            $('.outValue').html(seconds);
+            if (seconds == 0) {
+                window.location.href = "login.html";
+            }
+            // 定时1秒调用一次
+            setTimeout(function(){
+               BaseUtils.countDown(seconds, progress);
+            },1000);
+        }
+    },
     /**
      * 获取当前租户id
      */

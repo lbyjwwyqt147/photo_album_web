@@ -84,8 +84,21 @@ var SnippetMainPageHomeIndex = function() {
         //退出按钮事件
         $(".home_m_card_user_flaticon_logout").click(function (e) {
             e.preventDefault();
-            window.location.href = "login.html";
             toastr.success("退出系统,即将重新登录!");
+            setTimeout(function (){
+                window.location.href = "login.html";
+            }, 2000);
+            return false;
+        });
+        $('#session-timeout-dialog-login').click(function(e) {
+            e.preventDefault();
+            window.location.href = "login.html";
+            return false;
+        });
+        $('#session-timeout-dialog-close').click(function(e) {
+            e.preventDefault();
+            console.log("====");
+            $("#session-timeout-dialog").hide();
             return false;
         });
     };
@@ -180,7 +193,7 @@ var SnippetMainPageHomeIndex = function() {
         // public functions
         init: function() {
             initHomeMenuData();
-           initHomeContentTab();
+            initHomeContentTab();
         }
     };
 }();

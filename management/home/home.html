@@ -325,6 +325,42 @@
 
 		<!-- end:: Page -->
 
+		<!-- begin :: 登录超时 modal  -->
+		<div class="modal fade show" id="session-timeout-dialog" style="display: none;" >
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="top: 1rem;">×</button>
+						<h4 class="modal-title">会话超时通知</h4>
+					</div>
+					<div class="modal-body" style="padding: 25px;">
+						<p style="margin-bottom: 1rem;">你的登录信息已经过期.</p>
+						<p  style="margin-bottom: 1rem;"><span class="outValue">30</span>s后自动跳转到登录界面.</p>
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped countdown-bar active" id="progress-bar-time-out" role="progressbar" style="min-width: 15px; width: 100%;">
+								<span class="countdown-holder"><span class="outValue">30</span>s</span>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<a href="#" id="session-timeout-dialog-login" class="btn btn-primary m-btn m-btn--icon">
+							<span>
+								<i class="la la-sign-in"></i>
+								<span>重新登录</span>
+							</span>
+						</a>
+					<!--	<a href="#" id="session-timeout-dialog-close" class="btn btn-primary m-btn m-btn&#45;&#45;icon">
+						<span>
+								<i class="la la-close"></i>
+								<span>取消</span>
+							</span>
+						</a>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end :: 登录超时 modal  -->
+
 
 		<!-- begin::Scroll Top -->
 		<div id="m_scroll_top" class="m-scroll-top">
