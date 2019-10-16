@@ -7,7 +7,7 @@ body {
 }
 
 .m-body .m-wrapper {
-    padding: 30px 20px 15px 20px;
+    padding: 0px 20px 15px 20px;
     border-bottom-right-radius: 6px;
 }
 
@@ -229,7 +229,7 @@ figure.effect-chico:hover img {
 }
 
 .m--font-info {
-    color: #3956ab !important;
+    color: #0040a5 !important;
 }
 
 .m-widget5 .m-widget5__item {
