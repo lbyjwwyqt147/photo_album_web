@@ -27,7 +27,7 @@ body {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     background-color: rgba(137,190,178, 1);
-    box-shadow: 0px 20px 20px -18px rgba(114,83,52, 1);
+    box-shadow: 0px 2px 10px 0px rgba(114,83,52, 1);
 
 }
 
