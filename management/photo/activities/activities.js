@@ -15,7 +15,6 @@ var SnippetMainPageActivities = function() {
         var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(activitiesMainPageModuleCode);
         if (functionButtonGroup != null) {
             var gridHeadToolsHtml = $("#activities-mainPage-grid-head-tools");
-            var tableToolbarHtml = $("#activities_mainPage_table_toolbar");
 
             var buttonGroup = functionButtonGroup.split(';');
             //如果arry数组里面存在"指定字符" 这个字符串则返回该字符串的数组下标，否则返回(不包含在数组中) -1
@@ -52,7 +51,8 @@ var SnippetMainPageActivities = function() {
     var activitiesMainPageInitDataGrid = function (params) {
         if (params == null) {
             params = {
-                'pageSize' : activitiesGridPageSize
+                'pageSize' : activitiesGridPageSize,
+                'maturity' : 0
             }
         }
         layui.use('flow', function(){
@@ -125,6 +125,18 @@ var SnippetMainPageActivities = function() {
         $activityStatus .selectpicker('refresh');
         var $maturityQuery = $("#maturity-query")
         $maturityQuery .selectpicker('refresh');
+        // 状态选择事件绑定
+        $activityStatus.on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+           // var curSelectedValue = e.target.value;
+            activitiesMainPageRefreshGrid();
+        });
+        // 是否到期选择事件绑定
+        $maturityQuery.on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+            // var curSelectedValue = e.target.value;
+            activitiesMainPageRefreshGrid();
+        });
     }
 
     /**

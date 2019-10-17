@@ -850,9 +850,7 @@ var BaseUtils = {
         var w = img.width;
         var h = img.height;
         wRatio = maxWidth / w;
-        console.log(wRatio);
         hRatio = maxHeight / h;
-        console.log(hRatio);
         if (maxWidth ==0 && maxHeight==0){
             Ratio = 1;
         }else if (maxWidth==0){//

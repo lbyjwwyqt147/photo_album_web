@@ -7,7 +7,7 @@ body {
 }
 
 .m-body .m-wrapper {
-    padding: 0px 20px 15px 20px;
+    padding: 10px 20px 15px 20px;
     border-bottom-right-radius: 6px;
 }
 
@@ -169,7 +169,7 @@ figure.effect-chico:hover img {
 }
 
 .kt-callout--success {
-    background-color: rgba(10, 187, 135, 0.07) !important;
+    background-color: rgba(199, 237, 233, 0.7) !important;
 }
 
 .kt-callout--danger {
@@ -181,7 +181,7 @@ figure.effect-chico:hover img {
 }
 
 .kt-callout--disabled {
-    background-color: rgba(139, 137, 137, 0.1) !important;
+    background-color: rgba(114, 111, 128, 0.2) !important;
 }
 
 .m-image-title-class {

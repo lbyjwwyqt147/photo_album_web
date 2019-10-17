@@ -34,6 +34,23 @@
         max-width: 100%;
     }
 
+    #activities-page-frame .activities-list-image-title {
+        position: absolute;
+        z-index: 1;
+        display:block;
+        padding-left: 0rem;
+        overflow:hidden;
+        margin-bottom: 0px;
+        bottom: 15.2%;
+        width: 37%;
+        text-align: center;
+        height: 35px;
+        line-height: 35px;
+        color: #ffffff;
+        font-size: 1.6rem;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
    /* .kt-portlet__body:hover {
         background-color: rgba(93, 120, 255, 0.1);
     }*/
@@ -69,7 +86,7 @@
                                                 <label class="col-xl-1 col-form-label" style="width: 50%;">状态:</label>
                                                 <div class="col-xl-1" >
                                                     <select  class="form-control m-bootstrap-select m_selectpicker" name="activityStatus" id="activity-status-query"  placeholder="状态" autocomplete="off">
-                                                        <option value="" >请选择</option>
+                                                        <option value="" >全部</option>
                                                         <option value="0" >已发布</option>
                                                         <option value="2" >已下架</option>
                                                         <option value="1" >草稿</option>
@@ -103,7 +120,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="row"  id="activities_mainPage_grid" >
+                            <div class="row"  id="activities_mainPage_grid" style="min-height: 500px;">
 
                             </div>
                         </div>

@@ -111,9 +111,12 @@ var SnippetMainPageHumanPortrait = function() {
      * 初始化 select 组件
      */
     var humanPortraitMainPageInitSelectpicker = function () {
-        $("#albumClassification").selectpicker('refresh');
-        $("#album-status-query").selectpicker('refresh');
-        $("#album-display-query").selectpicker('refresh');
+        var $albumClassification = $("#albumClassification");
+        $albumClassification.selectpicker('refresh');
+        var $albumStatusQuery = $("#album-status-query");
+        $albumStatusQuery.selectpicker('refresh');
+        var $albumDisplayQuery = $("#album-display-query");
+        $albumDisplayQuery.selectpicker('refresh');
         var $albumStyle = $("#album-style");
         $albumStyle.select2({
             placeholder: "风格",
@@ -124,6 +127,24 @@ var SnippetMainPageHumanPortrait = function() {
             Object.keys(data).forEach(function(key){
                 $albumStyle.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
             });
+        });
+        // 类型选择事件绑定
+        $albumClassification.on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+            // var curSelectedValue = e.target.value;
+            humanPortraitMainPageRefreshGrid();
+        });
+        // 状态选择事件绑定
+        $albumStatusQuery.on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+            // var curSelectedValue = e.target.value;
+            humanPortraitMainPageRefreshGrid();
+        });
+        // 显示在首页选择事件绑定
+        $albumDisplayQuery.on("changed.bs.select",function(e){
+            // e 的话就是一个对象 然后需要什么就 “e.参数” 形式 进行获取
+            // var curSelectedValue = e.target.value;
+            humanPortraitMainPageRefreshGrid();
         });
     }
 
