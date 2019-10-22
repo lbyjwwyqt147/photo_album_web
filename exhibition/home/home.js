@@ -61,11 +61,7 @@ var SnippetMainPageLeadingEndMainIndex = function() {
             $('.leading_main_portrait_carousel_btn').click(function(e) {
                 e.preventDefault();
                 var curType = $(this).attr("variety");
-                console.log(curType);
-
                 var curVal = $(this).attr("value");
-                console.log(curVal);
-
                 if (curType == "1" && curVal != null && curVal != "" ) {
                     window.open("../../exhibition/home/index.html?"+ curVal + "&10");
                 }
