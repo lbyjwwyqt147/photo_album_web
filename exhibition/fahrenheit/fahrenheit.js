@@ -56,6 +56,13 @@ var SnippetMainPageFahrenheitIndex = function() {
         });
     };
 
+    /**
+     * 刷新grid
+     */
+    var initFahrenheitPageRefreshDataGrid = function (params) {
+        $("#leading_fahrenheit_portrait_mainPage_grid").html('');
+        initFahrenheitData(params);
+    };
 
     var initFahrenheitCarousel = function () {
         $getAjax({
@@ -146,6 +153,10 @@ var SnippetMainPageFahrenheitIndex = function() {
         init: function() {
             initFahrenheitData();
             initFahrenheitCarousel();
+        },
+        initRefreshDataGrid: function(params) {
+            initFahrenheitPageRefreshDataGrid(params);
+            BaseUtils.scrollTo("#leading_fahrenheit_portrait_mainPage_grid", 5000);
         }
     };
 }();

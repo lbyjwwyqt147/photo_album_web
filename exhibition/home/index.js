@@ -54,16 +54,12 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                  * 头部导航菜单点击事件
                  */
                 $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-                    console.log(e.target)          // 当前活动的标签页
-                    console.log(e.relatedTarget)   // 上一次活动的标签页
+                   // console.log(e.target)          // 当前活动的标签页
+                  //  console.log(e.relatedTarget)   // 上一次活动的标签页
                     var curClassify = $(this).attr("value");
                     var curContentUrl = $(this).attr("content");
-                    console.log(curClassify);
                     initLeadingEndHomeMenuEvent(curClassify);
                     var curHrefDiv = $(e.target).attr("href");
-                    console.log(curHrefDiv);
-                    console.log( $(curHrefDiv));
-
                     $(curHrefDiv).html(initLeadingEndHomeTabsContent(curContentUrl, curHrefDiv))
                 });
             },
@@ -80,12 +76,18 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
         var navSticky = $("#m-nav-sticky");
         navSticky.hide();
         navSticky.html("");
-        if (classify == 2) {
+        if (classify == 2 || classify == 4 ) {
             // 获取写真照片 风格数据
             BaseUtils.dictDataSelect("image_style", function (data) {
+                var rootItemHtml = '<li class="m-nav-sticky__item" data-toggle="m-tooltip" title="全部风格" data-placement="left">\n';
+                rootItemHtml += '<a href="#" class="type-sticky__item" value="">\n';
+                rootItemHtml +=   "全部\n";
+                 rootItemHtml +=  '</a>\n';
+                 rootItemHtml +=  '</li>\n';
+                navSticky.append(rootItemHtml);
                 Object.keys(data).forEach(function(key){
                 var itemHtml = '<li class="m-nav-sticky__item" data-toggle="m-tooltip" title="'+data[key].text+'" data-placement="left">\n';
-                    itemHtml += '<a href="https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank" value="'+data[key].id+'">\n';
+                    itemHtml += '<a href="#" class="type-sticky__item" value="'+data[key].id+'">\n';
                     itemHtml +=  data[key].text + "\n";
                     itemHtml +=  '</a>\n';
                     itemHtml +=  '</li>\n';
@@ -93,6 +95,29 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                 });
             });
             navSticky.show();
+            $('.type-sticky__item').click(function(e) {
+                e.preventDefault();
+                $(".m-nav-sticky__item").removeClass("active");
+                var $this = $(this);
+                $this.parent().addClass("active")
+                var $albumStyle = $this.attr("value");
+                var params = {
+                    'pageSize' : 20,
+                    'albumClassify' : 1,
+                    'albumStatus' : 0,
+                    'albumStyle': $albumStyle
+                };
+                if (classify == 2) {
+                    // 写真馆
+                    params.albumClassification = 1;
+                    SnippetMainPageFahrenheitIndex.initRefreshDataGrid(params);
+                } else if (classify == 4) {
+                    // 客片馆
+                    params.albumClassification = 2;
+                    SnippetMainPageLoveshowIndex.initLoveshowRefreshDataGrid(params);
+                }
+                return false;
+            });
         }
     };
 
@@ -102,8 +127,6 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
      */
     var initLeadingEndHomeTabsContent = function (target, divId) {
         var tabContent = $(divId);
-        console.log(" -==== tab 内容 如下  === ");
-        console.log($.trim(tabContent.html()));
         if (businessType == 10) {
             tabContent.html("");
         };

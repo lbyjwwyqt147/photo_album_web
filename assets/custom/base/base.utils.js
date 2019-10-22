@@ -866,6 +866,24 @@ var BaseUtils = {
         }
         objImg.height = h;
         objImg.width = w;
+    },
+
+    /**
+     * 页面可视区滚动到指定位置
+     * @param element   位置区域ID属性
+     * @param speed
+     */
+    scrollTo : function(element,speed) {
+        if(!speed){
+            speed = 300;
+        }
+        if(!element){
+            $("html,body").animate({scrollTop:0},speed);
+        }else{
+            if(element.length>0){
+                $("html,body").animate({scrollTop:$(element).offset().top-80},speed);
+            }
+        }
     }
 
 };

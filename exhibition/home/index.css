@@ -99,6 +99,12 @@ body {
     border-radius: 8px 8px 8px 8px;
 }
 
+li.m-nav-sticky__item.active {
+    background: rgba(244,208,0, 1) !important;
+    border-radius: 2px 2px 2px 2px;
+}
+
+
 /** 首页页面样式  结束 **/
 
 
@@ -215,7 +221,6 @@ figure.effect-chico:hover img {
      -webkit-box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
      box-shadow: 0px 1px 1px 1px rgba(81, 77, 92, 0.01);
 }
-
 
 /** 分隔标题样式 结束  */
 

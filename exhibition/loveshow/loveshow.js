@@ -1,5 +1,5 @@
 /***
- * 写真页面
+ * 客片页面
  * @type {{init: SnippetMainPageLoveshowIndex.init}}
  */
 var SnippetMainPageLoveshowIndex = function() {
@@ -56,6 +56,13 @@ var SnippetMainPageLoveshowIndex = function() {
         });
     };
 
+    /**
+     * 刷新grid
+     */
+    var initLoveshowPageRefreshDataGrid = function (params) {
+        $("#leading_loveshow_portrait_mainPage_grid").html('');
+        initLoveshowData(params);
+    };
 
     var initLoveshowCarousel = function () {
         $getAjax({
@@ -146,6 +153,10 @@ var SnippetMainPageLoveshowIndex = function() {
         init: function() {
             initLoveshowData();
             initLoveshowCarousel();
+        },
+        initLoveshowRefreshDataGrid: function(params) {
+            initLoveshowPageRefreshDataGrid(params);
+            BaseUtils.scrollTo("#leading_loveshow_portrait_mainPage_grid", 5000);
         }
     };
 }();
