@@ -85,13 +85,14 @@ var ImagesView = {
         images_col_div += '<div class="m-dropdown__body">\n';
         images_col_div += '<div class="m-dropdown__content">\n';
         images_col_div += '<ul class="m-nav">\n';
-        images_col_div += '<li class="m-nav__item">\n';
-        images_col_div += '<a href="#" class="'+rowId+'_edit_btn m-nav__link"  value = "'+v.id+'" status = "'+v.status+'" dataVersion = "'+v.dataVersion+'">\n';
-        images_col_div += '<i class="m-nav__link-icon flaticon-edit"></i>\n';
-        images_col_div += '<span class="m-nav__link-text">编辑</span>\n';
-        images_col_div += '</a>\n';
-        images_col_div += '</li>\n';
         if (v.status != 0) {
+            images_col_div += '<li class="m-nav__item">\n';
+            images_col_div += '<a href="#" class="'+rowId+'_edit_btn m-nav__link"  value = "'+v.id+'" status = "'+v.status+'" dataVersion = "'+v.dataVersion+'">\n';
+            images_col_div += '<i class="m-nav__link-icon flaticon-edit"></i>\n';
+            images_col_div += '<span class="m-nav__link-text">编辑</span>\n';
+            images_col_div += '</a>\n';
+            images_col_div += '</li>\n';
+
             images_col_div += '<li class="m-nav__item">\n';
             images_col_div += '<a href="#" class="'+rowId+'_publish_btn m-nav__link"  value = "'+v.id+'" status = "'+v.status+'" dataVersion = "'+v.dataVersion+'">\n';
             images_col_div += '<i class="m-nav__link-icon flaticon-interface-7"></i>\n';

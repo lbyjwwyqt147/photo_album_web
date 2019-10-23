@@ -384,18 +384,17 @@
              */
             function addFile( file ){
                 var index = $queue.find('li').length;
-                var calculateWidth = thumbnailWidth + 8
+                var calculateWidth = thumbnailWidth + 6
                 var imgLeft = index * calculateWidth;
-                var imgTop = 13;
-                var wrapHeight = thumbnailHeight + 20;
-                var wrapWidth = $queue.width() + 20 + 10;
+                var imgTop = 8;
+                var wrapHeight = thumbnailHeight + 13;
+                var wrapWidth = $queue.width() + 2;
                 if( imgLeft >= wrapWidth){
-                    imgTop = (parseInt(imgLeft/wrapWidth) * wrapHeight) + 10;
+                    imgTop = (parseInt(imgLeft/wrapWidth) * wrapHeight) + 3;
                     wrapHeight = imgTop + wrapHeight;
-                    imgLeft = (index % (parseInt(wrapWidth/calculateWidth)) ) * calculateWidth;
-                   if (imgLeft == 0) {
-                       imgLeft = 2
-                    }
+                    var arrange = Math.round(wrapWidth/calculateWidth);
+                    var sequence = index % arrange;;
+                    imgLeft = sequence * calculateWidth;
                 }
                 if (imgLeft == 0) {
                     imgLeft = 2
@@ -447,7 +446,7 @@
                                 $wrap.empty().append( img );
                             } else {
                                 // 图片预览
-                                console.log(" 直接访问图片地址..........")
+                               // console.log(" 直接访问图片地址..........")
                                 /* $.ajax('../../server/preview.php', {
                                      method: 'POST',
                                      data: src,
@@ -710,7 +709,7 @@
 
 
             if( !WebUploader.Uploader.support() ) {
-                console.log('WebUploader 不支持');
+                toastr.warning('WebUploader 不支持');
                 throw new Error('WebUploader does not support');
             }
 
@@ -722,12 +721,12 @@
                 }else if (type == "Q_EXCEED_NUM_LIMIT"){
                     toastr.warning("图片总数不能超过" + options.fileNumLimit + "张", "图片数量错误");
                 } else {
-                    console.log("上传出错！请检查后重新上传！错误代码：" + type);
+                    toastr.error("上传出错！请检查后重新上传！错误代码：" + type);
                 }
             });
 
             uploader.onError = function( code ) {
-                console.log( '上传 Eroor: ' + code );
+                toastr.error( '上传 Eroor: ' + code );
             };
 
             //当 uploader 被重置的时候触发。
