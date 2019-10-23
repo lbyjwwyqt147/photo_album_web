@@ -71,7 +71,7 @@ var SnippetMainPageUploadingLook= function() {
                 $.each(datas, function(index,item){
                     var  imageHtml = '<div class="col-xl-2" style="padding-top: 10px;">\n';
                     imageHtml += '<a href="'+ item.pictureLocation +'" data-fancybox="images" >\n';
-                    imageHtml += '<img onload="BaseUtils.autoResizeImage(340,340,this)" src="'+item.pictureLocation+'" width="0" height="0" />\n';
+                    imageHtml += '<img onload="BaseUtils.autoResizeImage(245,245,this)" src="'+item.pictureLocation+'" width="0" height="0" />\n';
                     imageHtml += '</a>\n';
                     imageHtml += '</div>\n';
                     imageList.append(imageHtml);
