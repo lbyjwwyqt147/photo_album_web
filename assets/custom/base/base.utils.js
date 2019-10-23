@@ -180,11 +180,15 @@ var BaseUtils = {
      */
     LoginTimeOutHandler:function() {
         toastr.warning(BaseUtils.loginTimeOutMsg);
-        $("#progress-bar-time-out").css("width",  "100%");
-        $('.outValue').html(30);
         setTimeout(function (){
-            $("#session-timeout-dialog").show();
-            BaseUtils.countDown(31, 100);
+            layer.closeAll();
+            var $timeoutProgress = $("#session-timeout-dialog");
+            if ( $timeoutProgress.is(":hidden")) {
+                $("#progress-bar-time-out").css("width",  "100%");
+                $('.outValue').html(30);
+                $("#session-timeout-dialog").show();
+                BaseUtils.countDown(31, 100);
+            };
         }, 5000);
 
     },

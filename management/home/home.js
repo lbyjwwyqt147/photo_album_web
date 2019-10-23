@@ -97,7 +97,6 @@ var SnippetMainPageHomeIndex = function() {
         });
         $('#session-timeout-dialog-close').click(function(e) {
             e.preventDefault();
-            console.log("====");
             $("#session-timeout-dialog").hide();
             return false;
         });
