@@ -59,6 +59,12 @@
                             <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="photo_uploading_mainPage_look_form">
                                 <div class="m-portlet__body" id="photo_uploading_form_body" style="padding-top: 10px; padding-bottom: 5px;">
                                     <div class="form-group m-form__group row ">
+                                        <label class="col-form-label col-lg-3 col-sm-12">封面:</label>
+                                        <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <a data-fancybox="gallery" id="surface-plot-image-href" href=""><img class="layui-upload-img" style="display: none" id="surface-plot-image" width="170" height="76"></a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">主题:</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <input type="text" class="form-control m-input" name="albumName" id="album-name" placeholder="主题"    autocomplete="off" readonly>
@@ -83,12 +89,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group m-form__group row">
+                                <!--    <div class="form-group m-form__group row">
                                         <label class="col-form-label col-lg-3 col-sm-12">背景音乐地址:</label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <input type="text" class="form-control m-input"  name="albumMusicAddress" placeholder="背景音乐地址" autocomplete="off" readonly >
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="form-group m-form__group row">
                                         <label class="col-form-label col-lg-3 col-sm-12">摄影师:</label>
@@ -160,6 +166,7 @@
 
 <script type="text/javascript" src="../../../assets/custom/base/base.utils.js" ></script>
 <script type="text/javascript" src = "../../../assets/custom/base/base.ajax.js"></script>
+<script src="../../../assets/custom/base/images.view.js" type="text/javascript"></script>
 <script src="../../../management/photo/album/photo-uploading-look.js" type="text/javascript"></script>
 
 </body>

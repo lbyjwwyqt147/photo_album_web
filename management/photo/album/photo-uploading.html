@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../../assets/custom/plugins/webuploader/css/webuploader.css" />
     <link rel="stylesheet" type="text/css" href="../../../assets/custom/plugins/webuploader/css/style.css" />
     <link href="../../../assets/custom/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"  media="all" >
+    <link rel="stylesheet" type="text/css" href="../../../assets/custom/plugins/fancybox/jquery.fancybox.min.css">
     <link href="../../../management/home/home.css" rel="stylesheet"  type="text/css">
     <style>
 
@@ -137,6 +138,13 @@
                             <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="photo_uploading_mainPage_dataSubmit_form">
                                 <div class="m-portlet__body" id="photo_uploading_form_body" style="padding-top: 10px; padding-bottom: 5px;">
                                     <div class="form-group m-form__group row ">
+                                        <label class="col-form-label col-lg-3 col-sm-12">封面:<span class="has-danger-error">*</span></label>
+                                        <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <a data-fancybox="gallery" id="surface-plot-image-href" href=""><img class="layui-upload-img" style="display: none " id="surface-plot-image" width="170" height="76"></a>
+                                            <button type="button" class="layui-btn" id="surfacePlot"><i class="layui-icon"></i>上传封面</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row ">
                                         <label class="col-form-label col-lg-3 col-sm-12">主题:<span class="has-danger-error">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <input type="text" class="form-control m-input" name="albumName" id="album-name" placeholder="主题"    autocomplete="off">
@@ -254,6 +262,8 @@
                                         <input type="hidden" class="form-control  m-input" name="albumClassify" id="albumClassify" placeholder="albumClassify"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="pictures" id="photo-file-list" placeholder="file-list"  autocomplete="off">
                                         <input type="hidden" class="form-control  m-input" name="albumNumber"  placeholder="albumNumber"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="surfacePlot" id="surface-plot"  placeholder="surfacePlot"  autocomplete="off">
+                                        <input type="hidden" class="form-control  m-input" name="surfacePlotId" id="surface-plot-id"  placeholder="surfacePlot"  autocomplete="off">
                                     </div>
 
                                     <div class="modal-footer" style="padding-right: 9%;">
@@ -313,10 +323,11 @@
 <script type="text/javascript" src = "../../../assets/custom/plugins/jsencrypt/crypto-js.js"></script>
 <script type="text/javascript" src = "../../../assets/custom/plugins/jsencrypt/mode-ecb.js"></script>
 <script type="text/javascript" src = "../../../assets/custom/plugins/jsencrypt/pad-zeropadding.js"></script>
- <script type="text/javascript" src="../../../assets/custom/plugins/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="../../../assets/custom/plugins/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="../../../assets/custom/plugins/fancybox/jquery.fancybox.min.js"></script>
 
 <script type="text/javascript" src="../../../assets/custom/base/base.utils.js" ></script>
- <script type="text/javascript" src = "../../../assets/custom/base/base.ajax.js"></script>
+<script type="text/javascript" src = "../../../assets/custom/base/base.ajax.js"></script>
 <script type="text/javascript" src="../../../assets/custom/plugins/webuploader/images-extend-webuploader.js"></script>
 <script src="../../../management/photo/album/photo-uploading.js" type="text/javascript"></script>
 

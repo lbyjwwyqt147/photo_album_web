@@ -47,6 +47,12 @@ var SnippetMainPageUploadingLook= function() {
         $("#albumPhotographyAuthor-name").val(obj.albumPhotographyAuthorText);
         $("#albumStyle-name").val(obj.albumStyleText);
         $("#albumClassification-name").val(obj.albumClassificationText);
+        if (obj.surfacePlot != null) {
+            $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
+            $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+            $('#surface-plot-image').show();
+            $('#surface-plot-image-href').attr('href', obj.surfacePlot);
+        }
     };
 
     /**

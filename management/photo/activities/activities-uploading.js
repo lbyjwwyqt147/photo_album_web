@@ -83,10 +83,12 @@ var SnippetMainActivitiesPageUploading= function() {
         $("input[name='activityPrice']").val(obj.activityPrice);
         $("input[name='originalPrice']").val(obj.originalPrice);
         $("input[name='activityPriority']").val(obj.activityPriority);
-        $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
-        $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
-        $('#surface-plot-image').show();
-        $('#surface-plot-image-href').attr('href', obj.surfacePlot);
+        if (obj.surfacePlot != null) {
+            $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
+            $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+            $('#surface-plot-image').show();
+            $('#surface-plot-image-href').attr('href', obj.surfacePlot);
+        }
     };
 
     /**
@@ -156,7 +158,6 @@ var SnippetMainActivitiesPageUploading= function() {
                 },
                 done: function(res){
                     // 上传完毕回调
-                    console.log(res);
                     if (res.success) {
                         var imageObj = res.data[0];
                         $("#surface-plot").val(imageObj.fileCallAddress);
@@ -188,6 +189,11 @@ var SnippetMainActivitiesPageUploading= function() {
     var uploadingMainPageFormSubmitHandle = function() {
         $("#activity-description").val(BaseUtils.textareaTo( $("#activity-description").val()));
         BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
+        if ($("#surface-plot").val() == "") {
+            toastr.error("请上传封面图.");
+            BaseUtils.scrollTo("#surfacePlot", 1000);
+            return;
+        }
         uploadingMainPageSubmitForm.validate({
             rules: {
                 activityTheme: {

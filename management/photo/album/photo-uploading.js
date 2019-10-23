@@ -56,6 +56,52 @@ var SnippetMainPageUploading= function() {
             },
             headers : BaseUtils.cloudHeaders()
         });
+
+        // 封面上传组件
+        layui.use('upload', function(){
+            var $ = layui.jquery
+                ,layuiUpload = layui.upload;
+            var curUser = BaseUtils.getCurrentUser();
+            //拖拽上传
+            uploadInst =  layuiUpload.render({
+                elem: '#surfacePlot',
+                auto: true, //选择文件后自动上传
+                drag: false,
+                accept: 'images', //只允许上传图片
+                acceptMime: 'image/*', //只筛选图片
+                size: 20*1024*1024, //限制文件大小，单位 KB
+                url: 'http://127.0.0.1:18080/api/v1/verify/file/upload/batch',
+                data: {
+                    'systemCode' : BaseUtils.systemCode,
+                    'businessCode' : 11,
+                    'uploaderId' : curUser.id,
+                    'uploaderName': curUser.name,
+                    'lesseeId' : 1,
+                    'lesseeName' : '青橙摄影工作室',
+                },
+                headers: BaseUtils.cloudHeaders(),
+                before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#surface-plot-image').attr('src', result); //图片链接（base64）
+                        $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+                        $('#surface-plot-image').show();
+                        $('#surface-plot-image-href').attr('href', result);
+                    });
+                },
+                error: function(index, upload){
+                    //当上传失败时，你可以生成一个“重新上传”的按钮，点击该按钮时，执行 upload() 方法即可实现重新上传
+                },
+                done: function(res){
+                    // 上传完毕回调
+                    if (res.success) {
+                        var imageObj = res.data[0];
+                        $("#surface-plot").val(imageObj.fileCallAddress);
+                        $("#surface-plot-id").val(imageObj.id);
+                    }
+                }
+            });
+        });
     };
 
     /**
@@ -88,6 +134,13 @@ var SnippetMainPageUploading= function() {
         }
         $("#photo_uploading_mainPage_dataSubmit_form_uploading_seq").val(obj.albumPriority);
         // $("#albumDescription").val(BaseUtils.toTextarea( obj.albumDescription));
+        if (obj.surfacePlot != null) {
+            $('#surface-plot-image').attr('src', obj.surfacePlot); //图片链接
+            $('#surface-plot-image').attr("onload", "BaseUtils.imageAutoSize(this,150,75)");
+            $('#surface-plot-image').show();
+            $('#surface-plot-image-href').attr('href', obj.surfacePlot);
+        }
+
     };
 
     /**
@@ -180,6 +233,11 @@ var SnippetMainPageUploading= function() {
      */
     var uploadingMainPageFormSubmitHandle = function() {
         BaseUtils.formInputTrim(uploadingMainPageSubmitFormId);
+        if ($("#surface-plot").val() == "") {
+            toastr.error("请上传封面图.");
+            BaseUtils.scrollTo("#surfacePlot", 1000);
+            return;
+        }
         uploadingMainPageSubmitForm.validate({
             rules: {
                 albumName: {

@@ -226,9 +226,6 @@ var ImagesView = {
         images_col_div += '</div>\n';
         images_col_div += '</div>\n';
         return images_col_div;
-    },
-
-
-
+    }
 
 }
