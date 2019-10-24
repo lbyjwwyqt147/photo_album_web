@@ -74,8 +74,8 @@ var SnippetMainPageHomeIndex = function() {
     var initHomeMenuEvent = function () {
         // 鼠标移到菜单事件
         $('.m-menu__link_css').mouseout(function(element){
-            $(this).children('i').css('color','#666');
-            $(this).children('span').css('color','#666');
+            $(this).children('i').css('color','#0C0C0C');
+            $(this).children('span').css('color','#0C0C0C');
         }).mouseover(function(element){
             $(this).children('i').css('color','white');
             $(this).children('span').css('color','white');

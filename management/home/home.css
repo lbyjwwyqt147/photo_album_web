@@ -150,6 +150,9 @@ body.m-aside-left--skin-light .m-header {
 .m-aside-left {
     width: 210px;
 }
+.m-menu__link-text {
+    color: #0C0C0C !important;
+}
 /** 左边菜单栏 padding样式  */
 .m-aside-menu .m-menu__nav > .m-menu__item > .m-menu__link {
     padding:0px 25px 0px 15px !important;
@@ -201,12 +204,10 @@ body.m-aside-left--skin-light .m-header {
 }
 
 .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item.m-menu__item--open > .m-menu__heading .m-menu__link-text, .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item.m-menu__item--open > .m-menu__link .m-menu__link-text {
-    color: #868aa8;
     padding-left: 5px !important;
 }
 
 .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item .m-menu__submenu .m-menu__item > .m-menu__heading .m-menu__link-text, .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item .m-menu__submenu .m-menu__item > .m-menu__link .m-menu__link-text {
-    color: #686c89;
     padding-left: 5px !important;
 }
 
@@ -221,7 +222,7 @@ body.m-aside-left--skin-light .m-header {
 
 /** 菜单选中后 样式  */
 .m-menu__item.m-menu__item--active > .m-menu__link_css {
-    background-color: cadetblue !important;
+    background-color: rgba(69,137,148, 1) !important;
 }
 
 .m-menu__item.m-menu__item--active >  .m-menu__link_css > .m-menu__item-here {
@@ -243,23 +244,28 @@ body.m-aside-left--skin-light .m-header {
     color: #ffffff !important;
 }
 
+.m-menu__item--active >  .m-menu__link-text {
+    color: #ffffff !important;
+}
+
 /** 菜单展开后样式 */
 .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item.m-menu__item--open {
     -webkit-transition: background-color 0.3s;
     transition: background-color 0.3s;
-    background-color: #E3EDCD;
+    background-color: rgba(178,200,187,0.4);
 }
 
 .m-menu__item.m-menu__item--open > .m-menu__toggle {
-    background-color: darkseagreen !important;
+    background-color: rgba(113,175,164,1) !important;
 }
 
 .m-menu__item a:hover{
-    background-color:cadetblue !important;
+    background-color:rgba(137,190,178,1) !important;
+    color: #ffffff !important;
 }
 
-.m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__heading .m-menu__link-text, .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-text {
-    color: #666;
+.m-menu__item span:hover{
+    color: #ffffff !important;
 }
 
 /**  左边菜单栏样式 结束  */
@@ -404,10 +410,10 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
     background-color: #f2f2f2;
 }
 .layui-tab-title .layui-this {
-    color: cadetblue;
+    color: rgba(69,137,148, 1);
     font-weight: bold;
     border-top: 2px solid transparent;
-    border-color: cadetblue !important;
+    border-color: rgba(69,137,148, 1) !important;
 }
 .layui-tab-content {
     padding: 0px;
