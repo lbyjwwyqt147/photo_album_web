@@ -1,5 +1,6 @@
 //== Class Definition
 var SnippetMainPageLeadingEndHomeIndex = function() {
+    var serverUrl = BaseUtils.serverAddress;
     var businessId = 0;
     var businessType = 0;
     /**
@@ -146,9 +147,34 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
     };
 
     /**
+     *  设置公司信息
+     */
+    var setCompanyInfo = function () {
+        $getAjax({
+            url:serverUrl + "v1/table/cmpany/details",
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            if (response.data != null) {
+                var dataObj = response.data[0];
+                $("#company-profile").val(BaseUtils.toTextarea( dataObj.companyProfile));
+
+                $("#uccn-index-company-name").html(dataObj.companyName);
+                $("#uccn-index-company-address").html(dataObj.businessAddress);
+                $("#uccn-index-company-tel").html(dataObj.companyPhone);
+                $("#uccn-index-company-hours\n").html(dataObj.businessHours);
+                $('#uccn-index-weixin-image').attr('src', dataObj.weixinImage);
+                $('#uccn-index-weixin-image').show();
+                $('#uccn-index-qq-image').attr('src', dataObj.qqImage);
+                $('#uccn-index-qq-image').show();
+                $("#icp-aq").html(dataObj.filing);
+            }
+        });
+    };
+
+    /**
      * 百度地图展示
      */
-    var baiduMap = function () {
+    var baiduMaps = function () {
         layui.use('layer', function(){ //独立版的layer无需执行这一句
             var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
         });
@@ -178,7 +204,8 @@ var SnippetMainPageLeadingEndHomeIndex = function() {
                 businessType = params[1];
             }
             initLeadingEndHomeHomeMenuData();
-            baiduMap();
+            setCompanyInfo();
+            baiduMaps();
             if (businessType == 10) {
                 initLeadingEndHomeTabsContent("../../exhibition/activities/details.html?"+businessId, "#m_portlet_base_picture_1_6_tab_content");
             } else {

@@ -4,16 +4,19 @@
  */
 var SnippetMainPageCultureIndex = function() {
     var serverUrl = BaseUtils.serverAddress;
+
     /**
-     * 初始化图片数据
+     * 初始化公司数据
      */
     var  initCultureData = function () {
         $getAjax({
             url:serverUrl + "v1/table/cmpany/details",
             headers: BaseUtils.serverHeaders()
         }, function (response) {
-            var datas =  response.data;
-
+            if (response.data != null) {
+                var dataObj = response.data[0];
+                $("#company_introduction").html(dataObj.companyProfile);
+            }
         });
     };
 
@@ -62,7 +65,7 @@ var SnippetMainPageCultureIndex = function() {
         // public functions
         init: function() {
             initCultureData();
-            initCultureCarousel();
+          //  initCultureCarousel();
         }
     };
 }();
