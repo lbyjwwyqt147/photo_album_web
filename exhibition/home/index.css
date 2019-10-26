@@ -167,11 +167,11 @@ figure.effect-chico:hover img {
 
 
 .m-portlet .m-portlet-fit--top {
-     margin-top: 0rem !important;
+     margin-top: 0px !important;
 }
 
 .m-portlet.m-portlet--bordered-semi .m-portlet__body {
-    padding-top: 0rem !important;
+    padding-top: 0px !important;
 }
 
 .kt-callout--success {
@@ -192,7 +192,7 @@ figure.effect-chico:hover img {
 
 .m-image-title-class {
     display: block;
-    padding-left: 0rem;
+    padding-left: 0px;
     width: 100%;
     text-align: center;
     height: 40px;
@@ -229,7 +229,7 @@ figure.effect-chico:hover img {
 .m-widget5 .m-widget5__item .m-widget5__content .m-widget5__section {
     display: table-cell;
     vertical-align: top;
-     padding-left: 0rem;
+     padding-left: 0px;
     padding-top: 0.3rem;
 }
 
