@@ -155,11 +155,11 @@ var ImagesView = {
 
         images_col_div += '<div class="m-widget19">\n';
         images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
-        images_col_div += '<img src="'+v.cover+'" alt="">\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;margin-bottom: 15px;">\n';
+        images_col_div += '<img src="'+v.cover+'" alt="" id="img-'+v.id+'"  >\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom:2.7rem;">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 92%;margin-bottom: 15px;">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 92%;padding-bottom: 2.7rem;">\n';
         images_col_div += v.total;
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';
