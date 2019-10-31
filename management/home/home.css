@@ -719,14 +719,14 @@ body.m-aside-left--skin-dark .m-header .m-header-head {
 }
 
 .m-portlet .m-portlet-fit--top {
-    margin-top: 0rem !important;
+    margin-top: 0px !important;
 }
 
 .kt-callout .kt-callout__body .kt-callout__content .kt-callout__desc {
     font-size: 1.15rem;
     line-height: 2rem;
     color: #48465b;
-    padding-right: 0rem;
+    padding-right: 0px;
     font-weight: 400;
 }
 
@@ -743,4 +743,6 @@ figure.effect-chico:hover img {
     -webkit-transform: scale(1.003);
     transform: scale(1.003);
 }
+
+
 /**  kt-callout 样式 结束 */

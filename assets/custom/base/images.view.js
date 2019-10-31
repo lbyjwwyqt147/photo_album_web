@@ -155,11 +155,11 @@ var ImagesView = {
 
         images_col_div += '<div class="m-widget19">\n';
         images_col_div += ' <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style="min-height: 200px">\n';
-        images_col_div += '<img src="'+v.cover+'" alt="">\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom: 0.5rem;">\n';
+        images_col_div += '<img src="'+v.cover+'" alt="" id="img-'+v.id+'"  >\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 1rem;padding-bottom:2.7rem;">\n';
         images_col_div += v.title;
         images_col_div += '\n</h3>\n';
-        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 92%;padding-bottom: 0.5rem;">\n';
+        images_col_div += '<h3 class="m-widget19__title m--font-light" style="padding-left: 92%;padding-bottom: 2.7rem;">\n';
         images_col_div += v.total;
         images_col_div += '\n</h3>\n';
         images_col_div += '<div class="m-widget19__shadow"></div>\n';
@@ -180,7 +180,7 @@ var ImagesView = {
      * @returns {string}
      */
     leadingPortraitListHtmlAppend:function (rowId, v) {
-        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer;">\n';
+        var images_col_div = '<div class="col-xl-3 '+rowId+'_fancybox_btn" value = "'+v.id+'" style="cursor:pointer; margin-bottom: 15px; padding-left: 0px;">\n';
         images_col_div += '<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">\n';
         images_col_div += '<div class="m-portlet__head m-portlet__head--fit" style="padding: 0 1rem;height:auto;">\n';
         images_col_div += '<div class="m-portlet__head-caption">\n';

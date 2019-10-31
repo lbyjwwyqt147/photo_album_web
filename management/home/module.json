@@ -66,7 +66,7 @@
       "menuIcon": "la-outdent",
       "menuOpenUrl": "../photo/album/human-portrait/human-portrait.html",
       "moduleCode": "1020",
-      "moduleName": "写真集",
+      "moduleName": "写真馆",
       "modulePid": 2,
       "moduleType": 2,
       "status": 0
@@ -76,7 +76,7 @@
       "menuIcon": "la-outdent",
       "menuOpenUrl": "../photo/album/wang/wang.html",
       "moduleCode": "1021",
-      "moduleName": "婚纱照",
+      "moduleName": "婚纱馆",
       "modulePid": 2,
       "moduleType": 2,
       "status": 0
@@ -95,7 +95,7 @@
     "menuIcon": "flaticon-web",
     "menuOpenUrl": "",
     "moduleCode": "1002",
-    "moduleName": "相册管理",
+    "moduleName": "图像管理",
     "modulePid": 0,
     "moduleType": 1,
     "status": 0
