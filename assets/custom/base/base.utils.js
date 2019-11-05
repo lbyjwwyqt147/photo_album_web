@@ -11,6 +11,7 @@ var BaseUtils = {
     "saveSuccessMsg": "保存数据成功!",
     "saveFailMsg": "保存数据失败,请稍候再试!",
     "delFailMsg": "删除数据失败,请稍候再试!",
+    "getFailMsg": "获取数据失败,请稍候再试!",
     "errorMsg": "网络不稳定,请稍候再试!",
     "networkErrorMsg": "网络不稳定,请稍候再试!",
     'enable': '正常',

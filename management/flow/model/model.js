@@ -1,0 +1,369 @@
+/***
+ * 流程模型设计管理
+ * @type {{init}}
+ */
+var SnippetMainPageFlowModel = function() {
+    var serverUrl = BaseUtils.serverAddress;
+    var flowModelMainPageTable;
+    var flowModelMainPageMark = 1;
+    var flowModelMainPageModuleCode = 1050;
+    
+    /**
+     * 初始化 功能按钮
+     */
+    var flowModelMainPageInitFunctionButtonGroup = function () {
+        var functionButtonGroup = BaseUtils.getCurrentFunctionButtonGroup(flowModelMainPageModuleCode);
+        if (functionButtonGroup != null) {
+            var gridHeadToolsHtml = $("#flowModel-mainPage-grid-head-tools");
+            var tableToolbarHtml = $("#flowModel_mainPage_table_toolbar");
+
+            var buttonGroup = functionButtonGroup.split(';');
+            //如果arry数组里面存在"指定字符" 这个字符串则返回该字符串的数组下标，否则返回(不包含在数组中) -1
+            var save_index = $.inArray("1", buttonGroup);
+            if (save_index != -1) {
+                var save_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="新建流程模型">\n';
+                save_btn_html += '<a href="javascript:;" class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" id="flowModel_mainPage_add_btn">\n';
+                save_btn_html += '<i class="la la-plus"></i>\n';
+                save_btn_html += '</a>\n';
+                save_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(save_btn_html);
+
+
+                var edit_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="修改流程模型" lay-event="edit">\n'
+                edit_btn_html += '<i class="la la-edit"></i>\n';
+                edit_btn_html += '</a>\n';
+                tableToolbarHtml.append(edit_btn_html);
+
+                var deploy_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="部署发布流程模型" lay-event="deploy">\n'
+                deploy_btn_html += '<i class="la la-edit"></i>\n';
+                deploy_btn_html += '</a>\n';
+                tableToolbarHtml.append(deploy_btn_html);
+            }
+            var delete_index = $.inArray("2", buttonGroup);
+            if (delete_index != -1) {
+                var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除流程模型">\n';
+                delete_btn_html += '<a href="javascript:;" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" id="flowModel_mainPage_delete_btn">\n';
+                delete_btn_html += '<i class="la la-trash-o"></i>\n';
+                delete_btn_html += '</a>\n';
+                delete_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(delete_btn_html);
+
+
+
+                var table_del_btn_html = '<a href="javascript:;" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 删除流程模型" lay-event="del">\n'
+                table_del_btn_html += '<i class="la la-trash-o"></i>\n';
+                table_del_btn_html += '</a>\n';
+                tableToolbarHtml.append(table_del_btn_html);
+
+            }
+
+            var table_look_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="查看流程模型" lay-event="look">\n'
+            table_look_btn_html += '<i class="la la-eye"></i>\n';
+            table_look_btn_html += '</a>\n';
+            tableToolbarHtml.append(table_look_btn_html);
+        }
+        // Tooltip
+        $('[data-toggle="m-tooltip"]').tooltip();
+    };
+
+    /**
+     *  初始化 dataGrid 组件
+     */
+    var flowModelMainPageInitDataGrid = function () {
+        layui.use('table', function(){
+            var layuiForm = layui.form;
+            flowModelMainPageTable =  $initEncrypDataGrid({
+                elem: '#flowModel_mainPage_grid',
+                url: serverUrl + 'v1/table/flow/model/g',
+                method:"get",
+                where: {   //传递额外参数
+
+                },
+                headers: BaseUtils.serverHeaders(),
+                title: '流程模型列表',
+                initSort: {
+                    field: 'createTime', //排序字段，对应 cols 设定的各字段名
+                    type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+                },
+                cols: [[
+                    {checkbox: true},
+                    {field:'id', title:'ID', unresize:true, hide:true },
+                    {field:'name', title:'模型名称'},
+                    {field:'key', title:'标识Key'},
+                    {field:'description', title:'备注描述'},
+                    {field:'version', title:'版本'},
+                    {field:'deploymentId', title:'部署ID'},
+                    {field:'createTime', title:'创建时间', sort:true},
+                    {field:'lastUpdateTime', title:'更新时间', sort:true},
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#flowModel_mainPage_table_toolbar', align: 'center', width:210}
+                ]],
+                limit: 20,
+                limits: [20,30,40,50]
+            }, function(res, curr, count){
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                BaseUtils.checkIsLoginTimeOut(res.status);
+            });
+
+            //监听行工具事件
+            flowModelMainPageTable.on('tool(flowModel_mainPage_grid)', function(obj){
+                if(obj.event === 'del'){
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                    flowModelMainPageDeleteData(obj);
+                } else if(obj.event === 'edit'){
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                    lookflowModelParticulars(obj);
+                } else if (obj.event === 'deploy')  {
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                    flowModelMainPageDeploy(obj)
+                } else if (obj.event === 'look')  {
+                    if (BaseUtils.checkLoginTimeoutStatus()) {
+                        return;
+                    }
+                    lookflowModelParticulars(obj);
+                }
+            });
+
+            //监听行双击事件
+            flowModelMainPageTable.on('rowDouble(flowModel_mainPage_grid)', function(obj){
+                flowModelMainPageMark = 3;
+                lookflowModelParticulars(obj);
+            });
+        });
+    };
+
+    /**
+     * 刷新grid
+     */
+    var flowModelMainPageRefreshGrid = function () {
+        var searchSondition = $("#flowModel-page-grid-query-form").serializeJSON();
+        flowModelMainPageTable.reload('flowModel_mainPage_grid', {
+            where: searchSondition,
+            page: {
+                 curr: 1 //重新从第 1 页开始
+             }
+        });
+    };
+
+    /**
+     * 重置查询条件
+     */
+    var flowModelMainPageRefreshGridQueryCondition = function () {
+        $("#flowModel-page-grid-query-form")[0].reset();
+    };
+
+
+    /**
+     * 初始化 select 组件
+     */
+    var initSelectpicker = function () {
+
+    }
+
+
+    /**
+     * 查看流程模型
+     * @param obj
+     */
+    var  lookflowModelParticulars = function (obj) {
+        var layerArea = ['100%', '100%'];
+        var flowModelContent = layer.open({
+            type: 2,
+            title: '流程模型',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: layerArea,
+            content: '../../management/flow/new-diagram.html?dataId='+ obj.value,
+            end : function () {
+
+            }
+        });
+        // 窗口全屏打开
+        layer.full(flowModelContent);
+    }
+
+
+
+    /**
+     * 删除
+     */
+    var flowModelMainPageDeleteData = function(obj) {
+        if (BaseUtils.checkLoginTimeoutStatus()) {
+            return;
+        }
+        var ajaxDelUrl = serverUrl + "v1/verify/flow/model/d/b";
+        var idsArray = [];
+        if (obj != null) {
+            idsArray.push(obj.data.id);
+        } else {
+            // 获取选中的数据对象
+            var checkRows = flowModelMainPageTable.checkStatus('flowModel_mainPage_grid');
+            //获取选中行的数据
+            var checkData = checkRows.data;
+            if (checkData.length > 0) {
+                $.each(checkData, function(index,element){
+                    idsArray.push(element.id);
+                });
+            }
+        }
+        if (idsArray.length > 0) {
+            //询问框
+            layer.confirm('你确定要删除?', {
+                shade: [0.3, 'rgb(230, 230, 230)'],
+                btn: ['确定','取消'] //按钮
+            }, function(index, layero){   //按钮【按钮一】的回调
+                layer.close(index);
+                BaseUtils.pageMsgBlock();
+                $deleteAjax({
+                    url:ajaxDelUrl,
+                    data: {
+                        ids: idsArray.join(",")
+                    },
+                    headers: BaseUtils.serverHeaders()
+                }, function (response) {
+                    if (response.success) {
+                        if (obj != null) {
+                            obj.del();
+                        } else {
+                            flowModelMainPageRefreshGrid();
+                        }
+                    }
+                }, function (data) {
+
+                });
+            }, function () {  //按钮【按钮二】的回调
+
+            });
+        }
+    };
+
+    /**
+     *  流程部署
+     */
+    var flowModelMainPageDeploy = function(obj) {
+        if (BaseUtils.checkLoginTimeoutStatus()) {
+            return;
+        }
+        var paramsData = {};
+        var ajaxPutUrl = serverUrl + "v1/verify/flow/model/deploy";
+        if (obj != null) {
+            paramsData.modelId = obj.value;
+        }
+        if (paramsData != null) {
+            BaseUtils.pageMsgBlock();
+            $postAjax({
+                url: ajaxPutUrl,
+                data: paramsData,
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                  if (response.success) {
+                      toastr.success(response.message);
+                      flowModelMainPageRefreshGrid();
+                  } else if (response.status == 409) {
+                      flowModelMainPageRefreshGrid();
+                  }
+            }, function (data) {
+
+            });
+        }
+    };
+
+
+    /**
+     *  同步数据
+     */
+    var flowModelMainPageSyncData = function() {
+        if (BaseUtils.checkLoginTimeoutStatus()) {
+            return;
+        }
+        BaseUtils.pageMsgBlock();
+        $postAjax({
+            url: serverUrl + "v1/verify/flowModel/sync",
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            BaseUtils.htmPageUnblock();
+            if (response.success) {
+                flowModelMainPageRefreshGrid();
+            }
+        },function (response) {
+            BaseUtils.htmPageUnblock();
+        });
+    };
+
+
+
+    //== Public Functions
+    return {
+        // public functions
+        init: function() {
+            flowModelMainPageInitFunctionButtonGroup();
+            flowModelMainPageInitDataGrid();
+            initSelectpicker();
+            $('#flowModel_mainPage_delete_btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                flowModelMainPageDeleteData(null);
+                return false;
+            });
+            $('#flowModel_mainPage_add_btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                flowModelMainPageMark = 1;
+                var layerArea = ['100%', '100%'];
+                var flowModelContent = layer.open({
+                    type: 2,
+                    title: '流程模型设计',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: layerArea,
+                    content: '../../management/flow/new-diagram.html?dataId=0',
+                    end : function () {
+                        flowModelMainPageRefreshGridQueryCondition();
+                        flowModelMainPageRefreshGrid();
+                    }
+                });
+                // 窗口全屏打开
+                layer.full(flowModelContent);
+                return false;
+            });
+
+
+            $('#flowModel-page-grid-query-btn').click(function(e) {
+                e.preventDefault();
+                if (BaseUtils.checkLoginTimeoutStatus()) {
+                    return;
+                }
+                flowModelMainPageRefreshGrid();
+                return false;
+            });
+
+            $('#flowModel-page-grid-query-rotate-btn').click(function(e) {
+                e.preventDefault();
+                flowModelMainPageRefreshGridQueryCondition();
+                return false;
+            });
+
+            window.onresize = function(){
+                flowModelMainPageTable.resize("flowModel_mainPage_grid");
+            }
+        }
+    };
+}();
+
+//== Class Initialization
+jQuery(document).ready(function() {
+    SnippetMainPageFlowModel.init();
+});

@@ -27,7 +27,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
                     // toastr.success(BaseUtils.saveSuccessMsg);
                 }  else if (response.status == 202) {
-                    toastr.error(BaseUtils.saveFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.saveFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
@@ -111,7 +115,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
                     // toastr.success(BaseUtils.saveSuccessMsg);
                 }  else if (response.status == 202) {
-                    toastr.error(BaseUtils.saveFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.saveFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
@@ -199,7 +207,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
 
                 } else if (response.status == 202) {
-                    toastr.error(BaseUtils.delFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.delFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
@@ -259,7 +271,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
 
                 } else if (response.status == 202) {
-                    toastr.error(BaseUtils.delFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.delFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401 ) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
@@ -380,7 +396,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
 
                 } else if (response.status == 202) {
-                    toastr.error(BaseUtils.delFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.getFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
@@ -438,7 +458,11 @@ jQuery(document).ready(function() {
                 if (response.success) {
 
                 } else if (response.status == 202) {
-                    toastr.error(BaseUtils.delFailMsg);
+                    if ($.trim(response.message) != '') {
+                        toastr.error(BaseUtils.tipsFormat(response.message));
+                    } else {
+                        toastr.error(BaseUtils.getFailMsg);
+                    }
                 } else if (response.status == 504 || response.status == 401) {
                     BaseUtils.LoginTimeOutHandler();
                 }  else {
