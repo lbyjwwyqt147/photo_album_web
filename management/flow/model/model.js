@@ -7,6 +7,9 @@ var SnippetMainPageFlowModel = function() {
     var flowModelMainPageTable;
     var flowModelMainPageMark = 1;
     var flowModelMainPageModuleCode = 1050;
+    var flowModelMainPageFormModal = $('#flowModel_mainPage_dataSubmit_form_modal');
+    var flowModelMainPageSubmitForm = $("#flowModel_mainPage_dataSubmit_form");
+    var flowModelMainPageSubmitFormId = "#flowModel_mainPage_dataSubmit_form";
     
     /**
      * 初始化 功能按钮
@@ -163,9 +166,72 @@ var SnippetMainPageFlowModel = function() {
     /**
      * 初始化 select 组件
      */
-    var initSelectpicker = function () {
+    var initFlowModelSelectpicker = function () {
 
     }
+
+    /**
+     * 初始化表单提交
+     */
+    var flowModelMainPageFormSubmitHandle = function() {
+        $('#flowModel_mainPage_dataSubmit_form_submit').click(function(e) {
+            e.preventDefault();
+            BaseUtils.formInputTrim(flowModelMainPageSubmitFormId);
+            flowModelMainPageSubmitForm.validate({
+                rules: {
+                    flowModelName: {
+                        required: true,
+                        chcharacterNum:true,
+                        maxlength: 255
+                    },
+                    flowModelKey: {
+                        required: true,
+                        alnumCode:true,
+                        maxlength: 255
+                    },
+                    flowModelCategory: {
+                        required: true,
+                        maxlength: 255
+                    }
+                },
+                errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
+                errorPlacement: function (error, element) {   // 验证失败调用的函数
+                    error.addClass( "form-control-feedback" );   // 提示信息增加样式
+                    element.parent("div").parent("div").addClass( "has-danger" );
+                    if ( element.prop( "type" ) === "checkbox" ) {
+                        error.insertAfter(element.parent("label"));  // 待验证的元素如果是checkbox，错误提示放到label中
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).parent("div").parent("div").addClass( "has-danger" );
+                    $(element).addClass("has-danger");     // 验证失败时给元素增加样式
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).parent("div").parent("div").removeClass( "has-danger" );
+                    $(element).removeClass("has-danger");  // 验证成功时去掉元素的样式
+
+                },
+
+                //display error alert on form submit
+                invalidHandler: function(event, validator) {
+
+                },
+            });
+            if (!flowModelMainPageSubmitForm.valid()) {
+                return;
+            }
+            if (BaseUtils.checkLoginTimeoutStatus()) {
+                return;
+            }
+            var curFormJson = flowModelMainPageSubmitForm.serializeJSON();
+            var windowParams = BaseUtils.jsonConvertUrlParams(curFormJson);
+            openDiagramWindow(windowParams);
+            flowModelMainPageFormModal.modal('hide');
+            return false;
+        });
+    };
 
 
     /**
@@ -298,7 +364,61 @@ var SnippetMainPageFlowModel = function() {
         });
     };
 
+    var flowModelMainPageInitModalDialog = function() {
+        // 在调用 show 方法后触发。
+        $('#flowModel_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
+            var modalDialogTitle = "创建流程模型";
+            if (flowModelMainPageMark == 1) {
+                BaseUtils.cleanFormReadonly(flowModelMainPageSubmitFormId);
+            }
+            if (flowModelMainPageMark == 2) {
+                modalDialogTitle = "修改流程模型";
+                BaseUtils.cleanFormReadonly(flowModelMainPageSubmitFormId);
+            }
+            $(".has-danger-error").show();
+            $("#flowModel_mainPage_dataSubmit_form_submit").show();
 
+            var modalDialog = $(this);
+            modalDialog.find('.modal-title').text(modalDialogTitle);
+            // 居中显示
+            $(this).css('display', 'block');
+            var modalHeight = $(window).height() / 2 - $('#flowModel_mainPage_dataSubmit_form_modal .modal-dialog').height();
+            $(this).find('.modal-dialog').css({
+                'margin-top': modalHeight
+            });
+        });
+
+        // 当调用 hide 实例方法时触发。
+        $('#flowModel_mainPage_dataSubmit_form_modal').on('hide.bs.modal', function (event) {
+            // 清空form 表单数据
+            BaseUtils.cleanFormData(flowModelMainPageSubmitForm);
+            $(".modal-backdrop").remove();
+            BaseUtils.modalUnblock("#flowModel_mainPage_dataSubmit_form_modal");
+        });
+
+    };
+
+    /**
+     * 打开流程设计窗口
+     */
+    var openDiagramWindow = function(params) {
+        var layerArea = ['100%', '100%'];
+        var flowModelContent = layer.open({
+            type: 2,
+            title: '流程模型设计',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: layerArea,
+            content: '../../management/flow/new-diagram.html?'+params,
+            end : function () {
+                flowModelMainPageRefreshGridQueryCondition();
+                flowModelMainPageRefreshGrid();
+            }
+        });
+        // 窗口全屏打开
+        layer.full(flowModelContent);
+    }
 
     //== Public Functions
     return {
@@ -306,7 +426,9 @@ var SnippetMainPageFlowModel = function() {
         init: function() {
             flowModelMainPageInitFunctionButtonGroup();
             flowModelMainPageInitDataGrid();
-            initSelectpicker();
+            initFlowModelSelectpicker();
+            flowModelMainPageInitModalDialog();
+            flowModelMainPageFormSubmitHandle();
             $('#flowModel_mainPage_delete_btn').click(function(e) {
                 e.preventDefault();
                 if (BaseUtils.checkLoginTimeoutStatus()) {
@@ -321,22 +443,8 @@ var SnippetMainPageFlowModel = function() {
                     return;
                 }
                 flowModelMainPageMark = 1;
-                var layerArea = ['100%', '100%'];
-                var flowModelContent = layer.open({
-                    type: 2,
-                    title: '流程模型设计',
-                    shadeClose: true,
-                    shade: false,
-                    maxmin: true, //开启最大化最小化按钮
-                    area: layerArea,
-                    content: '../../management/flow/new-diagram.html?dataId=0',
-                    end : function () {
-                        flowModelMainPageRefreshGridQueryCondition();
-                        flowModelMainPageRefreshGrid();
-                    }
-                });
-                // 窗口全屏打开
-                layer.full(flowModelContent);
+                // 显示 dialog
+                flowModelMainPageFormModal.modal('show');
                 return false;
             });
 

@@ -1,5 +1,6 @@
 //== Class Definition
 var SnippetMainPageHomeIndex = function() {
+    var serverUrl = BaseUtils.serverAddress;
     var layer;
     /**
      * 初始化菜单数据项
@@ -84,17 +85,34 @@ var SnippetMainPageHomeIndex = function() {
         //退出按钮事件
         $(".home_m_card_user_flaticon_logout").click(function (e) {
             e.preventDefault();
-            toastr.success("退出系统,即将重新登录!");
-            setTimeout(function (){
-                window.location.href = "login.html";
-            }, 2000);
+            var ajaxDelUrl = serverUrl + "v1/user/out";
+            var accessToken =  BaseUtils.getCookie(BaseUtils.user_access_token);
+            $deleteAjax({
+                url:ajaxDelUrl,
+                data: {
+                    access_token: accessToken
+                },
+                headers: BaseUtils.serverHeaders()
+            }, function (response) {
+                if (response.success) {
+                    BaseUtils.delCookie(BaseUtils.user_access_token);
+                    toastr.success("退出系统,即将重新登录!");
+                    setTimeout(function (){
+                        window.location.href = "login.html";
+                    }, 2000);
+                }
+            }, function (data) {
+
+            });
             return false;
         });
+
         $('#session-timeout-dialog-login').click(function(e) {
             e.preventDefault();
             window.location.href = "login.html";
             return false;
         });
+
         $('#session-timeout-dialog-close').click(function(e) {
             e.preventDefault();
             $("#session-timeout-dialog").hide();

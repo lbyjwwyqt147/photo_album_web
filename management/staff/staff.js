@@ -623,6 +623,7 @@ var SnippetMainPageStaff = function() {
             $("#staffEquipment-text").val(BaseUtils.textareaTo( $("#staffEquipment-text").val()));
             BaseUtils.formInputTrim(staffMainPageSubmitFormId);
             $("#staff-sex").val(curSex);
+            $("#staff-lessee").val(BaseUtils.lessee);
             staffMainPageSubmitForm.validate({
                 rules: {
                     staffNumber: {

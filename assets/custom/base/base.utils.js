@@ -327,6 +327,43 @@ var BaseUtils = {
     },
 
     /**
+     * json 转为 url 参数字符串
+     * @param json
+     * @returns {string}
+     */
+    jsonConvertUrlParams : function (json) {
+        var params = Object.keys(json).map(function (key) {
+            return key + "=" + json[key];
+        }).join("&");
+        return params;
+    },
+
+    /**
+     * url 字符串 参数 转为json
+     * @param url
+     */
+    urlParamsConvertJson : function (url){
+        var index = -1,
+            str = '',
+            arr = [],
+            length = 0,
+            res = {};
+        if(url.indexOf('?')!=-1){
+            index = url.indexOf('?');
+            str = url.substring(index+1);
+            arr = str.split('&');
+            length = arr.length;
+            for(var i=0; i<length-1; i++){
+                res[arr[i].split('=')[0]] = decodeURI(arr[i].split('=')[1]);
+            }
+        }else{
+            res = {};
+        }
+        return res;
+    },
+
+
+/**
      * 转换textarea存入数据库的回车换行和空格
      * @param str
      * @returns {*}
