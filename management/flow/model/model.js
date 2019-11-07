@@ -37,8 +37,8 @@ var SnippetMainPageFlowModel = function() {
                 edit_btn_html += '</a>\n';
                 tableToolbarHtml.append(edit_btn_html);
 
-                var deploy_btn_html = '<a href="javascript:;" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="部署发布流程模型" lay-event="deploy">\n'
-                deploy_btn_html += '<i class="la la-edit"></i>\n';
+                var deploy_btn_html = '<a href="javascript:;" class="btn btn-outline-success m-btn m-btn--icon m-btn--icon-only" data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="部署发布流程模型" lay-event="deploy">\n'
+                deploy_btn_html += '<i class="la la-hand-o-right"></i>\n';
                 deploy_btn_html += '</a>\n';
                 tableToolbarHtml.append(deploy_btn_html);
             }
@@ -60,7 +60,7 @@ var SnippetMainPageFlowModel = function() {
 
             }
 
-            var table_look_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="查看流程模型" lay-event="look">\n'
+            var table_look_btn_html = '<a href="javascript:;" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="查看流程模型" lay-event="look">\n'
             table_look_btn_html += '<i class="la la-eye"></i>\n';
             table_look_btn_html += '</a>\n';
             tableToolbarHtml.append(table_look_btn_html);
@@ -94,11 +94,11 @@ var SnippetMainPageFlowModel = function() {
                     {field:'name', title:'模型名称'},
                     {field:'key', title:'标识Key'},
                     {field:'description', title:'备注描述'},
-                    {field:'version', title:'版本'},
+                    {field:'version', title:'版本', width:60},
                     {field:'deploymentId', title:'部署ID'},
-                    {field:'createTime', title:'创建时间', sort:true},
-                    {field:'lastUpdateTime', title:'更新时间', sort:true},
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#flowModel_mainPage_table_toolbar', align: 'center', width:210}
+                    {field:'createTime', title:'创建时间', sort:true, width:160},
+                    {field:'lastUpdateTime', title:'更新时间', sort:true, width:160},
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#flowModel_mainPage_table_toolbar', align: 'center', width:150}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -120,7 +120,13 @@ var SnippetMainPageFlowModel = function() {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
                     }
-                    lookflowModelParticulars(obj);
+                    flowModelMainPageSubmitForm.setForm(obj.data);
+                    $("#flow-model-id").val(obj.data.id);
+                    $("#flow-model-key-history").val(obj.data.key);
+                    flowModelMainPageMark = 2;
+                    // 显示 dialog
+                    flowModelMainPageFormModal.modal('show');
+                    //lookflowModelParticulars(obj);
                 } else if (obj.event === 'deploy')  {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
@@ -187,11 +193,30 @@ var SnippetMainPageFlowModel = function() {
                     flowModelKey: {
                         required: true,
                         alnumCode:true,
-                        maxlength: 255
+                        maxlength: 255,
+                        remote:{
+                            url: serverUrl + "v1/table/flow/model/verify/key",     //后台处理程序
+                            type: "get",               //数据发送方式
+                            dataType: "json",           //接受数据格式
+                            data: {                     //要传递的数据
+                                history: function() {
+                                    return $("#flow-model-key-history").val();
+                                }
+                            }
+                        }
                     },
                     flowModelCategory: {
                         required: true,
                         maxlength: 255
+                    },
+                    description: {
+                        required: false,
+                        maxlength: 255
+                    }
+                },
+                messages: { //提示
+                    flowModelKey: {
+                        remote: "标识key重复,请重新输入."
                     }
                 },
                 errorElement: "div",                  // 验证失败时在元素后增加em标签，用来放错误提示
@@ -247,7 +272,7 @@ var SnippetMainPageFlowModel = function() {
             shade: false,
             maxmin: true, //开启最大化最小化按钮
             area: layerArea,
-            content: '../../management/flow/new-diagram.html?dataId='+ obj.value,
+            content: '../../management/flow/new-diagram.html?dataId='+ obj.data.id,
             end : function () {
 
             }
@@ -321,22 +346,31 @@ var SnippetMainPageFlowModel = function() {
         var paramsData = {};
         var ajaxPutUrl = serverUrl + "v1/verify/flow/model/deploy";
         if (obj != null) {
-            paramsData.modelId = obj.value;
+            paramsData.modelId = obj.data.id;
         }
         if (paramsData != null) {
-            BaseUtils.pageMsgBlock();
-            $postAjax({
-                url: ajaxPutUrl,
-                data: paramsData,
-                headers: BaseUtils.serverHeaders()
-            }, function (response) {
-                  if (response.success) {
-                      toastr.success(response.message);
-                      flowModelMainPageRefreshGrid();
-                  } else if (response.status == 409) {
-                      flowModelMainPageRefreshGrid();
-                  }
-            }, function (data) {
+            //询问框
+            layer.confirm('您确认要部署发布模型【'+obj.data.name+'】?', {
+                shade: [0.3, 'rgb(230, 230, 230)'],
+                btn: ['确定','取消'] //按钮
+            }, function(index, layero){
+                layer.close(index);
+                BaseUtils.pageMsgBlock();
+                $postAjax({
+                    url: ajaxPutUrl,
+                    data: paramsData,
+                    headers: BaseUtils.serverHeaders()
+                }, function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        flowModelMainPageRefreshGrid();
+                    } else if (response.status == 409) {
+                        flowModelMainPageRefreshGrid();
+                    }
+                }, function (data) {
+
+                });
+            }, function () {  //按钮【按钮二】的回调
 
             });
         }

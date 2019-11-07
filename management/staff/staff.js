@@ -234,10 +234,10 @@ var SnippetMainPageStaff = function() {
                 gridHeadToolsHtml.append(sync_btn_html);
             }
 
-            var table_del_btn_html = '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
-            table_del_btn_html += '<i class="la la-eye"></i>\n';
-            table_del_btn_html += '</a>\n';
-            tableToolbarHtml.append(table_del_btn_html);
+            var table_look_btn_html = '<a href="javascript:;" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title=" 查看员工信息" lay-event="look">\n'
+            table_look_btn_html += '<i class="la la-eye"></i>\n';
+            table_look_btn_html += '</a>\n';
+            tableToolbarHtml.append(table_look_btn_html);
         }
         // Tooltip
         $('[data-toggle="m-tooltip"]').tooltip();
