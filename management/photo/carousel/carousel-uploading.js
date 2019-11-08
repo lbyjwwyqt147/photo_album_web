@@ -47,8 +47,9 @@ var SnippetMainPageCarouselUploading= function() {
                 'businessCode' : 20,
                 'uploaderId' : curUser.id,
                 'uploaderName': curUser.name,
-                'lesseeId' : 1,
-                'lesseeName' : '青橙摄影工作室'
+                'lesseeId' : BaseUtils.lessee,
+                'lesseeName' : '青橙摄影工作室',
+                'description' : '轮播图片'
             },
             headers : BaseUtils.cloudHeaders()
         });

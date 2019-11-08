@@ -57,8 +57,9 @@ var SnippetMainPageCompany = function() {
                     'businessCode' : 61,
                     'uploaderId' : curUser.id,
                     'uploaderName': curUser.name,
-                    'lesseeId' : 1,
+                    'lesseeId' : BaseUtils.lessee,
                     'lesseeName' : '青橙摄影工作室',
+                    'description' : '公司logo图片'
                 },
                 headers: BaseUtils.cloudHeaders(),
                 before: function(obj){
@@ -95,8 +96,9 @@ var SnippetMainPageCompany = function() {
                     'businessCode' : 62,
                     'uploaderId' : curUser.id,
                     'uploaderName': curUser.name,
-                    'lesseeId' : 1,
+                    'lesseeId' : BaseUtils.lessee,
                     'lesseeName' : '青橙摄影工作室',
+                    'description' : 'QQ二维码图片'
                 },
                 headers: BaseUtils.cloudHeaders(),
                 before: function(obj){
@@ -134,8 +136,9 @@ var SnippetMainPageCompany = function() {
                     'businessCode' : 61,
                     'uploaderId' : curUser.id,
                     'uploaderName': curUser.name,
-                    'lesseeId' : 1,
+                    'lesseeId' : BaseUtils.lessee,
                     'lesseeName' : '青橙摄影工作室',
+                    'description' : '微信二维码图片'
                 },
                 headers: BaseUtils.cloudHeaders(),
                 before: function(obj){

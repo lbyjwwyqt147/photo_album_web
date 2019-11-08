@@ -22,6 +22,7 @@ var BaseUtils = {
     'loginTimeOutMsg':"登录信息已过期,即将重新登录!",
     'functionButtonKey': "photo_album_function_button_",
     'user_access_token': "photo_album_user_credential",
+    'user_info': "photo_album_user",
     "encryption":true,
     "secretKey":"dO6+g3+08ELBKtx/1/WBYQ==",
     "cloudAppId": "1550817758252",
@@ -131,9 +132,17 @@ var BaseUtils = {
      * @param moduleCode
      */
     getCurrentUser:function(){
-        var curUser = {
-            'id' : 1,
-            'name' : '管理员'
+        var curUser = null;
+        var item = this.getCookie(BaseUtils.user_info);
+        if (item == null || typeof(item) == undefined || undefined == item  || 'undefined' == item) {
+            curUser = {
+                'id' : 1,
+                'name' : '管理员'
+            }
+        } else {
+            curUser =  $.parseJSON(item);
+            curUser.id = curUser.userId;
+            curUser.name = curUser.userName;
         }
         return curUser;
     },
@@ -799,7 +808,8 @@ var BaseUtils = {
             "appKey": BaseUtils.appKey,
             "credential": BaseUtils.credential,
             "systemCode": BaseUtils.systemCode,
-            "sign":sign
+            "sign":sign,
+            "tenement" :  BaseUtils.lessee
         };
         return headers;
     },
@@ -821,7 +831,8 @@ var BaseUtils = {
         var headers = {
             "credential": BaseUtils.credential,
             "sign":sign,
-            "Authorization" :  authorization
+            "Authorization" :  authorization,
+            "tenement" :  BaseUtils.lessee
         };
         return headers;
     },

@@ -88,9 +88,9 @@ var SnippetLogin = function() {
                     data:$("#user-login-form").serializeJSON(),
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
-                    console.log(response);
                     if (response.success && response.status == 200) {
                         BaseUtils.setCookie(BaseUtils.user_access_token, response.extend, 1 );
+                        BaseUtils.setCookie(BaseUtils.user_info, JSON.stringify(response.data), 1);
                         window.location.href = "home.html";
                     } else if ( response.status == 301) {
                         hidenAlerts(btn, form,"用户已被停用,请联系客服.");

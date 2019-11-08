@@ -96,6 +96,7 @@ var SnippetMainPageHomeIndex = function() {
             }, function (response) {
                 if (response.success) {
                     BaseUtils.delCookie(BaseUtils.user_access_token);
+                    BaseUtils.delCookie(BaseUtils.user_info);
                     toastr.success("退出系统,即将重新登录!");
                     setTimeout(function (){
                         window.location.href = "login.html";

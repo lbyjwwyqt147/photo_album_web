@@ -52,8 +52,9 @@ var SnippetMainActivitiesPageUploading= function() {
                 'businessCode' : 50,
                 'uploaderId' : curUser.id,
                 'uploaderName': curUser.name,
-                'lesseeId' : 1,
-                'lesseeName' : '青橙摄影工作室'
+                'lesseeId' : BaseUtils.lessee,
+                'lesseeName' : '青橙摄影工作室',
+                'description' : '最新活动宣传图片'
             },
             headers : BaseUtils.cloudHeaders()
         });
@@ -140,8 +141,9 @@ var SnippetMainActivitiesPageUploading= function() {
                     'businessCode' : 51,
                     'uploaderId' : curUser.id,
                     'uploaderName': curUser.name,
-                    'lesseeId' : 1,
+                    'lesseeId' : BaseUtils.lessee,
                     'lesseeName' : '青橙摄影工作室',
+                    'description' : '最新活动封面图片'
                 },
                 headers: BaseUtils.cloudHeaders(),
                 before: function(obj){
