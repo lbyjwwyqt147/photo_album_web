@@ -93,8 +93,22 @@ var SnippetMainPageFlowModel = function() {
                     {field:'id', title:'ID', unresize:true, hide:true },
                     {field:'name', title:'模型名称'},
                     {field:'key', title:'标识Key'},
+                    {field:'categoryName', title:'类型'},
                     {field:'description', title:'备注描述'},
                     {field:'version', title:'版本', width:60},
+                    {field:'status', title:'状态', align: 'center',  unresize:true,
+                        templet : function (row) {
+                            var value = row.status;
+                            var curText = "已部署";
+                            var spanCss = "m-badge--success";
+                            if (value == 1)  {
+                                spanCss = "m-badge--warning";
+                                curText = "未部署";
+                            }
+                            var spanHtml =  '<span class="m-badge ' + spanCss + ' m-badge--wide">' + curText + '</span>';
+                            return spanHtml;
+                        }
+                    },
                     {field:'deploymentId', title:'部署ID'},
                     {field:'createTime', title:'创建时间', sort:true, width:160},
                     {field:'lastUpdateTime', title:'更新时间', sort:true, width:160},
@@ -122,11 +136,15 @@ var SnippetMainPageFlowModel = function() {
                     }
                     flowModelMainPageSubmitForm.setForm(obj.data);
                     $("#flow-model-id").val(obj.data.id);
+                    $("#flow-model-name").val(obj.data.name);
+                    $("#flow-model-key").val(obj.data.key);
                     $("#flow-model-key-history").val(obj.data.key);
                     flowModelMainPageMark = 2;
                     // 显示 dialog
-                    flowModelMainPageFormModal.modal('show');
-                    //lookflowModelParticulars(obj);
+                   // flowModelMainPageFormModal.modal('show');
+                    var curFormJson = flowModelMainPageSubmitForm.serializeJSON();
+                    var windowParams = BaseUtils.jsonConvertUrlParams(curFormJson);
+                    openDiagramWindow(windowParams);
                 } else if (obj.event === 'deploy')  {
                     if (BaseUtils.checkLoginTimeoutStatus()) {
                         return;
@@ -173,7 +191,18 @@ var SnippetMainPageFlowModel = function() {
      * 初始化 select 组件
      */
     var initFlowModelSelectpicker = function () {
-
+        var selectUrl = serverUrl + "v1/table/category/info/select";
+        var selectParams = {
+            categoryType : 10,
+            categoryStatus : 0
+        }
+        BaseUtils.dropDownDataSelect(selectUrl, selectParams, BaseUtils.serverHeaders, function (data) {
+            var $flowModelCategory = $("#flow-model-category");
+            Object.keys(data).forEach(function(key){
+                $flowModelCategory.append("<option value=" + data[key].id + ">" + data[key].text + "</option>");
+            });
+            $flowModelCategory .selectpicker('refresh');
+        });
     }
 
     /**
@@ -252,8 +281,8 @@ var SnippetMainPageFlowModel = function() {
             }
             var curFormJson = flowModelMainPageSubmitForm.serializeJSON();
             var windowParams = BaseUtils.jsonConvertUrlParams(curFormJson);
-            openDiagramWindow(windowParams);
             flowModelMainPageFormModal.modal('hide');
+            openDiagramWindow(windowParams);
             return false;
         });
     };
@@ -320,6 +349,7 @@ var SnippetMainPageFlowModel = function() {
                     },
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
+                    BaseUtils.htmPageUnblock();
                     if (response.success) {
                         if (obj != null) {
                             obj.del();
@@ -328,7 +358,7 @@ var SnippetMainPageFlowModel = function() {
                         }
                     }
                 }, function (data) {
-
+                    BaseUtils.htmPageUnblock();
                 });
             }, function () {  //按钮【按钮二】的回调
 
@@ -361,6 +391,7 @@ var SnippetMainPageFlowModel = function() {
                     data: paramsData,
                     headers: BaseUtils.serverHeaders()
                 }, function (response) {
+                    BaseUtils.htmPageUnblock();
                     if (response.success) {
                         toastr.success(response.message);
                         flowModelMainPageRefreshGrid();
@@ -368,7 +399,7 @@ var SnippetMainPageFlowModel = function() {
                         flowModelMainPageRefreshGrid();
                     }
                 }, function (data) {
-
+                    BaseUtils.htmPageUnblock();
                 });
             }, function () {  //按钮【按钮二】的回调
 

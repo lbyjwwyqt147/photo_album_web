@@ -38,6 +38,8 @@ var SnippetMainPageFlowCategory = function() {
                 tableToolbarHtml.append(edit_btn_html);
 
             }
+
+
             var delete_index = $.inArray("2", buttonGroup);
             if (delete_index != -1) {
                 var delete_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="删除流程分类">\n';
@@ -56,6 +58,16 @@ var SnippetMainPageFlowCategory = function() {
 
             }
 
+            var sync_index = $.inArray("10", buttonGroup);
+            if (sync_index != -1) {
+                var sync_btn_html = '<li class="nav-item m-tabs__item" data-container="body" data-toggle="m-tooltip" data-placement="top" title="同步数据">\n';
+                sync_btn_html += '<a href="javascript:;" class="btn btn-accent m-btn m-btn--icon btn-sm m-btn--icon-only" id="flow_category_mainPage_sync_btn">\n';
+                sync_btn_html += '<i class="la la-rotate-right"></i>\n';
+                sync_btn_html += '</a>\n';
+                sync_btn_html += '</li>\n';
+                gridHeadToolsHtml.append(sync_btn_html);
+            }
+
         }
         // Tooltip
         $('[data-toggle="m-tooltip"]').tooltip();
@@ -69,10 +81,10 @@ var SnippetMainPageFlowCategory = function() {
             var layuiForm = layui.form;
             flowCategoryMainPageTable =  $initEncrypDataGrid({
                 elem: '#flow_category_mainPage_grid',
-                url: serverUrl + 'v1/table/flow/category/g',
+                url: serverUrl + 'v1/table/category/info/g',
                 method:"get",
                 where: {   //传递额外参数
-
+                    categoryType: 10
                 },
                 headers: BaseUtils.serverHeaders(),
                 title: '流程分类列表',
@@ -97,7 +109,7 @@ var SnippetMainPageFlowCategory = function() {
                             return spanHtml;
                         }
                     },
-                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#flow_category_mainPage_table_toolbar', align: 'center', width:150}
+                    {fixed: 'right', title:'操作', unresize:true, toolbar: '#flow_category_mainPage_table_toolbar', align: 'center', width:190}
                 ]],
                 limit: 20,
                 limits: [20,30,40,50]
@@ -214,10 +226,13 @@ var SnippetMainPageFlowCategory = function() {
                         alnumName:true,
                         maxlength: 32,
                         remote:{
-                            url: serverUrl + "v1/table/flow/category/verify/name",     //后台处理程序
+                            url: serverUrl + "v1/table/category/info/verify/name",     //后台处理程序
                             type: "get",               //数据发送方式
                             dataType: "json",           //接受数据格式
                             data: {                     //要传递的数据
+                                categoryType: function() {
+                                    return 10;
+                                },
                                 history: function() {
                                     return $("#flow-category-name-history").val();
                                 }
@@ -267,7 +282,7 @@ var SnippetMainPageFlowCategory = function() {
             }
             BaseUtils.modalBlock("#flow_category_mainPage_dataSubmit_form_modal");
             $postAjax({
-                url:serverUrl + "v1/verify/flow/category/s",
+                url:serverUrl + "v1/verify/category/info/s",
                 data:flowCategoryMainPageSubmitForm.serializeJSON(),
                 headers: BaseUtils.serverHeaders()
             }, function (response) {
@@ -293,7 +308,7 @@ var SnippetMainPageFlowCategory = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxDelUrl = serverUrl + "v1/verify/flow/category/d/b";
+        var ajaxDelUrl = serverUrl + "v1/verify/category/info/d/b";
         var idsArray = [];
         if (obj != null) {
             idsArray.push(obj.data.id);
@@ -346,7 +361,7 @@ var SnippetMainPageFlowCategory = function() {
         if (BaseUtils.checkLoginTimeoutStatus()) {
             return;
         }
-        var ajaxPutUrl = serverUrl + "v1/verify/flow/category/p";
+        var ajaxPutUrl = serverUrl + "v1/verify/category/info/p";
         var putData = null;
         if (obj != null) {
             putData = {
@@ -371,7 +386,7 @@ var SnippetMainPageFlowCategory = function() {
         }
         if (putData != null) {
             BaseUtils.pageMsgBlock();
-            $encrypPutAjax({
+            $putAjax({
                 url: ajaxPutUrl,
                 data: putData,
                 headers: BaseUtils.serverHeaders()
@@ -421,7 +436,7 @@ var SnippetMainPageFlowCategory = function() {
         }
         BaseUtils.pageMsgBlock();
         $postAjax({
-            url: serverUrl + "v1/verify/flow/category/sync",
+            url: serverUrl + "v1/verify/category/info/sync",
             headers: BaseUtils.serverHeaders()
         }, function (response) {
             BaseUtils.htmPageUnblock();
@@ -516,7 +531,7 @@ var SnippetMainPageFlowCategory = function() {
                 return false;
             });
 
-            $('#dict_mainPage_sync_btn').click(function(e) {
+            $('#flow_category_mainPage_sync_btn').click(function(e) {
                 e.preventDefault();
                 if (BaseUtils.checkLoginTimeoutStatus()) {
                     return;
