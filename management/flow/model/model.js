@@ -60,7 +60,7 @@ var SnippetMainPageFlowModel = function() {
 
             }
 
-            var table_look_btn_html = '<a href="javascript:;" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="查看流程模型" lay-event="look">\n'
+            var table_look_btn_html = '<a href="javascript:;" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only"  data-offset="-20px -20px" data-container="body" data-toggle="tooltip" data-placement="top" title="查看流程图" lay-event="look">\n'
             table_look_btn_html += '<i class="la la-eye"></i>\n';
             table_look_btn_html += '</a>\n';
             tableToolbarHtml.append(table_look_btn_html);
@@ -281,7 +281,6 @@ var SnippetMainPageFlowModel = function() {
             }
             var curFormJson = flowModelMainPageSubmitForm.serializeJSON();
             var windowParams = BaseUtils.jsonConvertUrlParams(curFormJson);
-            flowModelMainPageFormModal.modal('hide');
             openDiagramWindow(windowParams);
             return false;
         });
@@ -293,21 +292,31 @@ var SnippetMainPageFlowModel = function() {
      * @param obj
      */
     var  lookflowModelParticulars = function (obj) {
-        var layerArea = ['100%', '100%'];
-        var flowModelContent = layer.open({
-            type: 2,
-            title: '流程模型',
-            shadeClose: true,
-            shade: false,
-            maxmin: true, //开启最大化最小化按钮
-            area: layerArea,
-            content: '../../management/flow/new-diagram.html?dataId='+ obj.data.id,
-            end : function () {
-
+        BaseUtils.pageMsgBlock("数据加载中.....");
+        $getAjax({
+            url: serverUrl + "v1/table/flow/model/image",
+            data: {
+                deploymentId : obj.data.id,
+                type : 'model'
+            },
+            headers: BaseUtils.serverHeaders()
+        }, function (response) {
+            BaseUtils.htmPageUnblock();
+            if (response.success) {
+                $("#flow-model-image-el").attr("src", response.data);
+                layer.open({
+                    type: 1,
+                    title: "流程图",
+                    closeBtn: 0,
+                    area: ['auto'],
+                    skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    content: $('#flow-model-image-content')
+                });
             }
+        },function (response) {
+
         });
-        // 窗口全屏打开
-        layer.full(flowModelContent);
     }
 
 
@@ -408,27 +417,6 @@ var SnippetMainPageFlowModel = function() {
     };
 
 
-    /**
-     *  同步数据
-     */
-    var flowModelMainPageSyncData = function() {
-        if (BaseUtils.checkLoginTimeoutStatus()) {
-            return;
-        }
-        BaseUtils.pageMsgBlock();
-        $postAjax({
-            url: serverUrl + "v1/verify/flowModel/sync",
-            headers: BaseUtils.serverHeaders()
-        }, function (response) {
-            BaseUtils.htmPageUnblock();
-            if (response.success) {
-                flowModelMainPageRefreshGrid();
-            }
-        },function (response) {
-            BaseUtils.htmPageUnblock();
-        });
-    };
-
     var flowModelMainPageInitModalDialog = function() {
         // 在调用 show 方法后触发。
         $('#flowModel_mainPage_dataSubmit_form_modal').on('show.bs.modal', function (event) {
@@ -477,6 +465,9 @@ var SnippetMainPageFlowModel = function() {
             area: layerArea,
             content: '../../management/flow/new-diagram.html?'+params,
             end : function () {
+                flowModelMainPageFormModal.modal('hide');
+                // 清空form 表单数据
+                BaseUtils.cleanFormData(flowModelMainPageSubmitForm);
                 flowModelMainPageRefreshGridQueryCondition();
                 flowModelMainPageRefreshGrid();
             }
